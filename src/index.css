@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Preset A (Organic Tech) - Light Mode Override */
+    --color-background: #FAF8F5;
+    /* Ivory / Off-white base */
+    --color-primary: #2E4036;
+    /* Moss */
+    --color-accent: #CC5833;
+    /* Clay */
+    --color-text-main: #1A1A1A;
+    /* Charcoal */
+  }
+
+  body {
+    @apply bg-background text-textMain font-sans antialiased overflow-x-hidden;
+  }
+
+  /* Global Noise Overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.05;
+    background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+  }
+}
+
+@layer utilities {
+
+  .text-data {
+    @apply font-mono;
+  }
+
+  /* Magnetic Button Feel Base */
+  .btn-magnetic {
+    @apply relative overflow-hidden transition-all duration-300;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .btn-magnetic:hover {
+    @apply scale-[1.03] shadow-lg;
+  }
+
+  .link-hover {
+    @apply transition-transform duration-300 hover:-translate-y-[1px];
+  }
+
+  .text-shadow-subtle {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-shadow-strong {
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Custom Scrollbar for premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E0DDD5;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
