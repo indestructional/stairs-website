@@ -125,7 +125,7 @@ function Hero() {
             <div className="relative z-10 max-w-4xl text-left">
                 <h1 className="flex flex-col gap-2">
                     <span className="hero-elem font-heading font-extrabold text-4xl md:text-6xl text-primary uppercase tracking-wide leading-tight text-shadow-subtle">
-                        ДЕРЕВЯННЫЕ ЛЕСТНИЦЫ
+                        ИЗГОТОВЛЕНИЕ ЛЕСТНИЦ
                     </span>
                     <span className="hero-elem font-heading font-extrabold text-5xl md:text-7xl text-accent uppercase leading-[0.95] text-shadow-subtle">
                         НА ЗАКАЗ В КРАСНОДАРЕ
@@ -370,21 +370,20 @@ function Protocol() {
 // F. OUR WORKS - "The Portfolio Grid"
 // ==========================================
 function OurWorks() {
-    const [images, setImages] = useState([]);
-    const [visibleCount, setVisibleCount] = useState(20);
+    const [publications, setPublications] = useState([]);
+    const [visibleCount, setVisibleCount] = useState(12);
     const [loading, setLoading] = useState(true);
 
     // Lightbox state
     const [lightboxOpen, setLightboxOpen] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [currentPubIndex, setCurrentPubIndex] = useState(0);
+    const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
     useEffect(() => {
         fetch('/gallery.json')
             .then(res => res.json())
             .then(data => {
-                // Combine both categories for now until we build the tabs
-                const combined = [...(data.stairs || []), ...(data.other || [])];
-                setImages(combined);
+                setPublications(data);
                 setLoading(false);
             })
             .catch(err => {
@@ -394,10 +393,11 @@ function OurWorks() {
     }, []);
 
     // Handle Lightbox navigation
-    const openLightbox = (index) => {
-        setCurrentImageIndex(index);
+    const openLightbox = (pubIdx) => {
+        setCurrentPubIndex(pubIdx);
+        setCurrentImgIndex(0);
         setLightboxOpen(true);
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden';
     };
 
     const closeLightbox = () => {
@@ -406,13 +406,15 @@ function OurWorks() {
     };
 
     const nextImage = (e) => {
-        e.stopPropagation();
-        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+        e?.stopPropagation();
+        const currentPub = publications[currentPubIndex];
+        setCurrentImgIndex((prev) => (prev + 1) % currentPub.images.length);
     };
 
     const prevImage = (e) => {
-        e.stopPropagation();
-        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+        e?.stopPropagation();
+        const currentPub = publications[currentPubIndex];
+        setCurrentImgIndex((prev) => (prev - 1 + currentPub.images.length) % currentPub.images.length);
     };
 
     // Keyboard navigation for Lightbox
@@ -420,15 +422,15 @@ function OurWorks() {
         const handleKeyDown = (e) => {
             if (!lightboxOpen) return;
             if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowRight') nextImage(e);
-            if (e.key === 'ArrowLeft') prevImage(e);
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [lightboxOpen, images.length]);
+    }, [lightboxOpen, currentPubIndex, publications]);
 
     const handleLoadMore = () => {
-        setVisibleCount(prev => prev + 20);
+        setVisibleCount(prev => prev + 12);
     };
 
     if (loading) return null;
@@ -445,29 +447,17 @@ function OurWorks() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 auto-rows-[150px] md:auto-rows-[250px]">
-                    {images.slice(0, visibleCount).map((src, idx) => (
-                        <div
-                            key={idx}
-                            className="relative rounded-xl overflow-hidden group bg-primary/5 cursor-pointer"
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+                    {publications.slice(0, visibleCount).map((pub, idx) => (
+                        <WorkCarousel
+                            key={pub.id}
+                            images={pub.images}
                             onClick={() => openLightbox(idx)}
-                        >
-                            <img
-                                src={src}
-                                alt={`Работа мастера ${idx + 1}`}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                loading="lazy"
-                            />
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                                <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 p-3 rounded-full backdrop-blur-sm">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
-                                </div>
-                            </div>
-                        </div>
+                        />
                     ))}
                 </div>
 
-                {visibleCount < images.length && (
+                {visibleCount < publications.length && (
                     <div className="mt-16 flex justify-center">
                         <button
                             onClick={handleLoadMore}
@@ -479,9 +469,9 @@ function OurWorks() {
                 )}
             </div>
 
-            {lightboxOpen && (
+            {lightboxOpen && publications[currentPubIndex] && (
                 <div
-                    className="fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center p-4 animate-in fade-in duration-300"
+                    className="fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-300"
                     onClick={closeLightbox}
                 >
                     <button
@@ -493,27 +483,39 @@ function OurWorks() {
 
                     <div className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
                         <img
-                            src={images[currentImageIndex]}
-                            alt={`Работа мастера ${currentImageIndex + 1}`}
-                            className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+                            src={publications[currentPubIndex].images[currentImgIndex]}
+                            alt={`Работа ${currentPubIndex + 1} фото ${currentImgIndex + 1}`}
+                            className="max-w-full max-h-full object-contain rounded-lg shadow-lg select-none"
                         />
 
-                        {images.length > 1 && (
+                        {publications[currentPubIndex].images.length > 1 && (
                             <>
                                 <button
                                     className="absolute left-4 top-1/2 -translate-y-1/2 text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                                     onClick={prevImage}
                                 >
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                                 </button>
                                 <button
                                     className="absolute right-4 top-1/2 -translate-y-1/2 text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
                                     onClick={nextImage}
                                 >
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                 </button>
+
+                                <div className="absolute inset-x-0 bottom-6 flex justify-center gap-2 z-10 pointer-events-none">
+                                    {publications[currentPubIndex].images.map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentImgIndex ? 'bg-white scale-125' : 'bg-white/40 shadow-sm'}`}
+                                        />
+                                    ))}
+                                </div>
                             </>
                         )}
+                        <div className="absolute bottom-6 left-6 text-white/50 font-mono tracking-widest text-sm pointer-events-none">
+                            {currentImgIndex + 1} / {publications[currentPubIndex].images.length}
+                        </div>
                     </div>
                 </div>
             )}
@@ -521,7 +523,7 @@ function OurWorks() {
     );
 }
 
-function WorkCarousel({ images }) {
+function WorkCarousel({ images, onClick }) {
     const [currentIdx, setCurrentIdx] = useState(0);
 
     const next = (e) => {
@@ -535,21 +537,31 @@ function WorkCarousel({ images }) {
     };
 
     return (
-        <div className="group relative aspect-[3/4] bg-primary/5 rounded-2xl md:rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-md transition-all duration-500">
+        <div
+            onClick={onClick}
+            className="group cursor-pointer relative aspect-[3/4] bg-primary/5 rounded-2xl md:rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-md transition-all duration-500"
+        >
             <img
-                src={`/gallery/${images[currentIdx]}`}
+                src={images[currentIdx]}
                 alt="Лестница"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
             />
 
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none"></div>
+
             {images.length > 1 && (
                 <>
+                    {/* Expand Icon */}
+                    <div className="absolute top-4 right-4 bg-black/40 p-2 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm pointer-events-none pointer-events-none z-10">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
+                    </div>
+
                     <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1.5 z-10 pointer-events-none">
                         {images.map((_, i) => (
                             <div
                                 key={i}
-                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === currentIdx ? 'bg-white scale-125' : 'bg-white/40'}`}
+                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === currentIdx ? 'bg-white scale-125' : 'bg-white/40 shadow-sm'}`}
                             />
                         ))}
                     </div>
@@ -610,7 +622,7 @@ function Footer() {
                         <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#0088cc] hover:border-transparent transition-colors">
                             <Send size={20} />
                         </a>
-                        <a href="https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo" target="_blank" rel="noopener noreferrer" className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-[#534eef] hover:border-[#534eef]/50 transition-all cursor-pointer">
+                        <a href="https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo" target="_blank" rel="noopener noreferrer" className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#534eef] hover:border-transparent transition-colors">
                             <MaxIcon size={20} white />
                         </a>
                     </div>
@@ -661,6 +673,8 @@ function MessengerWidget() {
                             <a
                                 key={idx}
                                 href={item.link || '#'}
+                                target={item.link ? "_blank" : undefined}
+                                rel={item.link ? "noopener noreferrer" : undefined}
                                 onClick={(e) => !item.link && e.preventDefault()}
                                 className={`flex items-center gap-4 p-4 rounded-2xl transition-all ${item.link ? 'hover:bg-primary/5 active:scale-95' : 'opacity-50 cursor-not-allowed bg-black/5'}`}
                             >
