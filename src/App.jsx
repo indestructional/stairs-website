@@ -77,7 +77,7 @@ function Navbar() {
                 <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#25D366] transition-colors"><WhatsAppIcon size={20} /></a>
                 <a href="https://www.instagram.com/lestniza_krr/" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#E4405F] transition-colors"><InstagramIcon size={20} /></a>
                 <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#0088cc] transition-colors"><Send size={20} /></a>
-                <div className="text-primary opacity-40 cursor-not-allowed"><MaxIcon size={20} white /></div>
+                <a href="https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#534eef] transition-colors"><MaxIcon size={20} white /></a>
             </div>
 
             <a href="tel:+79892145276" className="hidden md:flex btn-magnetic items-center gap-2 bg-primary text-background px-6 py-2.5 rounded-full font-medium hover:shadow-lg hover:shadow-primary/20 transition-all whitespace-nowrap min-w-fit">
@@ -138,7 +138,7 @@ function Hero() {
                 </div>
 
                 <p className="hero-elem mt-6 text-xl md:text-2xl text-textMain/90 font-sans max-w-2xl font-medium text-shadow-subtle">
-                    Создаем уникальные деревянные лестницы любой сложности напрямую от мастера в Краснодаре.
+                    Создаем уникальные деревянные лестницы любой сложности напрямую от мастера в Краснодаре. Лестницы на бетонное основание, на металлоконструкцию, на косоурах.
                 </p>
 
                 <div className="hero-elem mt-12">
@@ -268,20 +268,19 @@ function Protocol() {
 
                 // Card remains 100% sharp until the NEXT card covers a significant portion (60%)
                 // We shift the start point to 'top 60%' as requested
-                gsap.fromTo(card,
-                    { filter: 'blur(0px)', opacity: 1, scale: 1 },
-                    {
-                        scale: 0.9,
-                        opacity: 0.3,
-                        filter: 'blur(15px)',
-                        scrollTrigger: {
-                            trigger: cards[i + 1],
-                            start: 'top 60%', // Start blurring when next card is 60% from top
-                            end: 'top 15%',  // Fully blurred when it hits the sticky point
-                            scrub: true,
-                        }
+                gsap.to(card, {
+                    scale: 0.95,
+                    opacity: 1, // Keep fully opaque
+                    filter: "blur(0px)", // No blur
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 10%',
+                        end: () => `+=${card.offsetHeight}`,
+                        scrub: true,
                     }
-                );
+                });
+
             });
         }, containerRef);
         return () => ctx.revert();
@@ -371,25 +370,65 @@ function Protocol() {
 // F. OUR WORKS - "The Portfolio Grid"
 // ==========================================
 function OurWorks() {
-    const [works, setWorks] = useState([]);
-    const [visibleCount, setVisibleCount] = useState(12);
+    const [images, setImages] = useState([]);
+    const [visibleCount, setVisibleCount] = useState(20);
     const [loading, setLoading] = useState(true);
+
+    // Lightbox state
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         fetch('/gallery.json')
             .then(res => res.json())
             .then(data => {
-                setWorks(data);
+                // Combine both categories for now until we build the tabs
+                const combined = [...(data.stairs || []), ...(data.other || [])];
+                setImages(combined);
                 setLoading(false);
             })
             .catch(err => {
-                console.error('Failed to load gallery:', err);
+                console.error("Error loading gallery:", err);
                 setLoading(false);
             });
     }, []);
 
-    const loadMore = () => {
-        setVisibleCount(prev => prev + 12);
+    // Handle Lightbox navigation
+    const openLightbox = (index) => {
+        setCurrentImageIndex(index);
+        setLightboxOpen(true);
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    };
+
+    const closeLightbox = () => {
+        setLightboxOpen(false);
+        document.body.style.overflow = 'auto';
+    };
+
+    const nextImage = (e) => {
+        e.stopPropagation();
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    };
+
+    const prevImage = (e) => {
+        e.stopPropagation();
+        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    };
+
+    // Keyboard navigation for Lightbox
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!lightboxOpen) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage(e);
+            if (e.key === 'ArrowLeft') prevImage(e);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [lightboxOpen, images.length]);
+
+    const handleLoadMore = () => {
+        setVisibleCount(prev => prev + 20);
     };
 
     if (loading) return null;
@@ -406,16 +445,32 @@ function OurWorks() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                    {works.slice(0, visibleCount).map((work) => (
-                        <WorkCarousel key={work.id} images={work.images} />
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4 auto-rows-[150px] md:auto-rows-[250px]">
+                    {images.slice(0, visibleCount).map((src, idx) => (
+                        <div
+                            key={idx}
+                            className="relative rounded-xl overflow-hidden group bg-primary/5 cursor-pointer"
+                            onClick={() => openLightbox(idx)}
+                        >
+                            <img
+                                src={src}
+                                alt={`Работа мастера ${idx + 1}`}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                loading="lazy"
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                <div className="text-white opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 p-3 rounded-full backdrop-blur-sm">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                                </div>
+                            </div>
+                        </div>
                     ))}
                 </div>
 
-                {visibleCount < works.length && (
+                {visibleCount < images.length && (
                     <div className="mt-16 flex justify-center">
                         <button
-                            onClick={loadMore}
+                            onClick={handleLoadMore}
                             className="btn-magnetic px-10 py-4 bg-primary text-background rounded-full font-medium text-lg hover:shadow-xl hover:shadow-primary/20"
                         >
                             Показать еще
@@ -423,6 +478,45 @@ function OurWorks() {
                     </div>
                 )}
             </div>
+
+            {lightboxOpen && (
+                <div
+                    className="fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center p-4 animate-in fade-in duration-300"
+                    onClick={closeLightbox}
+                >
+                    <button
+                        className="absolute top-4 right-4 text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-20"
+                        onClick={closeLightbox}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                    </button>
+
+                    <div className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+                        <img
+                            src={images[currentImageIndex]}
+                            alt={`Работа мастера ${currentImageIndex + 1}`}
+                            className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+                        />
+
+                        {images.length > 1 && (
+                            <>
+                                <button
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                                    onClick={prevImage}
+                                >
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
+                                </button>
+                                <button
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                                    onClick={nextImage}
+                                >
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+                                </button>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
         </section>
     );
 }
@@ -516,9 +610,9 @@ function Footer() {
                         <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#0088cc] hover:border-transparent transition-colors">
                             <Send size={20} />
                         </a>
-                        <div className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/40 cursor-not-allowed">
+                        <a href="https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo" target="_blank" rel="noopener noreferrer" className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-[#534eef] hover:border-[#534eef]/50 transition-all cursor-pointer">
                             <MaxIcon size={20} white />
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -540,7 +634,7 @@ function MessengerWidget() {
     const icons = [
         { icon: <WhatsAppIcon size={24} />, color: '#25D366', name: 'WhatsApp', link: 'https://wa.me/79892145276' },
         { icon: <Send size={24} />, color: '#0088cc', name: 'Telegram', link: 'https://t.me/+79892145276' },
-        { icon: <MaxIcon size={24} white />, color: '#534eef', name: 'Max', link: null }
+        { icon: <MaxIcon size={24} white />, color: '#534eef', name: 'Max', link: 'https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo' }
     ];
 
     useEffect(() => {
