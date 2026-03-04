@@ -115,16 +115,19 @@ function Hero() {
                 <img
                     src="/hero-stairs.png"
                     alt="Premium Staircase"
-                    className="w-full h-full object-cover object-[center_60%] transition-opacity duration-1000 hero-img"
+                    className="w-full h-[110%] object-cover object-[center_60%] transition-opacity duration-1000 hero-img -scale-x-100"
                     onLoad={(e) => e.target.style.opacity = 1}
                     style={{ opacity: 0 }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-[#FAF8F5]/30 to-transparent"></div>
+                <div className="absolute inset-0 bg-black/40"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+                {/* Smooth Fade to Next Section */}
+                <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background to-transparent"></div>
             </div>
 
             <div className="relative z-10 max-w-4xl text-left">
                 <h1 className="flex flex-col gap-2">
-                    <span className="hero-elem font-heading font-extrabold text-4xl md:text-6xl text-primary uppercase tracking-wide leading-tight text-shadow-subtle">
+                    <span className="hero-elem font-heading font-extrabold text-4xl md:text-6xl text-white uppercase tracking-wide leading-tight text-shadow-subtle">
                         ИЗГОТОВЛЕНИЕ ЛЕСТНИЦ
                     </span>
                     <span className="hero-elem font-heading font-extrabold text-5xl md:text-7xl text-accent uppercase leading-[0.95] text-shadow-subtle">
@@ -132,12 +135,12 @@ function Hero() {
                     </span>
                 </h1>
 
-                <div className="hero-elem flex items-center gap-3 mt-4 text-accent/80 font-mono text-sm uppercase tracking-[0.2em] font-bold">
-                    <div className="w-8 h-[1px] bg-accent/40" />
+                <div className="hero-elem flex items-center gap-3 mt-4 text-accent font-mono text-sm uppercase tracking-[0.2em] font-bold">
+                    <div className="w-8 h-[1px] bg-accent" />
                     Более 20 лет на рынке
                 </div>
 
-                <p className="hero-elem mt-6 text-xl md:text-2xl text-textMain/90 font-sans max-w-2xl font-medium text-shadow-subtle">
+                <p className="hero-elem mt-6 text-xl md:text-2xl text-white/90 font-sans max-w-2xl font-medium text-shadow-subtle">
                     Создаем уникальные деревянные лестницы любой сложности напрямую от мастера в Краснодаре. Лестницы на бетонное основание, на металлоконструкцию, на косоурах.
                 </p>
 
