@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9A8D76;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7A6D56;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Abstract Staircase Shape -->
+  <path d="M4 28 h6 v-6 h6 v-6 h6 v-6 h6" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="2" y="2" width="28" height="28" rx="6" fill="url(#grad)" />
+  <path d="M6 24 h6 v-6 h6 v-6 h6 v-6" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
