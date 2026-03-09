@@ -374,12 +374,14 @@ function Protocol() {
 // F. OUR WORKS - "The Portfolio Grid"
 // ==========================================
 function OurWorks() {
-    const [publications, setPublications] = useState([]);
-    const [visibleCount, setVisibleCount] = useState(12);
+    const [publications, setPublications] = useState({ stairs: [], other: [] });
+    const [visibleCountStairs, setVisibleCountStairs] = useState(12);
+    const [visibleCountOther, setVisibleCountOther] = useState(12);
     const [loading, setLoading] = useState(true);
 
     // Lightbox state
     const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [currentPubCategory, setCurrentPubCategory] = useState("stairs");
     const [currentPubIndex, setCurrentPubIndex] = useState(0);
     const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
@@ -387,7 +389,10 @@ function OurWorks() {
         fetch('/gallery.json')
             .then(res => res.json())
             .then(data => {
-                setPublications(data);
+                setPublications({
+                    stairs: data.stairs || [],
+                    other: data.other || []
+                });
                 setLoading(false);
             })
             .catch(err => {
@@ -397,7 +402,8 @@ function OurWorks() {
     }, []);
 
     // Handle Lightbox navigation
-    const openLightbox = (pubIdx) => {
+    const openLightbox = (category, pubIdx) => {
+        setCurrentPubCategory(category);
         setCurrentPubIndex(pubIdx);
         setCurrentImgIndex(0);
         setLightboxOpen(true);
@@ -411,13 +417,13 @@ function OurWorks() {
 
     const nextImage = (e) => {
         e?.stopPropagation();
-        const currentPub = publications[currentPubIndex];
+        const currentPub = publications[currentPubCategory][currentPubIndex];
         setCurrentImgIndex((prev) => (prev + 1) % currentPub.images.length);
     };
 
     const prevImage = (e) => {
         e?.stopPropagation();
-        const currentPub = publications[currentPubIndex];
+        const currentPub = publications[currentPubCategory][currentPubIndex];
         setCurrentImgIndex((prev) => (prev - 1 + currentPub.images.length) % currentPub.images.length);
     };
 
@@ -431,11 +437,10 @@ function OurWorks() {
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [lightboxOpen, currentPubIndex, publications]);
+    }, [lightboxOpen, currentPubCategory, currentPubIndex, publications]);
 
-    const handleLoadMore = () => {
-        setVisibleCount(prev => prev + 12);
-    };
+    const handleLoadMoreStairs = () => setVisibleCountStairs(prev => prev + 12);
+    const handleLoadMoreOther = () => setVisibleCountOther(prev => prev + 12);
 
     if (loading) return null;
 
@@ -452,28 +457,62 @@ function OurWorks() {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                    {publications.slice(0, visibleCount).map((pub, idx) => (
+                    {publications.stairs.slice(0, visibleCountStairs).map((pub, idx) => (
                         <WorkCarousel
                             key={pub.id}
                             images={pub.images}
-                            onClick={() => openLightbox(idx)}
+                            onClick={() => openLightbox("stairs", idx)}
                         />
                     ))}
                 </div>
 
-                {visibleCount < publications.length && (
+                {visibleCountStairs < publications.stairs.length && (
                     <div className="mt-16 flex justify-center">
                         <button
-                            onClick={handleLoadMore}
+                            onClick={handleLoadMoreStairs}
                             className="btn-magnetic px-10 py-4 bg-primary text-background rounded-full font-medium text-lg hover:shadow-xl hover:shadow-primary/20"
                         >
                             Показать еще
                         </button>
                     </div>
                 )}
+
+                {publications.other.length > 0 && (
+                    <div className="mt-32">
+                        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
+                            <div>
+                                <h2 className="font-heading font-bold text-3xl text-primary mb-4">Прочие столярные работы</h2>
+                                <p className="text-textMain/60 max-w-xl">
+                                    Изготавливаем не только лестницы, но и двери, беседки, мебель и другие изделия из массива дерева по индивидуальным заказам.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+                            {publications.other.slice(0, visibleCountOther).map((pub, idx) => (
+                                <WorkCarousel
+                                    key={pub.id}
+                                    images={pub.images}
+                                    onClick={() => openLightbox("other", idx)}
+                                />
+                            ))}
+                        </div>
+
+                        {visibleCountOther < publications.other.length && (
+                            <div className="mt-16 flex justify-center">
+                                <button
+                                    onClick={handleLoadMoreOther}
+                                    className="btn-magnetic px-10 py-4 bg-primary text-background rounded-full font-medium text-lg hover:shadow-xl hover:shadow-primary/20"
+                                >
+                                    Показать еще
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
-            {lightboxOpen && publications[currentPubIndex] && (
+            {lightboxOpen && publications[currentPubCategory][currentPubIndex] && (
                 <div
                     className="fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-300"
                     onClick={closeLightbox}
@@ -487,12 +526,12 @@ function OurWorks() {
 
                     <div className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
                         <img
-                            src={publications[currentPubIndex].images[currentImgIndex]}
+                            src={publications[currentPubCategory][currentPubIndex].images[currentImgIndex]}
                             alt={`Работа ${currentPubIndex + 1} фото ${currentImgIndex + 1}`}
                             className="max-w-full max-h-full object-contain rounded-lg shadow-lg select-none"
                         />
 
-                        {publications[currentPubIndex].images.length > 1 && (
+                        {publications[currentPubCategory][currentPubIndex].images.length > 1 && (
                             <>
                                 <button
                                     className="absolute left-4 top-1/2 -translate-y-1/2 text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
@@ -508,7 +547,7 @@ function OurWorks() {
                                 </button>
 
                                 <div className="absolute inset-x-0 bottom-6 flex justify-center gap-2 z-10 pointer-events-none">
-                                    {publications[currentPubIndex].images.map((_, i) => (
+                                    {publications[currentPubCategory][currentPubIndex].images.map((_, i) => (
                                         <div
                                             key={i}
                                             className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentImgIndex ? 'bg-white scale-125' : 'bg-white/40 shadow-sm'}`}
@@ -518,7 +557,7 @@ function OurWorks() {
                             </>
                         )}
                         <div className="absolute bottom-6 left-6 text-white/50 font-mono tracking-widest text-sm pointer-events-none">
-                            {currentImgIndex + 1} / {publications[currentPubIndex].images.length}
+                            {currentImgIndex + 1} / {publications[currentPubCategory][currentPubIndex].images.length}
                         </div>
                     </div>
                 </div>
