@@ -58,34 +58,48 @@ function Navbar() {
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            setScrolled(window.scrollY > 20);
         };
         window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial check
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
-        <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 rounded-full px-6 py-3 flex items-center gap-8 bg-white/90 backdrop-blur-xl shadow-lg shadow-black/5 border border-primary/10">
-            <div className="font-heading font-bold text-xl tracking-tight">Лестницы в Краснодаре</div>
+        <>
+            {/* Placeholder to reserve space and push Hero down */}
+            <div className="h-20 md:h-24 w-full bg-background relative z-40 border-b border-primary/5"></div>
 
-            <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-                <a href="#features" className="link-hover">Преимущества</a>
-                <a href="#philosophy" className="link-hover">Подход</a>
-                <a href="#protocol" className="link-hover">Этапы работы</a>
+            <div className={`fixed left-0 right-0 z-50 flex justify-center transition-all duration-500 ${scrolled ? 'top-4 md:top-6 pointer-events-none' : 'top-0 pointer-events-auto bg-background'}`}>
+                <nav className={`flex items-center transition-all duration-500 pointer-events-auto ${scrolled
+                        ? 'gap-4 md:gap-8 rounded-full px-5 md:px-6 py-3 bg-white/90 backdrop-blur-xl shadow-lg shadow-black/5 border border-primary/10 w-fit'
+                        : 'w-full max-w-7xl justify-between px-6 md:px-16 h-20 md:h-24 mx-auto'
+                    }`}>
+                    <div className="font-heading font-bold text-xl md:text-2xl tracking-tight whitespace-nowrap">Лестницы в Краснодаре</div>
+
+                    <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
+                        <a href="#features" className="link-hover">Преимущества</a>
+                        <a href="#philosophy" className="link-hover">Подход</a>
+                        <a href="#works" className="link-hover">Наши работы</a>
+                        <a href="#protocol" className="link-hover">Этапы работы</a>
+                    </div>
+
+                    <div className="flex items-center gap-4 md:gap-8">
+                        <div className={`flex items-center gap-3 md:gap-4 transition-all duration-500 ${scrolled ? 'border-l border-primary/20 pl-3 md:pl-4' : ''}`}>
+                            <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#25D366] transition-colors"><WhatsAppIcon size={20} /></a>
+                            <a href="https://www.instagram.com/lestniza_krr/" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#E4405F] transition-colors"><InstagramIcon size={20} /></a>
+                            <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#0088cc] transition-colors"><Send size={20} /></a>
+                            <a href="https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#534eef] transition-colors"><MaxIcon size={20} white /></a>
+                        </div>
+
+                        <a href="tel:+79892145276" className="hidden md:flex btn-magnetic items-center gap-2 bg-primary text-background px-6 py-2.5 rounded-full font-medium hover:shadow-lg hover:shadow-primary/20 transition-all whitespace-nowrap min-w-fit">
+                            <Phone size={18} />
+                            <span>+7 (989) 214-52-76</span>
+                        </a>
+                    </div>
+                </nav>
             </div>
-
-            <div className="flex items-center gap-4 border-l border-primary/20 pl-4">
-                <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#25D366] transition-colors"><WhatsAppIcon size={20} /></a>
-                <a href="https://www.instagram.com/lestniza_krr/" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#E4405F] transition-colors"><InstagramIcon size={20} /></a>
-                <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#0088cc] transition-colors"><Send size={20} /></a>
-                <a href="https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#534eef] transition-colors"><MaxIcon size={20} white /></a>
-            </div>
-
-            <a href="tel:+79892145276" className="hidden md:flex btn-magnetic items-center gap-2 bg-primary text-background px-6 py-2.5 rounded-full font-medium hover:shadow-lg hover:shadow-primary/20 transition-all whitespace-nowrap min-w-fit">
-                <Phone size={18} />
-                <span>+7 (989) 214-52-76</span>
-            </a>
-        </nav>
+        </>
     );
 }
 
@@ -110,7 +124,7 @@ function Hero() {
     }, []);
 
     return (
-        <section ref={heroRef} className="relative w-full h-[100dvh] flex items-end pb-24 px-8 md:px-16 overflow-hidden">
+        <section ref={heroRef} className="relative w-full h-[calc(100dvh-5rem)] md:h-[calc(100dvh-6rem)] flex items-end pb-12 md:pb-24 px-6 md:px-16 overflow-hidden mt-[-1px]">
             {/* Background Image - Premium Modern Staircase */}
             <div className="absolute inset-0 z-0 bg-[#E0DDD5] overflow-hidden">
                 <img
