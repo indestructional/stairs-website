@@ -124,20 +124,23 @@ function Hero() {
     }, []);
 
     return (
-        <section ref={heroRef} className="relative w-full h-[calc(100dvh-5rem)] md:h-[calc(100dvh-6rem)] flex items-end pb-12 md:pb-24 px-6 md:px-16 overflow-hidden mt-[-1px]">
-            {/* Background Image - Premium Modern Staircase */}
-            <div className="absolute inset-0 z-0 bg-[#E0DDD5] overflow-hidden">
+        <section ref={heroRef} className="relative w-full h-[calc(100dvh-5rem)] md:h-[calc(100dvh-6rem)] flex items-end pb-12 md:pb-24 px-6 md:px-16 overflow-hidden mt-[-1px] bg-black">
+            {/* Background Image - Final User Choice */}
+            <div className="absolute inset-0 z-0 overflow-hidden">
                 <img
-                    src="/hero-stairs.png"
+                    src="/hero-stairs-final.png"
                     alt="Premium Staircase"
-                    className="w-full h-[110%] object-cover object-[center_60%] transition-opacity duration-1000 hero-img -scale-x-100"
+                    className="w-full h-[110%] object-cover object-[center_bottom] transition-opacity duration-1000 hero-img"
                     onLoad={(e) => e.target.style.opacity = 1}
                     style={{ opacity: 0 }}
                 />
+                
+                {/* Visual Polish Overlays */}
                 <div className="absolute inset-0 bg-black/40"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
-                {/* Smooth Fade to Next Section */}
-                <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent"></div>
+                
+                {/* Smooth Fade to Next Section at the bottom */}
+                <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
             </div>
 
             <div className="relative z-10 max-w-4xl text-left">
@@ -162,7 +165,7 @@ function Hero() {
                 <div className="hero-elem mt-12">
                     <a href="tel:+79892145276" className="btn-magnetic inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-full text-lg font-bold shadow-xl shadow-accent/20">
                         <Phone size={24} />
-                        Связаться с мастером: +7 (989) 214-52-76
+                        Связаться с нами: +7 (989) 214-52-76
                     </a>
                 </div>
             </div>
@@ -663,7 +666,7 @@ function Footer() {
 
                 <div className="flex flex-col gap-8 md:w-1/3">
                     <div>
-                        <div className="text-white/40 font-mono text-xs mb-4">СВЯЗЬ С МАСТЕРОМ</div>
+                        <div className="text-white/40 font-mono text-xs mb-4">КОНСУЛЬТАЦИЯ И ЗАКАЗ</div>
                         <a href="tel:+79892145276" className="link-hover text-3xl md:text-5xl font-heading font-bold tracking-tighter text-accent block hover:text-white transition-colors">
                             +7 (989) 214-52-76
                         </a>
