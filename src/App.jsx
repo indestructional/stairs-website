@@ -128,7 +128,7 @@ function Hero() {
             {/* Background Image - Final User Choice */}
             <div className="absolute inset-0 z-0 overflow-hidden">
                 <img
-                    src="/hero-stairs-final.png"
+                    src={`${import.meta.env.BASE_URL}hero-stairs-final.png`}
                     alt="Premium Staircase"
                     className="w-full h-[110%] object-cover object-[center_bottom] transition-opacity duration-1000 hero-img"
                     onLoad={(e) => e.target.style.opacity = 1}
@@ -403,7 +403,7 @@ function OurWorks() {
     const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
     useEffect(() => {
-        fetch('/gallery.json')
+        fetch(`${import.meta.env.BASE_URL}gallery.json`)
             .then(res => res.json())
             .then(data => {
                 setPublications({
