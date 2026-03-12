@@ -159,7 +159,7 @@ function Hero() {
                 </div>
 
                 <p className="hero-elem mt-6 text-xl md:text-2xl text-white/90 font-sans max-w-2xl font-medium text-shadow-subtle">
-                    Создаем уникальные деревянные лестницы любой сложности напрямую от мастера в Краснодаре. Лестницы на бетонное основание, на металлоконструкцию, на косоурах.
+                    Создаем уникальные лестницы любой сложности напрямую от мастера в Краснодаре: на бетонное основание, на металлоконструкцию, на косоурах.
                 </p>
 
                 <div className="hero-elem mt-12">
@@ -655,7 +655,7 @@ function Footer() {
                 <div className="flex-1">
                     <h2 className="font-heading font-bold text-3xl mb-4">Лестницы в Краснодаре</h2>
                     <p className="text-white/60 font-sans max-w-sm mb-12">
-                        Создание надёжных деревянных лестниц любой сложности напрямую от мастера для частных домов.
+                        Создание надёжных лестниц любой сложности напрямую от мастера для частных домов.
                     </p>
 
                     <div className="flex items-center gap-4 border border-white/10 w-fit px-4 py-2 rounded-full mb-8">
