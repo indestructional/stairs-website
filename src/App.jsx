@@ -543,7 +543,7 @@ function OurWorks() {
 
                     <div className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
                         <img
-                            src={publications[currentPubCategory][currentPubIndex].images[currentImgIndex]}
+                            src={`${import.meta.env.BASE_URL}${publications[currentPubCategory][currentPubIndex].images[currentImgIndex].replace(/^\//, '')}`}
                             alt={`Работа ${currentPubIndex + 1} фото ${currentImgIndex + 1}`}
                             className="max-w-full max-h-full object-contain rounded-lg shadow-lg select-none"
                         />
@@ -602,7 +602,7 @@ function WorkCarousel({ images, onClick }) {
             className="group cursor-pointer relative aspect-[3/4] bg-primary/5 rounded-2xl md:rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-md transition-all duration-500"
         >
             <img
-                src={images[currentIdx]}
+                src={`${import.meta.env.BASE_URL}${images[currentIdx].replace(/^\//, '')}`}
                 alt="Лестница"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 loading="lazy"
