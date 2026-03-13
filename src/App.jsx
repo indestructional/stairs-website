@@ -72,8 +72,8 @@ function Navbar() {
 
             <div className={`fixed left-0 right-0 z-50 flex justify-center transition-all duration-500 ${scrolled ? 'top-4 md:top-6 pointer-events-none' : 'top-0 pointer-events-auto bg-background'}`}>
                 <nav className={`flex items-center transition-all duration-500 pointer-events-auto ${scrolled
-                        ? 'gap-4 md:gap-8 rounded-full px-5 md:px-6 py-3 bg-white/90 backdrop-blur-xl shadow-lg shadow-black/5 border border-primary/10 w-fit'
-                        : 'w-full max-w-7xl justify-between px-6 md:px-16 h-20 md:h-24 mx-auto'
+                    ? 'gap-4 md:gap-8 rounded-full px-5 md:px-6 py-3 bg-white/90 backdrop-blur-xl shadow-lg shadow-black/5 border border-primary/10 w-fit'
+                    : 'w-full max-w-7xl justify-between px-6 md:px-16 h-20 md:h-24 mx-auto'
                     }`}>
                     <div className="font-heading font-bold text-xl md:text-2xl tracking-tight whitespace-nowrap">Лестницы в Краснодаре</div>
 
@@ -134,11 +134,11 @@ function Hero() {
                     onLoad={(e) => e.target.style.opacity = 1}
                     style={{ opacity: 0 }}
                 />
-                
+
                 {/* Visual Polish Overlays */}
                 <div className="absolute inset-0 bg-black/40"></div>
                 <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent"></div>
-                
+
                 {/* Smooth Fade to Next Section at the bottom */}
                 <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
             </div>
@@ -500,7 +500,7 @@ function OurWorks() {
                             <div>
                                 <h2 className="font-heading font-bold text-3xl text-primary mb-4">Прочие столярные работы</h2>
                                 <p className="text-textMain/60 max-w-xl">
-                                    Берёмся и за другие столярные проекты из натуральной древесины — беседки, ограждения и прочие конструкции по индивидуальным заказам.
+                                    Берёмся и за другие столярные проекты из натуральной древесины: беседки, ограждения и прочие конструкции по индивидуальным заказам.
                                 </p>
                             </div>
                         </div>
