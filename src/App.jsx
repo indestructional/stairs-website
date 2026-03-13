@@ -40,15 +40,7 @@ function MaxIcon({ size = 20, white = false }) {
     );
 }
 
-function InstagramIcon({ size = 20 }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-        </svg>
-    );
-}
+
 
 // ==========================================
 // A. NAVBAR - "The Floating Island"
@@ -87,7 +79,6 @@ function Navbar() {
                     <div className="flex items-center gap-4 md:gap-8">
                         <div className={`flex items-center gap-3 md:gap-4 transition-all duration-500 ${scrolled ? 'border-l border-primary/20 pl-3 md:pl-4' : ''}`}>
                             <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#25D366] transition-colors"><WhatsAppIcon size={20} /></a>
-                            <a href="https://www.instagram.com/lestniza_krr/" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#E4405F] transition-colors"><InstagramIcon size={20} /></a>
                             <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#0088cc] transition-colors"><Send size={20} /></a>
                             <a href="https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo" target="_blank" rel="noopener noreferrer" className="link-hover text-primary hover:text-[#534eef] transition-colors"><MaxIcon size={20} white /></a>
                         </div>
@@ -675,9 +666,6 @@ function Footer() {
                     <div className="flex gap-4">
                         <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#25D366] hover:border-transparent transition-colors">
                             <WhatsAppIcon size={20} />
-                        </a>
-                        <a href="https://www.instagram.com/lestniza_krr/" target="_blank" rel="noopener noreferrer" className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#E4405F] hover:border-transparent transition-colors">
-                            <InstagramIcon size={20} />
                         </a>
                         <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" className="btn-magnetic w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-[#0088cc] hover:border-transparent transition-colors">
                             <Send size={20} />
