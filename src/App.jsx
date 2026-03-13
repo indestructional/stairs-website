@@ -498,9 +498,9 @@ function OurWorks() {
                     <div className="mt-32">
                         <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
                             <div>
-                                <h2 className="font-heading font-bold text-3xl text-primary mb-4">Дополнительные работы</h2>
+                                <h2 className="font-heading font-bold text-3xl text-primary mb-4">Прочие столярные работы</h2>
                                 <p className="text-textMain/60 max-w-xl">
-                                    Изготавливаем сопутствующие изделия: ограждения, поручни и другие элементы из массива дерева для завершения образа вашей лестницы.
+                                    Берёмся и за другие столярные проекты из натуральной древесины — беседки, ограждения и прочие конструкции по индивидуальным заказам.
                                 </p>
                             </div>
                         </div>
