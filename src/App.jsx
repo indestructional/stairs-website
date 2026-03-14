@@ -58,7 +58,7 @@ function Navbar() {
     }, []);
 
     return (
-        <>
+        <div className="hidden md:block">
             {/* Placeholder to reserve space and push Hero down */}
             <div className="h-20 md:h-24 w-full bg-background relative z-40 border-b border-primary/5"></div>
 
@@ -90,7 +90,7 @@ function Navbar() {
                     </div>
                 </nav>
             </div>
-        </>
+        </div>
     );
 }
 
