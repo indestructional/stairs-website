@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Phone, Send, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Analytics } from "@vercel/analytics/react"
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -783,7 +783,7 @@ function App() {
             <Protocol />
             <Footer />
             <MessengerWidget />
-            <Analytics />
+
         </div>
     )
 }
