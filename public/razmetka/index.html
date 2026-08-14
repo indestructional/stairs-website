@@ -275,31 +275,59 @@ function payload() {
 
 const status = document.getElementById('status');
 
-document.getElementById('send').onclick = async () => {
-  const btn = document.getElementById('send');
+// Отправка идёт обычной формой в скрытый кадр, а не запросом из скрипта:
+// запрос из скрипта браузер к этому сервису не пропускает.
+document.getElementById('send').onclick = () => {
   if (!ACCESS_KEY) {
     status.textContent = 'отправка не настроена, сохраните файлом';
     return;
   }
-  btn.disabled = true;
   status.textContent = 'отправляю...';
-  try {
-    const res = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        access_key: ACCESS_KEY,
-        subject: 'Разметка работ с сайта',
-        from_name: 'Разметка работ',
-        razmetka: payload(),
-      }),
-    });
-    const data = await res.json();
-    status.textContent = data.success ? 'отправлено, спасибо' : 'не отправилось, сохраните файлом';
-  } catch {
-    status.textContent = 'не отправилось, сохраните файлом';
+
+  let frame = document.getElementById('sink');
+  if (!frame) {
+    frame = document.createElement('iframe');
+    frame.id = 'sink';
+    frame.name = 'sink';
+    frame.style.display = 'none';
+    document.body.appendChild(frame);
   }
-  btn.disabled = false;
+
+  const form = document.createElement('form');
+  form.action = 'https://api.web3forms.com/submit';
+  form.method = 'POST';
+  form.target = 'sink';
+  form.style.display = 'none';
+  const add = (name, value) => {
+    const i = document.createElement('input');
+    i.type = 'hidden'; i.name = name; i.value = value;
+    form.appendChild(i);
+  };
+  add('access_key', ACCESS_KEY);
+  add('subject', 'Разметка работ с сайта');
+  add('from_name', 'Разметка работ');
+  add('razmetka', payload());
+  add('redirect', location.origin + '/razmetka/?sent=1');
+  document.body.appendChild(form);
+  form.submit();
+
+  // Успех подтверждаем возвратом кадра на наш домен: если сервис не
+  // принял отправку, он останется у себя и мы честно об этом скажем.
+  let tries = 0;
+  const timer = setInterval(() => {
+    tries++;
+    let href = null;
+    try { href = frame.contentWindow.location.href; } catch { /* ещё у сервиса */ }
+    if (href && href.includes('sent=1')) {
+      clearInterval(timer);
+      form.remove();
+      status.textContent = 'отправлено, спасибо';
+    } else if (tries > 30) {
+      clearInterval(timer);
+      form.remove();
+      status.textContent = 'отправить не вышло - нажмите «Сохранить файлом»';
+    }
+  }, 500);
 };
 
 document.getElementById('save').onclick = () => {
