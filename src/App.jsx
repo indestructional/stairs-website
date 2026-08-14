@@ -202,8 +202,8 @@ function Features() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {features.map((f, i) => (
-                        <div key={i} className="feature-card bg-white rounded-[2rem] p-10 shadow-sm border border-primary/10 flex flex-col gap-6 group hover:shadow-lg hover:shadow-primary/5 transition-all duration-500">
-                            <div className="w-16 h-16 rounded-2xl bg-accent/10 text-accent flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-all duration-500">
+                        <div key={i} className="feature-card bg-white rounded-[2rem] p-10 shadow-sm border border-primary/10 flex flex-col gap-6">
+                            <div className="w-16 h-16 rounded-2xl bg-accent/10 text-accent flex items-center justify-center">
                                 {f.icon}
                             </div>
                             <h3 className="font-heading font-bold text-2xl text-primary">{f.title}</h3>
@@ -466,7 +466,7 @@ function OurWorks() {
                     <div>
                         <h2 className="font-heading font-bold text-4xl text-primary mb-4">Наши работы</h2>
                         <p className="text-textMain/60 max-w-xl">
-                            Каждая лестница — уникальный проект, выполненный с учетом особенностей помещения и пожеланий заказчика.
+                            Каждая лестница - уникальный проект, выполненный с учетом особенностей помещения и пожеланий заказчика.
                         </p>
                     </div>
                 </div>
@@ -789,7 +789,7 @@ function Services() {
                 <div className="flex flex-col gap-4">
                     <h2 className="font-heading font-bold text-4xl text-primary">Что мы делаем</h2>
                     <p className="text-textMain/60 max-w-xl">
-                        Конструкции, породы дерева и смежные работы — подробно о каждом направлении.
+                        Конструкции, породы дерева и смежные работы - подробно о каждом направлении.
                     </p>
                 </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

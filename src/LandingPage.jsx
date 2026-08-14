@@ -70,7 +70,7 @@ function useSeo(page) {
     }, [page]);
 }
 
-/** Подборка работ по категории страницы — та же галерея, что на главной. */
+/** Подборка работ по категории страницы - та же галерея, что на главной. */
 function WorksPreview({ category }) {
     const [items, setItems] = useState([]);
 
@@ -101,7 +101,7 @@ function WorksPreview({ category }) {
                     ))}
                 </div>
                 <a href="/#works" className="text-accent font-medium link-hover self-start">
-                    Смотреть все 148 работ
+                    Смотреть все работы
                 </a>
             </div>
         </section>
@@ -116,7 +116,7 @@ function CallToAction() {
                     Приедем, замерим, посчитаем
                 </h2>
                 <p className="opacity-80 max-w-2xl">
-                    Замер бесплатный в черте {CITY}а, за городом — от 1000 рублей, и эта сумма вычитается
+                    Замер бесплатный в черте {CITY}а, за городом - от 1000 рублей, и эта сумма вычитается
                     из стоимости заказа. Выезжаем в радиусе {RADIUS_KM} км.
                 </p>
                 <a
