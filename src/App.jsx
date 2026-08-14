@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Phone, Send, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Phone, Send, ChevronLeft, ChevronRight, Menu, X, ChevronDown } from 'lucide-react';
 import { LANDINGS } from './content/landings.js';
 
 
@@ -71,6 +71,20 @@ export function Navbar() {
                     <a href="/" className="font-heading font-bold text-xl md:text-2xl tracking-tight whitespace-nowrap">Лестницы в Краснодаре</a>
 
                     <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
+                        <div className="relative group/menu">
+                            <button type="button" className="link-hover flex items-center gap-1">
+                                Услуги <ChevronDown size={15} />
+                            </button>
+                            <div className="absolute left-0 top-full pt-3 hidden group-hover/menu:block group-focus-within/menu:block">
+                                <div className="bg-white rounded-2xl shadow-xl border border-primary/10 py-2 w-72">
+                                    {LANDINGS.map((page) => (
+                                        <a key={page.slug} href={`/${page.slug}/`} className="block px-5 py-2.5 text-sm hover:bg-primary/5 hover:text-accent transition-colors">
+                                            {page.h1}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                         <a href="/#features" className="link-hover">Преимущества</a>
                         <a href="/#philosophy" className="link-hover">Подход</a>
                         <a href="/#works" className="link-hover">Наши работы</a>
@@ -91,6 +105,115 @@ export function Navbar() {
                     </div>
                 </nav>
             </div>
+        </div>
+    );
+}
+
+
+// ==========================================
+// МОБИЛЬНАЯ ШАПКА
+// Раньше навигации на телефоне не было вообще: десктопная шапка помечена
+// hidden md:block. При этом телефоны дают две трети трафика, а с
+// появлением внутренних страниц уйти с них стало некуда.
+// ==========================================
+export function MobileNav() {
+    const [open, setOpen] = useState(false);
+
+    // Пока меню открыто, страница под ним не должна прокручиваться.
+    useEffect(() => {
+        document.body.style.overflow = open ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
+    }, [open]);
+
+    const sections = [
+        { href: '/#features', label: 'Преимущества' },
+        { href: '/#philosophy', label: 'Подход' },
+        { href: '/#works', label: 'Наши работы' },
+        { href: '/#protocol', label: 'Этапы работы' },
+    ];
+
+    return (
+        <div className="md:hidden">
+            <div className="h-20 w-full bg-background border-b border-primary/10 sticky top-0 z-50 flex items-center justify-between px-5">
+                <a href="/" className="font-heading font-bold text-lg tracking-tight">Лестницы в Краснодаре</a>
+                <div className="flex items-center gap-2">
+                    <a
+                        href="tel:+79892145276"
+                        aria-label="Позвонить"
+                        className="w-11 h-11 rounded-full bg-accent text-white flex items-center justify-center"
+                    >
+                        <Phone size={20} />
+                    </a>
+                    <button
+                        type="button"
+                        onClick={() => setOpen(true)}
+                        aria-label="Открыть меню"
+                        aria-expanded={open}
+                        className="w-11 h-11 rounded-full border border-primary/20 text-primary flex items-center justify-center"
+                    >
+                        <Menu size={22} />
+                    </button>
+                </div>
+            </div>
+
+            {open && (
+                <div className="fixed inset-0 z-[110] bg-background overflow-y-auto">
+                    <div className="h-20 flex items-center justify-between px-5 border-b border-primary/10">
+                        <span className="font-heading font-bold text-lg">Меню</span>
+                        <button
+                            type="button"
+                            onClick={() => setOpen(false)}
+                            aria-label="Закрыть меню"
+                            className="w-11 h-11 rounded-full border border-primary/20 text-primary flex items-center justify-center"
+                        >
+                            <X size={22} />
+                        </button>
+                    </div>
+
+                    <nav className="px-5 py-6 flex flex-col gap-8 pb-24">
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs uppercase tracking-widest text-textMain/40 mb-2">Услуги</span>
+                            {LANDINGS.map((page) => (
+                                <a
+                                    key={page.slug}
+                                    href={`/${page.slug}/`}
+                                    onClick={() => setOpen(false)}
+                                    className="py-3 border-b border-primary/5 font-medium text-primary"
+                                >
+                                    {page.h1}
+                                </a>
+                            ))}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <span className="text-xs uppercase tracking-widest text-textMain/40 mb-2">О нас</span>
+                            {sections.map((s) => (
+                                <a
+                                    key={s.href}
+                                    href={s.href}
+                                    onClick={() => setOpen(false)}
+                                    className="py-3 border-b border-primary/5 text-textMain/80"
+                                >
+                                    {s.label}
+                                </a>
+                            ))}
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                            <span className="text-xs uppercase tracking-widest text-textMain/40">Связаться</span>
+                            <a href="tel:+79892145276" className="flex items-center gap-3 bg-accent text-white px-6 py-4 rounded-full font-bold justify-center">
+                                <Phone size={20} />
+                                <span>+7 (989) 214-52-76</span>
+                            </a>
+                            <div className="flex gap-3">
+                                <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="flex-1 h-14 rounded-2xl border border-primary/15 flex items-center justify-center text-[#25D366]"><WhatsAppIcon size={26} /></a>
+                                <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="flex-1 h-14 rounded-2xl border border-primary/15 flex items-center justify-center text-[#0088cc]"><Send size={26} /></a>
+                                <a href="https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo" target="_blank" rel="noopener noreferrer" aria-label="Max" className="flex-1 h-14 rounded-2xl border border-primary/15 flex items-center justify-center text-[#534eef]"><MaxIcon size={26} white /></a>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            )}
         </div>
     );
 }
@@ -818,6 +941,7 @@ function App() {
     return (
         <div className="w-full min-h-screen">
             <Navbar />
+            <MobileNav />
             <Hero />
             <Features />
             <Philosophy />

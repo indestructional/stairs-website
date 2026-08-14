@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Phone } from 'lucide-react';
-import { Navbar, Footer, MessengerWidget } from './App.jsx';
-import { bySlug, PHONE, PHONE_HREF, CITY, RADIUS_KM } from './content/landings.js';
+import { Navbar, MobileNav, Footer, MessengerWidget } from './App.jsx';
+import { LANDINGS, bySlug, PHONE, PHONE_HREF, CITY, RADIUS_KM } from './content/landings.js';
 
 const ORIGIN = 'https://lestniza-krr.ru';
 
@@ -131,6 +131,30 @@ function CallToAction() {
     );
 }
 
+
+/** Перелинковка: с внутренней страницы должно быть куда уйти, кроме как назад. */
+function OtherServices({ currentSlug }) {
+    const others = LANDINGS.filter((p) => p.slug !== currentSlug);
+    return (
+        <section className="w-full px-6 md:px-16 py-12 border-t border-primary/10">
+            <div className="max-w-5xl mx-auto flex flex-col gap-6">
+                <h2 className="font-heading font-bold text-xl md:text-2xl text-primary">Другие услуги</h2>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {others.map((p) => (
+                        <a
+                            key={p.slug}
+                            href={`/${p.slug}/`}
+                            className="px-5 py-4 rounded-xl border border-primary/10 hover:border-accent/40 hover:text-accent transition-colors font-medium text-primary"
+                        >
+                            {p.h1}
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
+
 export default function LandingPage({ slug }) {
     const page = bySlug[slug];
     useSeo(page);
@@ -140,6 +164,7 @@ export default function LandingPage({ slug }) {
     return (
         <div className="w-full min-h-screen bg-background">
             <Navbar />
+            <MobileNav />
 
             <main>
                 <header className="w-full px-6 md:px-16 pt-10 md:pt-16 pb-8">
@@ -195,6 +220,7 @@ export default function LandingPage({ slug }) {
                 )}
 
                 <CallToAction />
+                <OtherServices currentSlug={page.slug} />
             </main>
 
             <Footer />
