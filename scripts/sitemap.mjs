@@ -6,6 +6,7 @@
  */
 import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { LANDINGS } from '../src/content/landings.js';
 
 const ORIGIN = 'https://lestniza-krr.ru';
 const DIST = resolve('dist');
@@ -13,6 +14,7 @@ const DIST = resolve('dist');
 // Маршруты сайта. Пополняется по мере появления посадочных страниц.
 const ROUTES = [
     { path: '/', priority: '1.0', changefreq: 'weekly' },
+    ...LANDINGS.map((l) => ({ path: `/${l.slug}/`, priority: '0.8', changefreq: 'monthly' })),
 ];
 
 const today = new Date().toISOString().slice(0, 10);

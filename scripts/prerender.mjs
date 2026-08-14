@@ -15,9 +15,10 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { extname, join, resolve } from 'node:path';
 import puppeteer from 'puppeteer';
+import { LANDINGS } from '../src/content/landings.js';
 
 const DIST = resolve('dist');
-const ROUTES = ['/'];
+const ROUTES = ['/', ...LANDINGS.map((l) => `/${l.slug}/`)];
 
 const MIME = {
     '.html': 'text/html; charset=utf-8',
@@ -62,8 +63,9 @@ try {
         await page.goto(`http://127.0.0.1:${port}${route}`, { waitUntil: 'networkidle0', timeout: 60_000 });
 
         // Ждём, пока подтянется gallery.json и отрисуются карточки работ.
+        // Селектор общий: на главной это секция работ, на посадочных — подборка.
         await page.waitForFunction(
-            () => document.querySelectorAll('#works img').length > 0,
+            () => document.querySelectorAll('#root img[src*="/gallery/"]').length > 0,
             { timeout: 30_000 },
         ).catch(() => console.warn(`  предупреждение: галерея не отрисовалась на ${route}`));
 

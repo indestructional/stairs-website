@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Phone, Send, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LANDINGS } from './content/landings.js';
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -45,7 +46,7 @@ function MaxIcon({ size = 20, white = false }) {
 // ==========================================
 // A. NAVBAR - "The Floating Island"
 // ==========================================
-function Navbar() {
+export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -67,13 +68,13 @@ function Navbar() {
                     ? 'gap-4 md:gap-8 rounded-full px-5 md:px-6 py-3 bg-white/90 backdrop-blur-xl shadow-lg shadow-black/5 border border-primary/10 w-fit'
                     : 'w-full max-w-7xl justify-between px-6 md:px-16 h-20 md:h-24 mx-auto'
                     }`}>
-                    <div className="font-heading font-bold text-xl md:text-2xl tracking-tight whitespace-nowrap">Лестницы в Краснодаре</div>
+                    <a href="/" className="font-heading font-bold text-xl md:text-2xl tracking-tight whitespace-nowrap">Лестницы в Краснодаре</a>
 
                     <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
-                        <a href="#features" className="link-hover">Преимущества</a>
-                        <a href="#philosophy" className="link-hover">Подход</a>
-                        <a href="#works" className="link-hover">Наши работы</a>
-                        <a href="#protocol" className="link-hover">Этапы работы</a>
+                        <a href="/#features" className="link-hover">Преимущества</a>
+                        <a href="/#philosophy" className="link-hover">Подход</a>
+                        <a href="/#works" className="link-hover">Наши работы</a>
+                        <a href="/#protocol" className="link-hover">Этапы работы</a>
                     </div>
 
                     <div className="flex items-center gap-4 md:gap-8">
@@ -645,7 +646,7 @@ function WorkCarousel({ images, onClick }) {
 // ==========================================
 // G. FOOTER
 // ==========================================
-function Footer() {
+export function Footer() {
     return (
         <footer className="w-full bg-[#1A1A1A] text-white rounded-t-[4rem] mt-24 pt-20 pb-12 px-8 md:px-16 overflow-hidden relative">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 relative z-10">
@@ -694,7 +695,7 @@ function Footer() {
 // ==========================================
 // H. MESSENGER WIDGET
 // ==========================================
-function MessengerWidget() {
+export function MessengerWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
     const icons = [
@@ -775,6 +776,41 @@ function MessengerWidget() {
     );
 }
 
+
+// ==========================================
+// УСЛУГИ - ссылки на посадочные страницы.
+// Без них страницы остаются сиротами: поиск их не обойдёт,
+// а посетитель не узнает, что мы делаем не только лестницы.
+// ==========================================
+function Services() {
+    return (
+        <section id="services" className="w-full py-24 px-8 md:px-16 bg-background">
+            <div className="max-w-7xl mx-auto flex flex-col gap-10">
+                <div className="flex flex-col gap-4">
+                    <h2 className="font-heading font-bold text-4xl text-primary">Что мы делаем</h2>
+                    <p className="text-textMain/60 max-w-xl">
+                        Конструкции, породы дерева и смежные работы — подробно о каждом направлении.
+                    </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {LANDINGS.map((page) => (
+                        <a
+                            key={page.slug}
+                            href={`/${page.slug}/`}
+                            className="group flex flex-col gap-2 p-6 rounded-2xl border border-primary/10 bg-white/40 hover:border-accent/40 hover:shadow-lg transition-all"
+                        >
+                            <h3 className="font-heading font-bold text-xl text-primary group-hover:text-accent transition-colors">
+                                {page.h1}
+                            </h3>
+                            <p className="text-sm text-textMain/70 leading-relaxed">{page.lead}</p>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
+
 // ==========================================
 // MAIN APP COMPONENT
 // ==========================================
@@ -786,6 +822,7 @@ function App() {
             <Features />
             <Philosophy />
             <OurWorks />
+            <Services />
             <Protocol />
             <Footer />
             <MessengerWidget />
