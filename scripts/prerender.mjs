@@ -15,10 +15,10 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { extname, join, resolve } from 'node:path';
 import puppeteer from 'puppeteer';
-import { LANDINGS } from '../src/content/landings.js';
+import { ALL_PAGES } from '../src/content/landings.js';
 
 const DIST = resolve('dist');
-const ROUTES = ['/', ...LANDINGS.map((l) => `/${l.slug}/`)];
+const ROUTES = ['/', ...ALL_PAGES.map((l) => `/${l.slug}/`)];
 
 const MIME = {
     '.html': 'text/html; charset=utf-8',

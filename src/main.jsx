@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App.jsx'
 import LandingPage from './LandingPage.jsx'
-import { LANDINGS } from './content/landings.js'
+import { ALL_PAGES } from './content/landings.js'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<App />} />
-                {LANDINGS.map(({ slug }) => (
+                {ALL_PAGES.map(({ slug }) => (
                     <Route key={slug} path={`/${slug}`} element={<LandingPage slug={slug} />} />
                 ))}
                 <Route path="*" element={<App />} />

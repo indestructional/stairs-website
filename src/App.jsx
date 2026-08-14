@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Phone, Send, ChevronLeft, ChevronRight, Menu, X, ChevronDown } from 'lucide-react';
-import { LANDINGS } from './content/landings.js';
+import { LANDINGS, STAGES } from './content/landings.js';
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -486,11 +486,16 @@ function Protocol() {
                 <h2 className="font-heading font-bold text-4xl text-primary text-center mb-16">Этапы работы</h2>
 
                 {steps.map((step, idx) => (
-                    <div key={idx} className="prot-card sticky top-[15vh] w-full h-[70vh] bg-white rounded-[3rem] border border-primary/10 p-8 md:p-16 flex flex-col md:flex-row gap-12 items-center shadow-xl shadow-black/5">
+                    <a
+                        key={idx}
+                        href={STAGES[idx] ? `/${STAGES[idx].slug}/` : '#protocol'}
+                        className="prot-card group sticky top-[15vh] w-full h-[70vh] bg-white rounded-[3rem] border border-primary/10 hover:border-accent/40 p-8 md:p-16 flex flex-col md:flex-row gap-12 items-center shadow-xl shadow-black/5 transition-colors"
+                    >
                         <div className="flex-1 flex flex-col justify-center">
-                            <div className="font-mono text-xl text-accent font-bold mb-6">ЭТАП РАБОТЫ</div>
-                            <h3 className="font-heading font-bold text-4xl md:text-5xl text-primary mb-6">{step.title}</h3>
+                            <div className="font-mono text-xl text-accent font-bold mb-6">ЭТАП {step.num}</div>
+                            <h3 className="font-heading font-bold text-4xl md:text-5xl text-primary mb-6 group-hover:text-accent transition-colors">{step.title}</h3>
                             <p className="font-sans text-xl text-textMain/70 max-w-md">{step.desc}</p>
+                            <span className="mt-6 text-accent font-medium">Подробнее об этапе</span>
                         </div>
                         <div className="w-full md:w-[40%] aspect-square rounded-[3rem] border border-primary/5 flex items-center justify-center relative overflow-hidden bg-background/50">
                             {/* Visual decor for steps */}
@@ -501,7 +506,7 @@ function Protocol() {
                                 {step.renderSvg()}
                             </div>
                         </div>
-                    </div>
+                    </a>
                 ))}
             </div>
         </section>
