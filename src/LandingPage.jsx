@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Phone } from 'lucide-react';
 import { Navbar, MobileNav, Footer, MessengerWidget } from './App.jsx';
-import { LANDINGS, bySlug, PHONE, PHONE_HREF, CITY, RADIUS_KM } from './content/landings.js';
+import { LANDINGS, bySlug, PHONE, PHONE_HREF, CITY } from './content/landings.js';
 
 const ORIGIN = 'https://lestniza-krr.ru';
 
@@ -116,8 +116,8 @@ function CallToAction() {
                     Приедем, замерим, посчитаем
                 </h2>
                 <p className="opacity-80 max-w-2xl">
-                    Замер бесплатный в черте {CITY}а, за городом - от 1000 рублей, и эта сумма вычитается
-                    из стоимости заказа. Выезжаем в радиусе {RADIUS_KM} км.
+                    Сам замер бесплатный в черте {CITY}а, за городом оплачивается выезд - от 1000 рублей.
+                    Работаем по {CITY}у и краю, ближние районы в приоритете.
                 </p>
                 <a
                     href={`tel:${PHONE_HREF}`}

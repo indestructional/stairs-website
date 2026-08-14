@@ -276,7 +276,7 @@ function Hero() {
 
                 <div className="hero-elem flex items-center gap-3 mt-4 text-accent font-mono text-sm uppercase tracking-[0.2em] font-bold">
                     <div className="w-8 h-[1px] bg-accent" />
-                    Более 20 лет на рынке
+                    Более 25 лет на рынке
                 </div>
 
                 <p className="hero-elem mt-6 text-xl md:text-2xl text-white/90 font-sans max-w-2xl font-medium text-shadow-subtle">
@@ -589,7 +589,7 @@ function OurWorks() {
                     <div>
                         <h2 className="font-heading font-bold text-4xl text-primary mb-4">Наши работы</h2>
                         <p className="text-textMain/60 max-w-xl">
-                            За двадцать лет работы за плечами сотни объектов - здесь часть из них. Каждая лестница делалась под своё помещение и свои пожелания.
+                            За двадцать пять лет работы за плечами сотни объектов - здесь часть из них. Каждая лестница делалась под своё помещение и свои пожелания.
                         </p>
                     </div>
                 </div>
