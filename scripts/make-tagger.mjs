@@ -5,12 +5,16 @@
  * ни типа, ни породы, ни описания. Без этого 797 фотографий бесполезны
  * и для поиска, и для посетителя, который выбирает себе лестницу.
  *
- * Разметить может только мастер. Страница собирается со встроенными
- * данными, чтобы открываться двойным кликом без сервера: fetch с file://
- * браузер блокирует, а картинки по относительным путям грузятся нормально.
+ * Разметить может только мастер, а он в другом городе. Поэтому страница
+ * кладётся на сам сайт по адресу /razmetka/, закрытому от индексации и
+ * не связанному ссылками ни с одной другой страницей. Ссылку передают
+ * лично; после разметки страницу можно удалить.
  *
- * Запуск: node scripts/make-tagger.mjs
- * Результат: tools/razmetka-rabot.html
+ * Картинки берутся из уменьшенных превью: 797 полноразмерных фотографий
+ * на телефоне грузились бы вечно и съели бы трафик.
+ *
+ * Запуск: node scripts/make-tagger.mjs (входит в npm run build)
+ * Результат: public/razmetka/index.html
  */
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -49,6 +53,7 @@ const html = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Разметка работ</title>
+<meta name="robots" content="noindex, nofollow">
 <style>
   :root {
     --ground: #F5F3EE; --card: #FFFFFF; --ink: #1B211D; --soft: #6B7169;
@@ -112,7 +117,14 @@ const html = `<!doctype html>
   }
   #viewer img { max-width: 94vw; max-height: 94vh; object-fit: contain; }
   .saved { color: #BFE3CB; font-size: 13px; }
-  @media (max-width: 720px) { .card { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) {
+    .card { grid-template-columns: 1fr; padding: 14px; }
+    .thumb { width: 72px; height: 72px; }
+    select, input[type=number] { min-height: 42px; }
+    .row > label { width: 100%; }
+    header { padding: 12px 14px; }
+    main { padding: 0 14px 60px; }
+  }
 </style>
 </head>
 <body>
@@ -120,8 +132,7 @@ const html = `<!doctype html>
 <header>
   <h1>Разметка работ</h1>
   <span class="progress" id="progress"></span>
-  <button id="save">Скачать разметку</button>
-  <button class="ghost" id="copy">Скопировать</button>
+  <button id="save">Сохранить файл</button>
   <span class="saved" id="saved"></span>
 </header>
 
@@ -131,8 +142,8 @@ const html = `<!doctype html>
   Если один объект разбит на несколько публикаций, у второй и следующих поставьте
   <b>«тот же объект, что №»</b> и номер первой. Ненужные публикации отметьте
   <b>«убрать с сайта»</b>, лишние фотографии - крестиком, лучшую фотографию сделайте главной.
-  Работа сохраняется в браузере автоматически, но в конце обязательно нажмите
-  <b>«Скачать разметку»</b> и пришлите файл.
+  Всё сохраняется само, страницу можно закрыть и вернуться позже - отмеченное не пропадёт.
+  Когда закончите, нажмите <b>«Сохранить файл»</b> вверху и пришлите получившийся файл сыну.
 </p>
 
 <div class="filters">
@@ -184,12 +195,12 @@ function renderCard(item) {
     const box = document.createElement('div');
     box.className = 'thumb' + (s.main === idx ? ' main' : '') + (s.hidden.includes(idx) ? ' hidden' : '');
     const img = document.createElement('img');
-    img.src = '../public' + src;
+    img.src = '/gallery-thumbs' + src.replace(/^\\/gallery/, '').replace(/\\.(jpg|jpeg|png)\$/i, '.webp');
     img.alt = 'Работа ' + item.n + ', фото ' + (idx + 1);
     img.loading = 'lazy';
     img.onclick = () => {
       const v = document.getElementById('viewer');
-      v.querySelector('img').src = img.src;
+      v.querySelector('img').src = src;
       v.style.display = 'flex';
     };
     const acts = document.createElement('div');
@@ -287,11 +298,6 @@ document.getElementById('save').onclick = () => {
   URL.revokeObjectURL(a.href);
 };
 
-document.getElementById('copy').onclick = async () => {
-  await navigator.clipboard.writeText(payload());
-  document.getElementById('saved').textContent = 'скопировано в буфер';
-};
-
 document.getElementById('onlyTodo').onchange = rerender;
 document.getElementById('viewer').onclick = (e) => { e.currentTarget.style.display = 'none'; };
 
@@ -301,6 +307,6 @@ rerender();
 </html>
 `;
 
-await mkdir(resolve('tools'), { recursive: true });
-await writeFile(resolve('tools/razmetka-rabot.html'), html, 'utf8');
-console.log(`  tools/razmetka-rabot.html - ${items.length} публикаций, ${items.reduce((s, i) => s + i.images.length, 0)} фотографий`);
+await mkdir(resolve('public/razmetka'), { recursive: true });
+await writeFile(resolve('public/razmetka/index.html'), html, 'utf8');
+console.log(`  /razmetka/ - ${items.length} публикаций, ${items.reduce((s, i) => s + i.images.length, 0)} фотографий`);

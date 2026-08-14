@@ -32,6 +32,7 @@ ${ROUTES.map(({ path, priority, changefreq }) => `  <url>
 
 const robots = `User-agent: *
 Allow: /
+Disallow: /razmetka/
 
 Sitemap: ${ORIGIN}/sitemap.xml
 `;

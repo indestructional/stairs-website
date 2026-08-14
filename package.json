@@ -8,7 +8,8 @@
     "build": "vite build && node scripts/sitemap.mjs && node scripts/prerender.mjs",
     "build:only": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tagger": "node scripts/make-tagger.mjs"
   },
   "dependencies": {
     "gsap": "^3.12.5",
