@@ -119,8 +119,14 @@ function Hero() {
             {/* Background Image - Final User Choice */}
             <div className="absolute inset-0 z-0 overflow-hidden">
                 <img
-                    src={`${import.meta.env.BASE_URL}hero-stairs-final.png`}
-                    alt="Premium Staircase"
+                    src={`${import.meta.env.BASE_URL}hero-stairs-final.webp`}
+                    srcSet={`${import.meta.env.BASE_URL}hero-stairs-final-1200.webp 1200w, ${import.meta.env.BASE_URL}hero-stairs-final.webp 1971w`}
+                    sizes="100vw"
+                    alt="Деревянная лестница на второй этаж, изготовленная на заказ в Краснодаре"
+                    width="1971"
+                    height="1465"
+                    fetchPriority="high"
+                    decoding="async"
                     className="w-full h-[110%] object-cover object-[center_bottom] transition-opacity duration-1000 hero-img"
                     onLoad={(e) => e.target.style.opacity = 1}
                     style={{ opacity: 0 }}
