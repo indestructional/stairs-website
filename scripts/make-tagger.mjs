@@ -375,7 +375,7 @@ document.getElementById('send').onclick = () => {
   add('subject', 'Разметка работ с сайта');
   add('from_name', 'Разметка работ');
   add('razmetka', payload());
-  add('redirect', location.origin + '/razmetka/?sent=1');
+  add('redirect', location.origin + '/razmetka/ok.html');
   document.body.appendChild(form);
   form.submit();
 
@@ -386,7 +386,7 @@ document.getElementById('send').onclick = () => {
     tries++;
     let href = null;
     try { href = frame.contentWindow.location.href; } catch { /* ещё у сервиса */ }
-    if (href && href.includes('sent=1')) {
+    if (href && href.includes('ok.html')) {
       clearInterval(timer);
       form.remove();
       status.textContent = 'отправлено, спасибо';
@@ -419,4 +419,13 @@ rerender();
 
 await mkdir(resolve('public/razmetka'), { recursive: true });
 await writeFile(resolve('public/razmetka/index.html'), html, 'utf8');
+
+// Крошечная страница-подтверждение: сервис возвращает на неё скрытый кадр
+// после приёма. Возвращать на саму разметку нельзя - она весит 83 КБ и
+// перезагружалась бы целиком внутри кадра.
+await writeFile(
+    resolve('public/razmetka/ok.html'),
+    '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><title>Принято</title></head><body>Принято</body></html>',
+    'utf8',
+);
 console.log(`  /razmetka/ - ${items.length} публикаций, ${items.reduce((s, i) => s + i.images.length, 0)} фотографий, отправка на почту: ${ACCESS_KEY ? 'настроена' : 'НЕ НАСТРОЕНА'}`);
