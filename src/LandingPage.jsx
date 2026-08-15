@@ -108,6 +108,31 @@ function WorksPreview({ category }) {
     );
 }
 
+
+/**
+ * Короткая справка вместо развёрнутых блоков про замер и цену.
+ * Раньше они целиком повторялись на каждой странице и занимали больше
+ * места, чем собственный текст страницы - для поиска это близкие дубли.
+ * Развёрнутые версии живут по ссылкам, здесь только суть.
+ */
+function QuickFacts({ currentSlug }) {
+    return (
+        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-textMain/70 border-y border-primary/10 py-4">
+            <span>Замер бесплатный по {CITY}у</span>
+            <span className="text-primary/20">|</span>
+            <span>Гарантия год по договору</span>
+            <span className="text-primary/20">|</span>
+            <span>Более 25 лет опыта</span>
+            {currentSlug !== 'ceny' && (
+                <a href="/ceny/" className="text-accent font-medium link-hover">От чего зависит цена</a>
+            )}
+            {currentSlug !== 'etap-zamer' && (
+                <a href="/etap-zamer/" className="text-accent font-medium link-hover">Как проходит замер</a>
+            )}
+        </div>
+    );
+}
+
 function CallToAction() {
     return (
         <section className="w-full py-16 px-6 md:px-16">
@@ -178,6 +203,7 @@ export default function LandingPage({ slug }) {
                             {page.h1}
                         </h1>
                         <p className="text-lg md:text-xl text-textMain/80 max-w-3xl">{page.lead}</p>
+                        <QuickFacts currentSlug={page.slug} />
                         <a
                             href={`tel:${PHONE_HREF}`}
                             className="btn-magnetic inline-flex items-center gap-3 bg-accent text-white px-7 py-3.5 rounded-full font-bold self-start"
