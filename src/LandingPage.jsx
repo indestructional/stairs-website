@@ -117,9 +117,11 @@ function WorksPreview({ category }) {
  * места, чем собственный текст страницы - для поиска это близкие дубли.
  * Развёрнутые версии живут по ссылкам, здесь только суть.
  */
-function QuickFacts({ currentSlug }) {
+function QuickFacts({ currentSlug, priceLabel }) {
     return (
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-textMain/70 border-y border-primary/10 py-4">
+            {priceLabel && <span className="font-semibold text-primary">{priceLabel}</span>}
+            {priceLabel && <span className="text-primary/20">|</span>}
             <span>Замер бесплатный по {CITY}у</span>
             <span className="text-primary/20">|</span>
             <span>Гарантия год по договору</span>
@@ -205,7 +207,7 @@ export default function LandingPage({ slug }) {
                             {page.h1}
                         </h1>
                         <p className="text-lg md:text-xl text-textMain/80 max-w-3xl">{page.lead}</p>
-                        <QuickFacts currentSlug={page.slug} />
+                        <QuickFacts currentSlug={page.slug} priceLabel={page.priceLabel} />
                         <a
                             href={`tel:${PHONE_HREF}`}
                             className="btn-magnetic inline-flex items-center gap-3 bg-accent text-white px-7 py-3.5 rounded-full font-bold self-start"
