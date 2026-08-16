@@ -72,16 +72,58 @@ function useSeo(page) {
     }, [page]);
 }
 
-/** Подборка работ по категории страницы - та же галерея, что на главной. */
-function WorksPreview({ category }) {
+
+/**
+ * Осмысленная подпись к фотографии вместо «Работа 3 фото 2».
+ * Падежи заданы списком: автоматическое склонение на этих словах врёт
+ * («из ясеньа», «из сосна»).
+ */
+const GENITIVE = {
+    'Дуб': 'дуба',
+    'Бук': 'бука',
+    'Ясень': 'ясеня',
+    'Сосна': 'сосны',
+    'Лиственница': 'лиственницы',
+};
+
+export function describe(pub) {
+    const parts = [pub.type || 'Деревянная лестница'];
+    const material = GENITIVE[pub.material];
+    if (material) parts.push(`из ${material}`);
+    parts.push('на заказ в Краснодаре');
+    return parts.join(' ');
+}
+
+/**
+ * Подборка работ под тему страницы. После разметки у публикаций появились
+ * тип, порода и перечень того, что видно на фотографиях - значит на
+ * странице про дуб можно показывать дубовые работы, а на странице про
+ * перила те, где действительно видны балясины.
+ *
+ * Если подходящих работ мало, добираем остальными: пустая подборка хуже
+ * не совсем точной.
+ */
+function WorksPreview({ category, works }) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
         fetch(`${import.meta.env.BASE_URL}gallery.json`)
             .then((r) => r.json())
-            .then((data) => setItems((data[category] ?? []).slice(0, 8)))
+            .then((data) => {
+                const all = data[category] ?? [];
+                const fits = (pub) => {
+                    if (!works) return true;
+                    if (works.type) return pub.type === works.type;
+                    if (works.material) return pub.material === works.material;
+                    if (works.shown) return pub.shown?.includes(works.shown);
+                    return true;
+                };
+                const matched = all.filter(fits);
+                const rest = all.filter((pub) => !matched.includes(pub));
+                setItems([...matched, ...rest].slice(0, 8));
+            })
             .catch(() => setItems([]));
-    }, [category]);
+    }, [category, works]);
 
     if (!items.length) return null;
 
@@ -94,7 +136,7 @@ function WorksPreview({ category }) {
                         <a key={pub.id} href="/#works" className="block aspect-square overflow-hidden rounded-lg bg-primary/5">
                             <img
                                 src={`${import.meta.env.BASE_URL}${pub.images[0].replace(/^\//, '')}`}
-                                alt="Деревянная лестница, изготовленная на заказ в Краснодаре"
+                                alt={describe(pub)}
                                 loading="lazy"
                                 decoding="async"
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -231,7 +273,7 @@ export default function LandingPage({ slug }) {
                     </div>
                 </div>
 
-                <WorksPreview category={page.category} />
+                <WorksPreview category={page.category} works={page.works} />
 
                 {page.faq?.length > 0 && (
                     <section className="w-full px-6 md:px-16 py-8">

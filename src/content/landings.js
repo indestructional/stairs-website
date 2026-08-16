@@ -113,6 +113,7 @@ export const LANDINGS = [
     },
     {
         slug: 'lestnicy-iz-sosny',
+        works: { material: 'Сосна' },
         priceLabel: 'от 180 000 ₽',
         category: 'stairs',
         title: `Лестница из сосны на заказ в ${CITY}е - недорого, от мастера`,
@@ -176,6 +177,7 @@ export const LANDINGS = [
     },
     {
         slug: 'lestnicy-na-vtoroy-etazh',
+        works: { type: 'Лестница на второй этаж' },
         priceLabel: 'от 180 000 ₽ - сосна, дальше зависит от породы и конструкции',
         category: 'stairs',
         title: `Лестница на второй этаж на заказ в ${CITY}е - изготовление и монтаж`,
@@ -220,6 +222,7 @@ export const LANDINGS = [
     },
     {
         slug: 'lestnicy-na-betonnom-osnovanii',
+        works: { type: 'Лестница на бетонном основании' },
         category: 'stairs',
         title: `Отделка бетонной лестницы деревом в ${CITY}е - обшивка под ключ`,
         description: `Обшивка бетонной лестницы деревом в ${CITY}е и крае: ступени, подступенки, ограждения. Замер, изготовление, монтаж. Собственное производство.`,
@@ -255,6 +258,7 @@ export const LANDINGS = [
     },
     {
         slug: 'lestnicy-na-metallokarkase',
+        works: { type: 'Лестница на металлокаркасе' },
         priceLabel: 'от 150 000 ₽ - деревянная часть на готовый каркас',
         category: 'stairs',
         title: `Лестница на металлокаркасе с деревянными ступенями - ${CITY}`,
@@ -291,6 +295,7 @@ export const LANDINGS = [
     },
     {
         slug: 'lestnicy-iz-duba',
+        works: { material: 'Дуб' },
         priceLabel: 'от 280 000 ₽',
         category: 'stairs',
         title: `Дубовая лестница на заказ в ${CITY}е - изготовление из массива дуба`,
@@ -323,6 +328,7 @@ export const LANDINGS = [
     },
     {
         slug: 'lestnicy-iz-buka',
+        works: { material: 'Бук' },
         priceLabel: 'от 200 000 ₽',
         category: 'stairs',
         title: `Лестница из бука на заказ в ${CITY}е - изготовление и установка`,
@@ -354,6 +360,7 @@ export const LANDINGS = [
     },
     {
         slug: 'lestnicy-iz-yasenya',
+        works: { material: 'Ясень' },
         priceLabel: 'от 230 000 ₽',
         category: 'stairs',
         title: `Лестница из ясеня на заказ в ${CITY}е - изготовление из массива`,
@@ -379,6 +386,7 @@ export const LANDINGS = [
     },
     {
         slug: 'perila-i-ograzhdeniya',
+        works: { shown: 'Балясины' },
         priceLabel: 'от 3 200 ₽ за погонный метр',
         category: 'stairs',
         title: `Перила и ограждения для лестниц в ${CITY}е - изготовление на заказ`,
