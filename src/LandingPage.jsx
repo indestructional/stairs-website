@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Phone } from 'lucide-react';
 import { Navbar, MobileNav, Footer, MessengerWidget } from './App.jsx';
+import WorksGrid from './WorksGrid.jsx';
 import LeadForm from './LeadForm.jsx';
 import { LEADS_ACCESS_KEY } from './content/forms.js';
 import { LANDINGS, bySlug, PHONE, PHONE_HREF, CITY } from './content/landings.js';
@@ -74,36 +75,13 @@ function useSeo(page) {
 
 
 /**
- * Осмысленная подпись к фотографии вместо «Работа 3 фото 2».
- * Падежи заданы списком: автоматическое склонение на этих словах врёт
- * («из ясеньа», «из сосна»).
+ * Подборка работ под тему страницы. После разметки у публикаций есть тип,
+ * порода и перечень того, что видно на снимках - значит на странице про
+ * дуб показываем дубовые работы, а на странице про перила те, где видны
+ * балясины. Если подходящих мало, добираем остальными: пустая подборка
+ * хуже не совсем точной.
  */
-const GENITIVE = {
-    'Дуб': 'дуба',
-    'Бук': 'бука',
-    'Ясень': 'ясеня',
-    'Сосна': 'сосны',
-    'Лиственница': 'лиственницы',
-};
-
-export function describe(pub) {
-    const parts = [pub.type || 'Деревянная лестница'];
-    const material = GENITIVE[pub.material];
-    if (material) parts.push(`из ${material}`);
-    parts.push('на заказ в Краснодаре');
-    return parts.join(' ');
-}
-
-/**
- * Подборка работ под тему страницы. После разметки у публикаций появились
- * тип, порода и перечень того, что видно на фотографиях - значит на
- * странице про дуб можно показывать дубовые работы, а на странице про
- * перила те, где действительно видны балясины.
- *
- * Если подходящих работ мало, добираем остальными: пустая подборка хуже
- * не совсем точной.
- */
-function WorksPreview({ category, works }) {
+function useWorks(category, works) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -112,46 +90,37 @@ function WorksPreview({ category, works }) {
             .then((data) => {
                 const all = data[category] ?? [];
                 const fits = (pub) => {
-                    if (!works) return true;
+                    if (!works) return false;
                     if (works.type) return pub.type === works.type;
                     if (works.material) return pub.material === works.material;
                     if (works.shown) return pub.shown?.includes(works.shown);
-                    return true;
+                    return false;
                 };
                 const matched = all.filter(fits);
                 const rest = all.filter((pub) => !matched.includes(pub));
-                setItems([...matched, ...rest].slice(0, 8));
+                setItems([...matched, ...rest]);
             })
             .catch(() => setItems([]));
     }, [category, works]);
 
-    if (!items.length) return null;
-
-    return (
-        <section className="w-full py-16 px-6 md:px-16 bg-background">
-            <div className="max-w-5xl mx-auto flex flex-col gap-8">
-                <h2 className="font-heading font-bold text-2xl md:text-3xl text-primary">Примеры наших работ</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {items.map((pub) => (
-                        <a key={pub.id} href="/#works" className="block aspect-square overflow-hidden rounded-lg bg-primary/5">
-                            <img
-                                src={`${import.meta.env.BASE_URL}${pub.images[0].replace(/^\//, '')}`}
-                                alt={describe(pub)}
-                                loading="lazy"
-                                decoding="async"
-                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                            />
-                        </a>
-                    ))}
-                </div>
-                <a href="/#works" className="text-accent font-medium link-hover self-start">
-                    Смотреть все работы
-                </a>
-            </div>
-        </section>
-    );
+    return items;
 }
 
+/** Заголовок подборки: «наши работы из дуба» понятнее, чем «примеры работ». */
+const WORKS_TITLE = {
+    'Дуб': 'Наши работы из дуба',
+    'Бук': 'Наши работы из бука',
+    'Ясень': 'Наши работы из ясеня',
+    'Сосна': 'Наши работы из сосны',
+    'Лиственница': 'Наши работы из лиственницы',
+};
+
+function worksHeading(works) {
+    if (works?.material) return WORKS_TITLE[works.material] ?? 'Примеры наших работ';
+    if (works?.type) return `Наши работы: ${works.type.toLowerCase()}`;
+    if (works?.shown === 'Балясины') return 'Наши ограждения и перила';
+    return 'Примеры наших работ';
+}
 
 /**
  * Короткая справка вместо развёрнутых блоков про замер и цену.
@@ -228,6 +197,7 @@ function OtherServices({ currentSlug }) {
 
 export default function LandingPage({ slug }) {
     const page = bySlug[slug];
+    const works = useWorks(page?.category, page?.works);
     useSeo(page);
 
     if (!page) return null;
@@ -273,7 +243,14 @@ export default function LandingPage({ slug }) {
                     </div>
                 </div>
 
-                <WorksPreview category={page.category} works={page.works} />
+                <WorksGrid
+                    items={works}
+                    title={worksHeading(page.works)}
+                    subtitle="Все фотографии сделаны на реальных объектах. Нажмите, чтобы посмотреть работу целиком."
+                    initial={8}
+                    step={8}
+                    moreHref="/#works"
+                />
 
                 {page.faq?.length > 0 && (
                     <section className="w-full px-6 md:px-16 py-8">

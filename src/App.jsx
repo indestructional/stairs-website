@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Phone, Send, ChevronLeft, ChevronRight, Menu, X, ChevronDown } from 'lucide-react';
 import { LANDINGS, STAGES } from './content/landings.js';
 import LeadForm from './LeadForm.jsx';
+import WorksGrid from './WorksGrid.jsx';
 import { LEADS_ACCESS_KEY } from './content/forms.js';
 
 
@@ -520,262 +521,31 @@ function Protocol() {
 // ==========================================
 function OurWorks() {
     const [publications, setPublications] = useState({ stairs: [], other: [] });
-    const [visibleCountStairs, setVisibleCountStairs] = useState(12);
-    const [visibleCountOther, setVisibleCountOther] = useState(12);
-    const [loading, setLoading] = useState(true);
-
-    // Lightbox state
-    const [lightboxOpen, setLightboxOpen] = useState(false);
-    const [currentPubCategory, setCurrentPubCategory] = useState("stairs");
-    const [currentPubIndex, setCurrentPubIndex] = useState(0);
-    const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
     useEffect(() => {
         fetch(`${import.meta.env.BASE_URL}gallery.json`)
-            .then(res => res.json())
-            .then(data => {
-                setPublications({
-                    stairs: data.stairs || [],
-                    other: data.other || []
-                });
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Error loading gallery:", err);
-                setLoading(false);
-            });
+            .then((r) => r.json())
+            .then(setPublications)
+            .catch(() => setPublications({ stairs: [], other: [] }));
     }, []);
 
-    // Handle Lightbox navigation
-    const openLightbox = (category, pubIdx) => {
-        setCurrentPubCategory(category);
-        setCurrentPubIndex(pubIdx);
-        setCurrentImgIndex(0);
-        setLightboxOpen(true);
-        document.body.style.overflow = 'hidden';
-    };
-
-    const closeLightbox = () => {
-        setLightboxOpen(false);
-        document.body.style.overflow = 'auto';
-    };
-
-    const nextImage = (e) => {
-        e?.stopPropagation();
-        const currentPub = publications[currentPubCategory][currentPubIndex];
-        setCurrentImgIndex((prev) => (prev + 1) % currentPub.images.length);
-    };
-
-    const prevImage = (e) => {
-        e?.stopPropagation();
-        const currentPub = publications[currentPubCategory][currentPubIndex];
-        setCurrentImgIndex((prev) => (prev - 1 + currentPub.images.length) % currentPub.images.length);
-    };
-
-    // Keyboard navigation for Lightbox
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (!lightboxOpen) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowRight') nextImage();
-            if (e.key === 'ArrowLeft') prevImage();
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [lightboxOpen, currentPubCategory, currentPubIndex, publications]);
-
-    const handleLoadMoreStairs = () => setVisibleCountStairs(prev => prev + 12);
-    const handleLoadMoreOther = () => setVisibleCountOther(prev => prev + 12);
-
-    if (loading) return null;
-
     return (
-        <section id="works" className="w-full py-32 px-8 md:px-16 bg-background">
-            <div className="max-w-7xl mx-auto">
-                <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                    <div>
-                        <h2 className="font-heading font-bold text-4xl text-primary mb-4">Наши работы</h2>
-                        <p className="text-textMain/60 max-w-xl">
-                            За двадцать пять лет работы за плечами сотни объектов - здесь часть из них. Каждая лестница делалась под своё помещение и свои пожелания.
-                        </p>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                    {publications.stairs.slice(0, visibleCountStairs).map((pub, idx) => (
-                        <WorkCarousel
-                            key={pub.id}
-                            images={pub.images}
-                            onClick={() => openLightbox("stairs", idx)}
-                        />
-                    ))}
-                </div>
-
-                {visibleCountStairs < publications.stairs.length && (
-                    <div className="mt-16 flex justify-center">
-                        <button
-                            onClick={handleLoadMoreStairs}
-                            className="btn-magnetic px-10 py-4 bg-primary text-background rounded-full font-medium text-lg hover:shadow-xl hover:shadow-primary/20"
-                        >
-                            Показать еще
-                        </button>
-                    </div>
-                )}
-
-                {publications.other.length > 0 && (
-                    <div className="mt-32">
-                        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                            <div>
-                                <h2 className="font-heading font-bold text-3xl text-primary mb-4">Прочие столярные работы</h2>
-                                <p className="text-textMain/60 max-w-xl">
-                                    Берёмся и за другие столярные проекты из натуральной древесины: беседки, ограждения и прочие конструкции по индивидуальным заказам.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                            {publications.other.slice(0, visibleCountOther).map((pub, idx) => (
-                                <WorkCarousel
-                                    key={pub.id}
-                                    images={pub.images}
-                                    onClick={() => openLightbox("other", idx)}
-                                />
-                            ))}
-                        </div>
-
-                        {visibleCountOther < publications.other.length && (
-                            <div className="mt-16 flex justify-center">
-                                <button
-                                    onClick={handleLoadMoreOther}
-                                    className="btn-magnetic px-10 py-4 bg-primary text-background rounded-full font-medium text-lg hover:shadow-xl hover:shadow-primary/20"
-                                >
-                                    Показать еще
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-
-            {lightboxOpen && publications[currentPubCategory][currentPubIndex] && (
-                <div
-                    className="fixed inset-0 z-[1000] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-300"
-                    onClick={closeLightbox}
-                >
-                    <button
-                        className="absolute top-4 right-4 text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-20"
-                        onClick={closeLightbox}
-                    >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
-                    </button>
-
-                    <div className="relative w-full h-full max-w-6xl max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-                        <img
-                            src={`${import.meta.env.BASE_URL}${publications[currentPubCategory][currentPubIndex].images[currentImgIndex].replace(/^\//, '')}`}
-                            alt={`Работа ${currentPubIndex + 1} фото ${currentImgIndex + 1}`}
-                            className="max-w-full max-h-full object-contain rounded-lg shadow-lg select-none"
-                        />
-
-                        {publications[currentPubCategory][currentPubIndex].images.length > 1 && (
-                            <>
-                                <button
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                                    onClick={prevImage}
-                                >
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                                </button>
-                                <button
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-                                    onClick={nextImage}
-                                >
-                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                                </button>
-
-                                <div className="absolute inset-x-0 bottom-6 flex justify-center gap-2 z-10 pointer-events-none">
-                                    {publications[currentPubCategory][currentPubIndex].images.map((_, i) => (
-                                        <div
-                                            key={i}
-                                            className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentImgIndex ? 'bg-white scale-125' : 'bg-white/40 shadow-sm'}`}
-                                        />
-                                    ))}
-                                </div>
-                            </>
-                        )}
-                        <div className="absolute bottom-6 left-6 text-white/50 font-mono tracking-widest text-sm pointer-events-none">
-                            {currentImgIndex + 1} / {publications[currentPubCategory][currentPubIndex].images.length}
-                        </div>
-                    </div>
-                </div>
-            )}
-        </section>
-    );
-}
-
-function WorkCarousel({ images, onClick }) {
-    const [currentIdx, setCurrentIdx] = useState(0);
-
-    const next = (e) => {
-        e.stopPropagation();
-        setCurrentIdx((prev) => (prev + 1) % images.length);
-    };
-
-    const prev = (e) => {
-        e.stopPropagation();
-        setCurrentIdx((prev) => (prev - 1 + images.length) % images.length);
-    };
-
-    return (
-        <div
-            onClick={onClick}
-            className="group cursor-pointer relative aspect-[3/4] bg-primary/5 rounded-2xl md:rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-md transition-all duration-500"
-        >
-            <img
-                src={`${import.meta.env.BASE_URL}${images[currentIdx].replace(/^\//, '')}`}
-                alt="Лестница"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
+        <>
+            <WorksGrid
+                id="works"
+                items={publications.stairs}
+                title="Наши работы"
+                subtitle="За двадцать пять лет работы за плечами сотни объектов - здесь часть из них. Каждая лестница делалась под своё помещение и свои пожелания."
             />
-
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none"></div>
-
-            {images.length > 1 && (
-                <>
-                    {/* Expand Icon */}
-                    <div className="absolute top-4 right-4 bg-black/40 p-2 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm pointer-events-none pointer-events-none z-10">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
-                    </div>
-
-                    <div className="absolute inset-x-0 bottom-4 flex justify-center gap-1.5 z-10 pointer-events-none">
-                        {images.map((_, i) => (
-                            <div
-                                key={i}
-                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === currentIdx ? 'bg-white scale-125' : 'bg-white/40 shadow-sm'}`}
-                            />
-                        ))}
-                    </div>
-
-                    <button
-                        onClick={prev}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/10 backdrop-blur-md text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center hover:bg-white/20"
-                    >
-                        <ChevronLeft size={20} />
-                    </button>
-
-                    <button
-                        onClick={next}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/10 backdrop-blur-md text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center hover:bg-white/20"
-                    >
-                        <ChevronRight size={20} />
-                    </button>
-                </>
-            )}
-        </div>
+            <WorksGrid
+                items={publications.other}
+                title="Прочие столярные работы"
+                subtitle="Берёмся и за другие проекты из натуральной древесины: беседки, ограждения, арки и мебель из массива."
+            />
+        </>
     );
 }
 
-// ==========================================
-// G. FOOTER
-// ==========================================
 export function Footer() {
     return (
         <footer className="w-full bg-[#1A1A1A] text-white rounded-t-[4rem] mt-24 pt-20 pb-12 px-8 md:px-16 overflow-hidden relative">
