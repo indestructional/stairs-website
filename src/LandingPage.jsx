@@ -115,9 +115,15 @@ const WORKS_TITLE = {
     'Лиственница': 'Наши работы из лиственницы',
 };
 
+const TYPE_TITLE = {
+    'Лестница на второй этаж': 'Наши лестницы на второй этаж',
+    'Лестница на бетонном основании': 'Бетонные лестницы, которые мы обшили',
+    'Лестница на металлокаркасе': 'Наши работы на металлокаркасе',
+};
+
 function worksHeading(works) {
     if (works?.material) return WORKS_TITLE[works.material] ?? 'Примеры наших работ';
-    if (works?.type) return `Наши работы: ${works.type.toLowerCase()}`;
+    if (works?.type) return TYPE_TITLE[works.type] ?? 'Примеры наших работ';
     if (works?.shown === 'Балясины') return 'Наши ограждения и перила';
     return 'Примеры наших работ';
 }
