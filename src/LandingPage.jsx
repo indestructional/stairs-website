@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Phone } from 'lucide-react';
 import { Navbar, MobileNav, Footer, MessengerWidget } from './App.jsx';
+import LeadForm from './LeadForm.jsx';
+import { LEADS_ACCESS_KEY } from './content/forms.js';
 import { LANDINGS, bySlug, PHONE, PHONE_HREF, CITY } from './content/landings.js';
 
 const ORIGIN = 'https://lestniza-krr.ru';
@@ -245,6 +247,7 @@ export default function LandingPage({ slug }) {
                     </section>
                 )}
 
+                <LeadForm accessKey={LEADS_ACCESS_KEY} source={page.h1} />
                 <CallToAction />
                 <OtherServices currentSlug={page.slug} />
             </main>

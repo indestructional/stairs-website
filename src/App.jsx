@@ -3,6 +3,8 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Phone, Send, ChevronLeft, ChevronRight, Menu, X, ChevronDown } from 'lucide-react';
 import { LANDINGS, STAGES } from './content/landings.js';
+import LeadForm from './LeadForm.jsx';
+import { LEADS_ACCESS_KEY } from './content/forms.js';
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -953,6 +955,7 @@ function App() {
             <OurWorks />
             <Services />
             <Protocol />
+            <LeadForm accessKey={LEADS_ACCESS_KEY} source="Главная страница" />
             <Footer />
             <MessengerWidget />
 
