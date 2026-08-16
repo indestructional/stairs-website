@@ -18,10 +18,33 @@ const GENITIVE = {
     'Лиственница': 'лиственницы',
 };
 
-/** Осмысленная подпись вместо «Работа 3 фото 2» - её читают и люди, и поиск. */
-export function describe(pub) {
-    const parts = [pub.type || 'Деревянная лестница'];
+/**
+ * Названия типов в разметке - это варианты выбора, а не текст для сайта:
+ * «Перила или ограждение отдельно» в подписи читается странно. Здесь они
+ * переводятся в человеческие формулировки.
+ */
+const TYPE_NAME = {
+    'Лестница на второй этаж': 'Деревянная лестница на второй этаж',
+    'Лестница на бетонном основании': 'Отделка бетонной лестницы деревом',
+    'Лестница на металлокаркасе': 'Деревянные ступени на металлокаркасе',
+    'Поворотная с забежными ступенями': 'Поворотная лестница с забежными ступенями',
+    'Перила или ограждение отдельно': 'Деревянные перила и ограждение',
+    'Беседка': 'Беседка из дерева',
+    'Терраса или настил': 'Терраса из дерева',
+    'Арка или портал': 'Деревянная арка',
+    'Мебель из массива': 'Мебель из массива дерева',
+};
+
+/**
+ * Осмысленная подпись вместо «Работа 3 фото 2» - её читают и люди, и
+ * поиск по картинкам. Запасное слово зависит от раздела: в столярных
+ * работах лежат не лестницы, и называть колодец лестницей нельзя.
+ */
+export function describe(pub, fallback = 'Деревянная лестница') {
+    const named = TYPE_NAME[pub.type];
+    const head = named ?? (pub.type && pub.type !== 'Другое' ? pub.type : fallback);
     const material = GENITIVE[pub.material];
+    const parts = [head];
     if (material) parts.push(`из ${material}`);
     parts.push('на заказ в Краснодаре');
     return parts.join(' ');
@@ -29,7 +52,7 @@ export function describe(pub) {
 
 const src = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
 
-function WorkCarousel({ pub, onOpen }) {
+function WorkCarousel({ pub, onOpen, fallback }) {
     const [idx, setIdx] = useState(0);
     const step = (delta) => (event) => {
         event.stopPropagation();
@@ -43,7 +66,7 @@ function WorkCarousel({ pub, onOpen }) {
         >
             <img
                 src={src(pub.images[idx])}
-                alt={describe(pub)}
+                alt={describe(pub, fallback)}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -84,7 +107,7 @@ function WorkCarousel({ pub, onOpen }) {
     );
 }
 
-function Lightbox({ pub, onClose }) {
+function Lightbox({ pub, onClose, fallback }) {
     const [idx, setIdx] = useState(0);
     const move = (delta) => setIdx((prev) => (prev + delta + pub.images.length) % pub.images.length);
 
@@ -116,12 +139,12 @@ function Lightbox({ pub, onClose }) {
             <div className="relative w-full h-full max-w-6xl max-h-[90vh] flex flex-col items-center justify-center gap-4" onClick={(e) => e.stopPropagation()}>
                 <img
                     src={src(pub.images[idx])}
-                    alt={describe(pub)}
+                    alt={describe(pub, fallback)}
                     className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-lg select-none"
                 />
 
                 <div className="text-center text-white/80 text-sm px-4">
-                    <span>{describe(pub)}</span>
+                    <span>{describe(pub, fallback)}</span>
                     {pub.note && <span className="block text-white/60 mt-1">{pub.note}</span>}
                     {pub.images.length > 1 && <span className="block text-white/40 mt-1">{idx + 1} из {pub.images.length}</span>}
                 </div>
@@ -151,7 +174,7 @@ function Lightbox({ pub, onClose }) {
     );
 }
 
-export default function WorksGrid({ items, title, subtitle, initial = 12, step = 12, id, moreHref }) {
+export default function WorksGrid({ items, title, subtitle, initial = 12, step = 12, id, moreHref, fallback = 'Деревянная лестница' }) {
     const [visible, setVisible] = useState(initial);
     const [openIdx, setOpenIdx] = useState(null);
 
@@ -169,7 +192,7 @@ export default function WorksGrid({ items, title, subtitle, initial = 12, step =
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
                     {items.slice(0, visible).map((pub, idx) => (
-                        <WorkCarousel key={pub.id} pub={pub} onOpen={() => setOpenIdx(idx)} />
+                        <WorkCarousel key={pub.id} pub={pub} fallback={fallback} onOpen={() => setOpenIdx(idx)} />
                     ))}
                 </div>
 
@@ -192,7 +215,7 @@ export default function WorksGrid({ items, title, subtitle, initial = 12, step =
                 )}
             </div>
 
-            {openIdx !== null && <Lightbox pub={items[openIdx]} onClose={() => setOpenIdx(null)} />}
+            {openIdx !== null && <Lightbox pub={items[openIdx]} fallback={fallback} onClose={() => setOpenIdx(null)} />}
         </section>
     );
 }

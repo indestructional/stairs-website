@@ -255,6 +255,7 @@ export default function LandingPage({ slug }) {
                     subtitle="Все фотографии сделаны на реальных объектах. Нажмите, чтобы посмотреть работу целиком."
                     initial={8}
                     step={8}
+                    fallback={page.category === 'other' ? 'Столярная работа из дерева' : 'Деревянная лестница'}
                     moreHref="/#works"
                 />
 

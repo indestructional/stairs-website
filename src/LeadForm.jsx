@@ -17,6 +17,7 @@ const METRIKA_ID = 108209687;
  */
 export default function LeadForm({ accessKey, source = 'сайт' }) {
     const [state, setState] = useState('idle');
+    const [sent, setSent] = useState({});
     const [agreed, setAgreed] = useState(false);
     const frameRef = useRef(null);
     const timerRef = useRef(null);
@@ -31,6 +32,7 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
         if (!name || !phone) return;
 
         setState('sending');
+        setSent({ name, nuzhno: form.elements.nuzhno.value, comment: form.elements.comment.value.trim() });
 
         const post = document.createElement('form');
         post.action = 'https://api.web3forms.com/submit';
@@ -76,6 +78,17 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
         }, 500);
     };
 
+    // Ссылка в WhatsApp с уже написанным текстом: человеку остаётся нажать
+    // «отправить», и обращение попадает в мессенджер, куда семья смотрит
+    // постоянно. Автоматически отправить заявку в WhatsApp нельзя - для
+    // этого нужен платный доступ к их API.
+    const whatsappHref = () => {
+        const text = sent.name
+            ? `Здравствуйте! Меня зовут ${sent.name}. Оставил заявку на сайте: ${sent.nuzhno}.${sent.comment ? ' ' + sent.comment : ''}`
+            : 'Здравствуйте! Хочу узнать про изготовление лестницы.';
+        return `https://wa.me/79892145276?text=${encodeURIComponent(text)}`;
+    };
+
     if (state === 'done') {
         return (
             <section id="zayavka" className="w-full px-6 md:px-16 py-16">
@@ -90,12 +103,12 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
                     </p>
                     <div className="flex flex-wrap gap-3">
                         <a
-                            href="https://wa.me/79892145276"
+                            href={whatsappHref()}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="btn-magnetic inline-flex items-center gap-3 bg-[#25D366] text-white px-7 py-4 rounded-full font-bold"
                         >
-                            Написать в WhatsApp
+                            Продолжить в WhatsApp
                         </a>
                         <a
                             href={`tel:${PHONE_HREF}`}
