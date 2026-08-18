@@ -3,6 +3,7 @@ import { Phone, Check } from 'lucide-react';
 import { PHONE, PHONE_HREF, CITY } from './content/landings.js';
 
 const METRIKA_ID = 108209687;
+const MAX_LINK = 'https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3AwHzQOGU1qDOfo';
 
 /**
  * Форма заявки.
@@ -18,6 +19,7 @@ const METRIKA_ID = 108209687;
 export default function LeadForm({ accessKey, source = 'сайт' }) {
     const [state, setState] = useState('idle');
     const [sent, setSent] = useState({});
+    const [copied, setCopied] = useState(false);
     const [agreed, setAgreed] = useState(false);
     const frameRef = useRef(null);
     const timerRef = useRef(null);
@@ -82,11 +84,21 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
     // «отправить», и обращение попадает в мессенджер, куда семья смотрит
     // постоянно. Автоматически отправить заявку в WhatsApp нельзя - для
     // этого нужен платный доступ к их API.
-    const whatsappHref = () => {
-        const text = sent.name
-            ? `Здравствуйте! Меня зовут ${sent.name}. Оставил заявку на сайте: ${sent.nuzhno}.${sent.comment ? ' ' + sent.comment : ''}`
-            : 'Здравствуйте! Хочу узнать про изготовление лестницы.';
-        return `https://wa.me/79892145276?text=${encodeURIComponent(text)}`;
+    const messageText = () => (sent.name
+        ? `Здравствуйте! Меня зовут ${sent.name}. Оставил заявку на сайте: ${sent.nuzhno}.${sent.comment ? ' ' + sent.comment : ''}`
+        : 'Здравствуйте! Хочу узнать про изготовление лестницы.');
+
+    const whatsappHref = () => `https://wa.me/79892145276?text=${encodeURIComponent(messageText())}`;
+
+    // MAX не умеет открывать чат с готовым текстом, как WhatsApp. Поэтому
+    // текст кладём в буфер обмена: человеку останется вставить его в чат.
+    const openMax = async () => {
+        try {
+            await navigator.clipboard.writeText(messageText());
+            setCopied(true);
+        } catch {
+            // Буфер может быть недоступен - тогда просто открываем чат.
+        }
     };
 
     if (state === 'done') {
@@ -111,6 +123,15 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
                             Продолжить в WhatsApp
                         </a>
                         <a
+                            href={MAX_LINK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={openMax}
+                            className="btn-magnetic inline-flex items-center gap-3 bg-[#534eef] text-white px-7 py-4 rounded-full font-bold"
+                        >
+                            Продолжить в MAX
+                        </a>
+                        <a
                             href={`tel:${PHONE_HREF}`}
                             className="inline-flex items-center gap-3 border border-background/30 px-7 py-4 rounded-full font-medium"
                         >
@@ -118,6 +139,11 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
                             <span>{PHONE}</span>
                         </a>
                     </div>
+                    {copied && (
+                        <p className="text-sm opacity-70">
+                            Текст обращения скопирован - вставьте его в чат MAX, чтобы не набирать заново.
+                        </p>
+                    )}
                 </div>
             </section>
         );
@@ -131,7 +157,7 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
                 </h2>
                 <p className="text-textMain/70 mb-8 max-w-xl">
                     Перезвоним, уточним детали и договоримся о времени. Замер бесплатный
-                    в черте {CITY}а. Если удобнее написать - <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="text-accent font-medium link-hover">напишите в WhatsApp</a>.
+                    в черте {CITY}а. Если удобнее написать - <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="text-accent font-medium link-hover">WhatsApp</a> или <a href={MAX_LINK} target="_blank" rel="noopener noreferrer" className="text-accent font-medium link-hover">MAX</a>.
                 </p>
 
                 <form onSubmit={submit} className="flex flex-col gap-4">
