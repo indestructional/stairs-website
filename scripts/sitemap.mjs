@@ -33,6 +33,7 @@ ${ROUTES.map(({ path, priority, changefreq }) => `  <url>
 const robots = `User-agent: *
 Allow: /
 Disallow: /razmetka/
+Disallow: /foto/
 Disallow: /vychitka/
 
 Sitemap: ${ORIGIN}/sitemap.xml
