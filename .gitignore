@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Служебные страницы для мастера (разметка, выбор фото, вычитка).
+# Генерируются скриптами из scripts/ и смотрятся локально через npm run dev.
+# В деплой не попадают: сайт собирается из git.
+public/razmetka/
+public/foto/
+public/vychitka/
+public/gallery-thumbs/

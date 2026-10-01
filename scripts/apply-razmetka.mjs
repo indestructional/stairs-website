@@ -1,13 +1,13 @@
 /**
  * Применяет разметку мастера к галерее.
  *
- * На входе: public/gallery.json (id + список файлов, больше ничего) и
- * ../workspace/razmetka-rabot.json - результат разметки, где по каждой
+ * На входе: data/gallery.raw.json (id + список файлов, больше ничего) и
+ * ../active/materials/razmetka-rabot.json - результат разметки, где по каждой
  * работе указан тип, порода, что видно на фотографиях, заметка, а также
  * пометки «убрать с сайта», «тот же объект, что №» и скрытые кадры.
  *
  * На выходе: public/gallery.json с осмысленными полями и отчёт в консоль.
- * Исходный файл сохраняется рядом как gallery.raw.json - разметку можно
+ * Исходник лежит в data/gallery.raw.json, вне public - разметку можно
  * будет применить заново, если мастер что-то уточнит.
  *
  * Запуск: node scripts/apply-razmetka.mjs
@@ -15,9 +15,9 @@
 import { readFile, writeFile, access } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const RAW = resolve('public/gallery.raw.json');
+const RAW = resolve('data/gallery.raw.json');
 const OUT = resolve('public/gallery.json');
-const MARKUP = resolve('../workspace/razmetka-rabot.json');
+const MARKUP = resolve('../active/materials/razmetka-rabot.json');
 
 // Работаем всегда от исходника: так скрипт можно гонять повторно.
 const hasRaw = await access(RAW).then(() => true).catch(() => false);
