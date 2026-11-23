@@ -377,10 +377,12 @@ function Philosophy() {
 
     return (
         <section ref={containerRef} id="philosophy" className="relative w-full py-40 px-8 md:px-16 bg-primary text-background overflow-hidden rounded-[3rem] my-4 mx-2 md:mx-4" style={{ width: 'calc(100% - 1rem)' }}>
-            {/* Background - Wood texture */}
+            {/* Декоративный фон блока */}
             <img
                 src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1600&auto=format&fit=crop&q=60"
-                alt="Мастерская"
+                alt=""
+                width="1600"
+                height="949"
                 className="phil-bg absolute inset-0 w-full h-[150%] object-cover opacity-15 mix-blend-overlay -top-[25%]"
             />
 
@@ -569,6 +571,7 @@ export function Footer() {
                         <a href="tel:+79892145276" className="link-hover text-3xl md:text-5xl font-heading font-bold tracking-tighter text-accent block hover:text-white transition-colors">
                             +7 (989) 214-52-76
                         </a>
+                        <p className="mt-2 text-sm text-white/70">Ежедневно с 09:00 до 20:00 по Краснодару</p>
                     </div>
 
                     <div className="flex gap-4">

@@ -44,13 +44,13 @@ function useSeo(page) {
                         { '@type': 'ListItem', position: 2, name: page.h1, item: url },
                     ],
                 },
-                {
+                ...(page.slug !== 'privacy' ? [{
                     '@type': 'Service',
                     name: page.h1,
                     description: page.description,
                     areaServed: { '@type': 'City', name: CITY },
                     provider: { '@type': 'HomeAndConstructionBusiness', name: 'Лестницы в Краснодаре', telephone: PHONE_HREF },
-                },
+                }] : []),
                 ...(page.faq?.length ? [{
                     '@type': 'FAQPage',
                     mainEntity: page.faq.map(({ q, a }) => ({
@@ -150,6 +150,9 @@ function QuickFacts({ currentSlug, priceLabel }) {
             {currentSlug !== 'etap-zamer' && (
                 <a href="/etap-zamer/" className="text-accent font-medium link-hover">Как проходит замер</a>
             )}
+            {currentSlug !== 'etap-montazh' && currentSlug !== 'privacy' && (
+                <a href="/etap-montazh/" className="text-accent font-medium link-hover">Как проходит монтаж</a>
+            )}
         </div>
     );
 }
@@ -163,7 +166,6 @@ function CallToAction() {
                 </h2>
                 <p className="opacity-80 max-w-2xl">
                     Сам замер бесплатный в черте {CITY}а, за городом оплачивается выезд - от 1000 рублей.
-                    Работаем по {CITY}у и краю.
                 </p>
                 <a
                     href={`tel:${PHONE_HREF}`}

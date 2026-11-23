@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import dimensions from 'virtual:gallery-dimensions';
 
 /**
  * Сетка работ с каруселью в карточке и полноэкранным просмотром.
@@ -54,6 +55,7 @@ const src = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
 
 function WorkCarousel({ pub, onOpen, fallback }) {
     const [idx, setIdx] = useState(0);
+    const photo = pub.images[idx];
     const step = (delta) => (event) => {
         event.stopPropagation();
         setIdx((prev) => (prev + delta + pub.images.length) % pub.images.length);
@@ -65,7 +67,8 @@ function WorkCarousel({ pub, onOpen, fallback }) {
             className="group cursor-pointer relative aspect-[3/4] bg-primary/5 rounded-2xl md:rounded-3xl overflow-hidden border border-primary/5 shadow-sm hover:shadow-md transition-all duration-500"
         >
             <img
-                src={src(pub.images[idx])}
+                src={src(photo)}
+                {...dimensions[photo]}
                 alt={describe(pub, fallback)}
                 loading="lazy"
                 decoding="async"
@@ -109,6 +112,7 @@ function WorkCarousel({ pub, onOpen, fallback }) {
 
 function Lightbox({ pub, onClose, fallback }) {
     const [idx, setIdx] = useState(0);
+    const photo = pub.images[idx];
     const move = (delta) => setIdx((prev) => (prev + delta + pub.images.length) % pub.images.length);
 
     useEffect(() => {
@@ -138,9 +142,10 @@ function Lightbox({ pub, onClose, fallback }) {
 
             <div className="relative w-full h-full max-w-6xl max-h-[90vh] flex flex-col items-center justify-center gap-4" onClick={(e) => e.stopPropagation()}>
                 <img
-                    src={src(pub.images[idx])}
+                    src={src(photo)}
+                    {...dimensions[photo]}
                     alt={describe(pub, fallback)}
-                    className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-lg select-none"
+                    className="w-auto h-auto max-w-full max-h-[80vh] object-contain rounded-lg shadow-lg select-none"
                 />
 
                 <div className="text-center text-white/80 text-sm px-4">
