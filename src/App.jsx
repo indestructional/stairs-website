@@ -571,7 +571,7 @@ export function Footer() {
                         <a href="tel:+79892145276" className="link-hover text-3xl md:text-5xl font-heading font-bold tracking-tighter text-accent block hover:text-white transition-colors">
                             +7 (989) 214-52-76
                         </a>
-                        <p className="mt-2 text-sm text-white/70">Ежедневно с 09:00 до 20:00 по Краснодару</p>
+                        <p className="mt-2 text-sm text-white/70">Ежедневно с 09:00 до 20:00</p>
                     </div>
 
                     <div className="flex gap-4">
