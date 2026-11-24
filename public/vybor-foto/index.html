@@ -164,8 +164,8 @@
       <span class="counters" id="counters"></span>
     </div>
     <div class="hdr-acts">
-      <button type="button" class="btn" id="copyBtn">Скопировать результат</button>
-      <button type="button" class="btn ghost" id="saveBtn">Скачать файлом</button>
+      <button type="button" class="btn" id="sendBtn">Отправить результат</button>
+      <button type="button" class="btn ghost" id="copyBtn">Скопировать</button>
     </div>
   </div>
   <div class="status-line" id="status" role="status" aria-live="polite"></div>
@@ -176,7 +176,7 @@
     <p><strong>Нужно отметить два пункта:</strong></p>
     <p>1. Выберите <strong>4-6 лучших работ</strong> кнопкой «В лучшие работы» - они пойдут в примеры на главной странице (при желании добавьте короткую подпись к работе).</p>
     <p>2. Отметьте <strong>до 3 фотографий</strong> кнопкой «На главный экран» под конкретным снимком - из них выберем главное фото в самый верх сайта.</p>
-    <p>Нажмите на любую фотографию, чтобы открыть её крупно. Выбор сохраняется автоматически в этом браузере. В конце нажмите «Скопировать результат» и отправьте текст в ответ.</p>
+    <p>Нажмите на любую фотографию, чтобы открыть её крупно. Выбор сохраняется автоматически в этом браузере. Когда закончите, нажмите <strong>«Отправить результат»</strong> вверху или внизу страницы - выбранный список сразу придёт на почту.</p>
   </section>
 
   <div class="toolbar">
@@ -189,8 +189,9 @@
   <section class="result-box" id="result">
     <h2>Итоговый список</h2>
     <div class="hdr-acts">
-      <button type="button" class="btn" id="copyBtn2">Скопировать результат</button>
-      <button type="button" class="btn ghost" style="color: var(--ink); border-color: var(--line);" id="saveBtn2">Скачать файлом</button>
+      <button type="button" class="btn" id="sendBtn2">Отправить результат</button>
+      <button type="button" class="btn ghost" style="color: var(--ink); border-color: var(--line);" id="copyBtn2">Скопировать</button>
+      <button type="button" class="btn ghost" style="color: var(--ink); border-color: var(--line);" id="saveBtn2">Сохранить файлом</button>
     </div>
     <pre id="report"></pre>
   </section>
@@ -450,9 +451,80 @@ function saveResult() {
   document.getElementById('status').textContent = 'Файл сохранён.';
 }
 
+const ACCESS_KEY = '5256707c-77d1-43ff-a7bd-607a1c993685';
+let sending = false;
+
+function setStatus(text) {
+  document.getElementById('status').textContent = text;
+}
+
+function sendResult() {
+  if (sending) return;
+  const pickedCount = WORKS.filter((w) => state.works[w.id]?.selected).length;
+  if (!pickedCount && !state.heroes.length) {
+    setStatus('Сначала отметьте хотя бы одну работу или фото для главного экрана.');
+    return;
+  }
+  sending = true;
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('sendBtn2').disabled = true;
+  setStatus('Отправляем результат...');
+
+  let frame = document.getElementById('sink');
+  if (!frame) {
+    frame = document.createElement('iframe');
+    frame.id = 'sink';
+    frame.name = 'sink';
+    frame.title = 'Отправка результата';
+    frame.style.display = 'none';
+    document.body.appendChild(frame);
+  }
+
+  const form = document.createElement('form');
+  form.action = 'https://api.web3forms.com/submit';
+  form.method = 'POST';
+  form.target = 'sink';
+  form.style.display = 'none';
+  const add = (name, value) => {
+    const i = document.createElement('input');
+    i.type = 'hidden'; i.name = name; i.value = value;
+    form.appendChild(i);
+  };
+  add('access_key', ACCESS_KEY);
+  add('subject', 'Выбор фотографий для главной страницы');
+  add('from_name', 'Выбор фото для главной');
+  add('vybor', buildReport());
+  add('redirect', location.origin + '/vybor-foto/ok.html');
+  document.body.appendChild(form);
+  form.submit();
+
+  let tries = 0;
+  const timer = setInterval(() => {
+    tries += 1;
+    let href = null;
+    try { href = frame.contentWindow.location.href; } catch {}
+    if (href && href.includes('/vybor-foto/ok.html')) {
+      clearInterval(timer);
+      form.remove();
+      sending = false;
+      document.getElementById('sendBtn').disabled = false;
+      document.getElementById('sendBtn2').disabled = false;
+      setStatus('Отправлено, спасибо! Список уже на почте.');
+    } else if (tries > 30) {
+      clearInterval(timer);
+      form.remove();
+      sending = false;
+      document.getElementById('sendBtn').disabled = false;
+      document.getElementById('sendBtn2').disabled = false;
+      setStatus('Не получилось отправить автоматически - нажмите «Скопировать» или «Сохранить файлом».');
+    }
+  }, 500);
+}
+
+document.getElementById('sendBtn').addEventListener('click', sendResult);
+document.getElementById('sendBtn2').addEventListener('click', sendResult);
 document.getElementById('copyBtn').addEventListener('click', copyResult);
 document.getElementById('copyBtn2').addEventListener('click', copyResult);
-document.getElementById('saveBtn').addEventListener('click', saveResult);
 document.getElementById('saveBtn2').addEventListener('click', saveResult);
 document.getElementById('onlySelected').addEventListener('change', renderList);
 
