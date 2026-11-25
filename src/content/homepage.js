@@ -3,8 +3,8 @@ export const WA_URL = 'https://wa.me/79892145276';
 export const TG_URL = 'https://t.me/+79892145276';
 
 export const HERO_PHOTO = {
-    src: 'hero-led-2.webp',
-    alt: 'Вид сверху на веер забежных ступеней из ясеня со скрытой подсветкой',
+    src: 'hero-owl.webp',
+    alt: 'Изогнутая лестница из бука на бетонном основании с гнутым поручнем и резным столбом с совой',
 };
 
 export const HERO_COPY = {

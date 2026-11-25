@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { X, ChevronLeft, ChevronRight, Bookmark, Check } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { X, ChevronLeft, ChevronRight, Bookmark, Check, Maximize2 } from 'lucide-react';
 import dimensions from 'virtual:gallery-dimensions';
 import {
     FEATURED_WORK_IDS,
@@ -49,10 +49,10 @@ const DETAIL_TAGS = [
 
 const imgSrc = (p) => `${import.meta.env.BASE_URL}${p.replace(/^\//, '')}`;
 
-function WorkLightbox({ work, onClose, isSaved, onToggleSave }) {
-    const [idx, setIdx] = useState(0);
+function WorkLightbox({ work, initialIdx = 0, onClose, isSaved, onToggleSave }) {
+    const [idx, setIdx] = useState(initialIdx);
     const images = work.images || [];
-    const photo = images[idx];
+    const photo = images[idx] || images[0];
 
     useEffect(() => {
         const onKey = (e) => {
@@ -164,6 +164,136 @@ function WorkLightbox({ work, onClose, isSaved, onToggleSave }) {
     );
 }
 
+function WorkCard({ work, isSaved, onOpen, onToggleSave }) {
+    const images = work.images || [];
+    const [photoIdx, setPhotoIdx] = useState(0);
+    const touchStartX = useRef(null);
+    const currentImg = images[photoIdx] || images[0];
+    const hasMany = images.length > 1;
+
+    const stepPhoto = (delta) => (e) => {
+        e.stopPropagation();
+        setPhotoIdx((prev) => (prev + delta + images.length) % images.length);
+    };
+
+    const onTouchStart = (e) => {
+        if (!hasMany) return;
+        touchStartX.current = e.touches[0]?.clientX ?? null;
+    };
+
+    const onTouchEnd = (e) => {
+        if (!hasMany || touchStartX.current === null) return;
+        const endX = e.changedTouches[0]?.clientX ?? touchStartX.current;
+        const diff = endX - touchStartX.current;
+        touchStartX.current = null;
+        if (Math.abs(diff) > 36) {
+            setPhotoIdx((prev) => (prev + (diff < 0 ? 1 : -1) + images.length) % images.length);
+        }
+    };
+
+    return (
+        <article className="card-lift bg-surface border border-primary/15 hover:border-accent/40 rounded-3xl flex flex-col overflow-hidden">
+            <div
+                className="group relative aspect-[4/3] w-full overflow-hidden bg-[#E7DED0]"
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
+            >
+                <button
+                    type="button"
+                    onClick={() => onOpen(work, photoIdx)}
+                    aria-label={`Открыть во весь экран: ${work.displayTitle}`}
+                    className="block w-full h-full text-left cursor-pointer"
+                >
+                    {currentImg && (
+                        <img
+                            src={imgSrc(currentImg)}
+                            {...(dimensions[currentImg] || {})}
+                            alt={work.displayTitle}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] select-none"
+                        />
+                    )}
+                </button>
+
+                <span className="pointer-events-none absolute left-3.5 top-3.5 bg-primary/85 backdrop-blur-sm text-white font-mono text-[11px] px-3 py-1 rounded-full">
+                    {work.baseLabel}{work.material && work.material !== 'Другое' ? ` · ${work.material}` : ''}
+                </span>
+
+                <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-3.5 top-3.5 w-8 h-8 rounded-full bg-black/45 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                >
+                    <Maximize2 size={14} />
+                </span>
+
+                {hasMany && (
+                    <>
+                        <button
+                            type="button"
+                            aria-label="Предыдущее фото работы"
+                            onClick={stepPhoto(-1)}
+                            className="absolute left-2.5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-black/45 hover:bg-black/75 text-white backdrop-blur-md shadow-sm opacity-90 sm:opacity-75 sm:group-hover:opacity-100 transition-all flex items-center justify-center z-10"
+                        >
+                            <ChevronLeft size={19} />
+                        </button>
+                        <button
+                            type="button"
+                            aria-label="Следующее фото работы"
+                            onClick={stepPhoto(1)}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-black/45 hover:bg-black/75 text-white backdrop-blur-md shadow-sm opacity-90 sm:opacity-75 sm:group-hover:opacity-100 transition-all flex items-center justify-center z-10"
+                        >
+                            <ChevronRight size={19} />
+                        </button>
+
+                        <div className="pointer-events-none absolute inset-x-14 bottom-3 flex items-center justify-center gap-1.5 z-10">
+                            {images.slice(0, 7).map((_, i) => {
+                                const active = photoIdx < 7 ? i === photoIdx : i === 6;
+                                return (
+                                    <span
+                                        key={i}
+                                        className={`h-1.5 rounded-full transition-all duration-300 shadow-sm ${
+                                            active ? 'w-4 bg-white' : 'w-1.5 bg-white/55'
+                                        }`}
+                                    />
+                                );
+                            })}
+                        </div>
+
+                        <span className="pointer-events-none absolute right-3 bottom-2.5 bg-black/55 backdrop-blur-sm text-white font-mono text-[11px] px-2.5 py-0.5 rounded-full z-10">
+                            {photoIdx + 1}/{images.length}
+                        </span>
+                    </>
+                )}
+            </div>
+
+            <div className="p-5 flex flex-col flex-1 gap-3.5">
+                <div>
+                    <h3 className="font-semibold text-[16px] text-primary leading-snug">
+                        {work.displayTitle}
+                    </h3>
+                    <p className="text-[13px] text-textMain/65 mt-1 m-0">
+                        {work.displayCaption}
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    onClick={() => onToggleSave(work)}
+                    className={`btn-magnetic mt-auto min-h-[44px] sm:min-h-[42px] px-4 w-full rounded-full border text-[13px] font-semibold inline-flex items-center justify-center gap-2 ${
+                        isSaved
+                            ? 'bg-primary text-surface border-primary'
+                            : 'bg-background text-primary border-primary/20 hover:border-accent hover:bg-white'
+                    }`}
+                >
+                    {isSaved ? <Check size={15} /> : <Bookmark size={15} />}
+                    {isSaved ? 'В папке замера' : 'Сохранить как ориентир'}
+                </button>
+            </div>
+        </article>
+    );
+}
+
 export default function WorksMatcher({
     works,
     savedIds,
@@ -174,7 +304,7 @@ export default function WorksMatcher({
     const [activeTags, setActiveTags] = useState([]);
     const [meters, setMeters] = useState(6);
     const [visibleCount, setVisibleCount] = useState(6);
-    const [openedWork, setOpenedWork] = useState(null);
+    const [openedState, setOpenedState] = useState(null);
 
     const classified = useMemo(() => {
         const mapped = (works || []).map(classifyWork);
@@ -335,67 +465,17 @@ export default function WorksMatcher({
                     </div>
                 </div>
 
-                {/* Сетка работ с плавным подъёмом и увеличением фото */}
+                {/* Сетка работ с перелистыванием фото прямо в карточке и открытием на весь экран */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {list.slice(0, visibleCount).map((work) => {
-                        const firstImg = work.images?.[0];
-                        const isSaved = savedIds.includes(work.id);
-                        return (
-                            <article
-                                key={work.id}
-                                className="card-lift bg-surface border border-primary/15 hover:border-accent/40 rounded-3xl flex flex-col overflow-hidden"
-                            >
-                                <button
-                                    type="button"
-                                    onClick={() => setOpenedWork(work)}
-                                    className="group relative aspect-[4/3] w-full overflow-hidden bg-[#E7DED0] text-left"
-                                >
-                                    {firstImg && (
-                                        <img
-                                            src={imgSrc(firstImg)}
-                                            {...(dimensions[firstImg] || {})}
-                                            alt={work.displayTitle}
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                                        />
-                                    )}
-                                    <span className="absolute left-3.5 top-3.5 bg-primary/85 backdrop-blur-sm text-white font-mono text-[11px] px-3 py-1 rounded-full">
-                                        {work.baseLabel}{work.material && work.material !== 'Другое' ? ` · ${work.material}` : ''}
-                                    </span>
-                                    {work.images?.length > 1 && (
-                                        <span className="absolute right-3.5 bottom-3.5 bg-primary/80 backdrop-blur-sm text-white font-mono text-[11px] px-2.5 py-0.5 rounded-full">
-                                            {work.images.length} фото
-                                        </span>
-                                    )}
-                                </button>
-
-                                <div className="p-5 flex flex-col flex-1 gap-3.5">
-                                    <div>
-                                        <h3 className="font-semibold text-[16px] text-primary leading-snug">
-                                            {work.displayTitle}
-                                        </h3>
-                                        <p className="text-[13px] text-textMain/65 mt-1 m-0">
-                                            {work.displayCaption}
-                                        </p>
-                                    </div>
-
-                                    <button
-                                        type="button"
-                                        onClick={() => onToggleSave(work)}
-                                        className={`btn-magnetic mt-auto min-h-[44px] sm:min-h-[42px] px-4 w-full rounded-full border text-[13px] font-semibold inline-flex items-center justify-center gap-2 ${
-                                            isSaved
-                                                ? 'bg-primary text-surface border-primary'
-                                                : 'bg-background text-primary border-primary/20 hover:border-accent hover:bg-white'
-                                        }`}
-                                    >
-                                        {isSaved ? <Check size={15} /> : <Bookmark size={15} />}
-                                        {isSaved ? 'В папке замера' : 'Сохранить как ориентир'}
-                                    </button>
-                                </div>
-                            </article>
-                        );
-                    })}
+                    {list.slice(0, visibleCount).map((work) => (
+                        <WorkCard
+                            key={work.id}
+                            work={work}
+                            isSaved={savedIds.includes(work.id)}
+                            onOpen={(w, idx) => setOpenedState({ work: w, idx })}
+                            onToggleSave={onToggleSave}
+                        />
+                    ))}
                 </div>
 
                 {/* Низ секции работ */}
@@ -424,11 +504,12 @@ export default function WorksMatcher({
                 </div>
             </div>
 
-            {openedWork && (
+            {openedState && (
                 <WorkLightbox
-                    work={openedWork}
-                    onClose={() => setOpenedWork(null)}
-                    isSaved={savedIds.includes(openedWork.id)}
+                    work={openedState.work}
+                    initialIdx={openedState.idx}
+                    onClose={() => setOpenedState(null)}
+                    isSaved={savedIds.includes(openedState.work.id)}
                     onToggleSave={onToggleSave}
                 />
             )}

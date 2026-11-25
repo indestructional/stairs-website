@@ -640,19 +640,19 @@ export default function App() {
             <MobileNav />
 
             <main>
-                {/* ПЕРВЫЙ ЭКРАН: чёткое HD-фото веера на всю ширину, плавно и полностью растворяется в #FAF8F5 */}
+                {/* ПЕРВЫЙ ЭКРАН: фото лестницы с резной совой на всю ширину, плавно и полностью растворяется в #FAF8F5 */}
                 <section className="hero-section relative bg-[#161E19] text-[#FAF8F5]">
                     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                         <img
                             src={`${base}${HERO_PHOTO.src}`}
-                            srcSet={`${base}hero-led-2-mobile.webp 820w, ${base}${HERO_PHOTO.src} 1600w`}
+                            srcSet={`${base}hero-owl-mobile.webp 820w, ${base}${HERO_PHOTO.src} 1376w`}
                             sizes="100vw"
                             alt={HERO_PHOTO.alt}
-                            width="1600"
-                            height="1067"
+                            width="1376"
+                            height="768"
                             fetchPriority="high"
                             decoding="async"
-                            className="w-full h-full object-cover object-[72%_center] md:object-[64%_center]"
+                            className="w-full h-full object-cover object-[68%_center] md:object-[50%_42%]"
                         />
 
                         {/* Мягкое горизонтальное затемнение под текст слева без какого-либо шва */}
