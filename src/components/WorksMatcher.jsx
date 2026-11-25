@@ -70,7 +70,7 @@ function WorkLightbox({ work, onClose, isSaved, onToggleSave }) {
 
     return (
         <div
-            className="fixed inset-0 z-[120] bg-[#110D0A]/95 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[120] bg-[#110D0A]/95 backdrop-blur-md flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
             aria-label={work.displayTitle}
@@ -89,13 +89,13 @@ function WorkLightbox({ work, onClose, isSaved, onToggleSave }) {
                         type="button"
                         onClick={onClose}
                         aria-label="Закрыть просмотр"
-                        className="min-w-[44px] min-h-[44px] border border-white/25 hover:border-white flex items-center justify-center shrink-0"
+                        className="w-11 h-11 rounded-full border border-white/25 hover:border-white hover:bg-white/10 flex items-center justify-center shrink-0 transition-colors"
                     >
                         <X size={20} />
                     </button>
                 </div>
 
-                <div className="relative bg-black flex items-center justify-center max-h-[68vh] overflow-hidden">
+                <div className="relative bg-black rounded-2xl flex items-center justify-center max-h-[68vh] overflow-hidden">
                     {photo && (
                         <img
                             src={imgSrc(photo)}
@@ -110,7 +110,7 @@ function WorkLightbox({ work, onClose, isSaved, onToggleSave }) {
                                 type="button"
                                 aria-label="Предыдущее фото"
                                 onClick={() => setIdx((p) => (p - 1 + images.length) % images.length)}
-                                className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-all hover:scale-105"
                             >
                                 <ChevronLeft size={24} />
                             </button>
@@ -118,7 +118,7 @@ function WorkLightbox({ work, onClose, isSaved, onToggleSave }) {
                                 type="button"
                                 aria-label="Следующее фото"
                                 onClick={() => setIdx((p) => (p + 1) % images.length)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-black/60 hover:bg-black/85 text-white flex items-center justify-center"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center transition-all hover:scale-105"
                             >
                                 <ChevronRight size={24} />
                             </button>
@@ -128,14 +128,14 @@ function WorkLightbox({ work, onClose, isSaved, onToggleSave }) {
 
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     {images.length > 1 ? (
-                        <div className="flex gap-1.5 overflow-x-auto py-1">
+                        <div className="flex gap-2 overflow-x-auto py-1">
                             {images.slice(0, 10).map((src, i) => (
                                 <button
                                     key={src}
                                     type="button"
                                     onClick={() => setIdx(i)}
-                                    className={`w-12 h-12 overflow-hidden border-2 shrink-0 ${
-                                        i === idx ? 'border-amber opacity-100' : 'border-transparent opacity-55 hover:opacity-90'
+                                    className={`w-12 h-12 rounded-xl overflow-hidden border-2 shrink-0 transition-all ${
+                                        i === idx ? 'border-amber opacity-100 scale-105' : 'border-transparent opacity-55 hover:opacity-90'
                                     }`}
                                 >
                                     <img src={imgSrc(src)} alt="" className="w-full h-full object-cover" />
@@ -149,7 +149,7 @@ function WorkLightbox({ work, onClose, isSaved, onToggleSave }) {
                     <button
                         type="button"
                         onClick={() => onToggleSave(work)}
-                        className={`min-h-[42px] px-4 text-sm font-semibold inline-flex items-center gap-2 transition-colors ${
+                        className={`btn-magnetic min-h-[42px] px-5 rounded-full text-sm font-semibold inline-flex items-center gap-2 ${
                             isSaved
                                 ? 'bg-amber text-[#16110D]'
                                 : 'border border-amber/60 text-amber hover:bg-amber hover:text-[#16110D]'
@@ -219,7 +219,7 @@ export default function WorksMatcher({
     };
 
     return (
-        <section id="works" className="w-full py-12 md:py-16 px-5 md:px-12 bg-background border-t border-primary/10 scroll-mt-20">
+        <section id="works" className="reveal-section w-full py-12 md:py-16 px-5 md:px-12 bg-background border-t border-primary/10 scroll-mt-24">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-7">
                     <div>
@@ -237,7 +237,7 @@ export default function WorksMatcher({
                 </div>
 
                 {/* Матчер ситуации: основа + тон (светлые/тёмные) и детали */}
-                <div className="bg-surface border border-primary/15 p-4 sm:p-5 mb-6 flex flex-col gap-3.5">
+                <div className="bg-surface border border-primary/15 rounded-[2rem] p-5 sm:p-6 mb-7 shadow-[0_10px_32px_rgba(26,21,18,0.05)] flex flex-col gap-4">
                     <div className="flex flex-wrap items-center gap-2">
                         <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-textMain/60 mr-1 w-full sm:w-auto">
                             Что сейчас в доме:
@@ -252,10 +252,10 @@ export default function WorksMatcher({
                                         setBaseFilter(f.id);
                                         setVisibleCount(6);
                                     }}
-                                    className={`min-h-[42px] px-3.5 text-sm font-semibold border transition-colors ${
+                                    className={`pill-interactive min-h-[42px] px-4 rounded-full text-sm font-semibold border ${
                                         active
-                                            ? 'bg-accent text-white border-accent'
-                                            : 'bg-background text-primary border-primary/20 hover:border-primary'
+                                            ? 'bg-accent text-white border-accent shadow-md'
+                                            : 'bg-background text-primary border-primary/15 hover:border-accent/50 hover:bg-white'
                                     }`}
                                 >
                                     {f.label}
@@ -275,9 +275,9 @@ export default function WorksMatcher({
                                     key={t.id}
                                     type="button"
                                     onClick={() => toggleTag(t.id)}
-                                    className={`min-h-[36px] px-3.5 text-[13px] font-medium border transition-colors ${
+                                    className={`pill-interactive min-h-[38px] px-4 rounded-full text-[13px] font-medium border ${
                                         active
-                                            ? 'bg-primary text-surface border-primary'
+                                            ? 'bg-primary text-surface border-primary shadow-md'
                                             : 'bg-white text-primary/85 border-primary/15 hover:border-primary/45'
                                     }`}
                                 >
@@ -287,7 +287,7 @@ export default function WorksMatcher({
                         })}
                     </div>
 
-                    <div className="bg-background border border-primary/15 p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3">
+                    <div className="bg-background rounded-2xl border border-primary/10 p-4 flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <div className="font-semibold text-[15px] text-primary">
                                 {currentBaseMeta.priceTitle}
@@ -300,13 +300,13 @@ export default function WorksMatcher({
                         </div>
 
                         {baseFilter === 'railing' && (
-                            <div className="inline-flex items-center gap-2 bg-surface px-3 py-1.5 border border-primary/15">
+                            <div className="inline-flex items-center gap-2 bg-surface px-3.5 py-1.5 rounded-full border border-primary/15">
                                 <span className="font-mono text-xs text-textMain/65">Длина:</span>
                                 <button
                                     type="button"
                                     aria-label="Уменьшить длину"
                                     onClick={() => setMeters((m) => Math.max(2, m - 1))}
-                                    className="w-8 h-8 border border-primary/30 bg-white font-mono font-bold text-primary"
+                                    className="w-8 h-8 rounded-full border border-primary/25 bg-white hover:border-primary font-mono font-bold text-primary transition-colors"
                                 >
                                     -
                                 </button>
@@ -315,7 +315,7 @@ export default function WorksMatcher({
                                     type="button"
                                     aria-label="Увеличить длину"
                                     onClick={() => setMeters((m) => Math.min(30, m + 1))}
-                                    className="w-8 h-8 border border-primary/30 bg-white font-mono font-bold text-primary"
+                                    className="w-8 h-8 rounded-full border border-primary/25 bg-white hover:border-primary font-mono font-bold text-primary transition-colors"
                                 >
                                     +
                                 </button>
@@ -328,22 +328,22 @@ export default function WorksMatcher({
                         <a
                             href="#zayavka"
                             onClick={handleSituationAsk}
-                            className="min-h-[40px] px-4 bg-primary hover:bg-accent text-surface text-sm font-semibold inline-flex items-center transition-colors"
+                            className="btn-magnetic min-h-[42px] px-5 rounded-full bg-primary hover:bg-accent text-surface text-sm font-semibold inline-flex items-center"
                         >
                             Спросить по моей ситуации
                         </a>
                     </div>
                 </div>
 
-                {/* Сетка работ с видимыми подписями и кнопкой в папку замера */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {/* Сетка работ с плавным подъёмом и увеличением фото */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {list.slice(0, visibleCount).map((work) => {
                         const firstImg = work.images?.[0];
                         const isSaved = savedIds.includes(work.id);
                         return (
                             <article
                                 key={work.id}
-                                className="bg-surface border border-primary/15 flex flex-col overflow-hidden transition-shadow hover:shadow-md"
+                                className="card-lift bg-surface border border-primary/15 hover:border-accent/40 rounded-3xl flex flex-col overflow-hidden"
                             >
                                 <button
                                     type="button"
@@ -357,22 +357,22 @@ export default function WorksMatcher({
                                             alt={work.displayTitle}
                                             loading="lazy"
                                             decoding="async"
-                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                                         />
                                     )}
-                                    <span className="absolute left-3 top-3 bg-[#1A1512]/85 text-[#FAF7F1] font-mono text-[11px] px-2.5 py-1">
+                                    <span className="absolute left-3.5 top-3.5 bg-[#1A1512]/80 backdrop-blur-sm text-[#FAF7F1] font-mono text-[11px] px-3 py-1 rounded-full">
                                         {work.baseLabel}{work.material && work.material !== 'Другое' ? ` · ${work.material}` : ''}
                                     </span>
                                     {work.images?.length > 1 && (
-                                        <span className="absolute right-3 bottom-3 bg-[#1A1512]/80 text-[#FAF7F1] font-mono text-[11px] px-2 py-0.5">
+                                        <span className="absolute right-3.5 bottom-3.5 bg-[#1A1512]/80 backdrop-blur-sm text-[#FAF7F1] font-mono text-[11px] px-2.5 py-0.5 rounded-full">
                                             {work.images.length} фото
                                         </span>
                                     )}
                                 </button>
 
-                                <div className="p-4 flex flex-col flex-1 gap-3">
+                                <div className="p-5 flex flex-col flex-1 gap-3.5">
                                     <div>
-                                        <h3 className="font-semibold text-[15.5px] text-primary leading-snug">
+                                        <h3 className="font-semibold text-[16px] text-primary leading-snug">
                                             {work.displayTitle}
                                         </h3>
                                         <p className="text-[13px] text-textMain/65 mt-1 m-0">
@@ -383,10 +383,10 @@ export default function WorksMatcher({
                                     <button
                                         type="button"
                                         onClick={() => onToggleSave(work)}
-                                        className={`mt-auto min-h-[40px] px-3 w-full border text-[13px] font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
+                                        className={`btn-magnetic mt-auto min-h-[42px] px-4 w-full rounded-full border text-[13px] font-semibold inline-flex items-center justify-center gap-2 ${
                                             isSaved
                                                 ? 'bg-primary text-surface border-primary'
-                                                : 'bg-background text-primary border-primary/20 hover:border-primary'
+                                                : 'bg-background text-primary border-primary/20 hover:border-accent hover:bg-white'
                                         }`}
                                     >
                                         {isSaved ? <Check size={15} /> : <Bookmark size={15} />}
@@ -398,15 +398,15 @@ export default function WorksMatcher({
                     })}
                 </div>
 
-                {/* Низ секции работ (без упоминания числа работ) */}
-                <div className="mt-7 pt-5 border-t border-primary/15 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                {/* Низ секции работ */}
+                <div className="mt-8 pt-6 border-t border-primary/15 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="max-w-2xl">
                         <p className="text-sm sm:text-[15px] text-textMain/80 m-0">
                             Похожую лестницу посчитаем заново под ваш проём. Если приглянулся вариант, сохраните его в папку замера или просто напишите нам - размеры и фото на старте не обязательны.
                         </p>
                         <a
                             href="/besedki-terrasy-izdeliya-iz-dereva/"
-                            className="inline-block mt-1.5 text-sm text-accent underline underline-offset-4 hover:text-primary"
+                            className="inline-block mt-1.5 text-sm text-accent underline underline-offset-4 hover:text-primary transition-colors"
                         >
                             Кроме лестниц делаем беседки, террасы, арки и мебель из массива (кроме кухонь и корпусной мебели с механизмами)
                         </a>
@@ -416,7 +416,7 @@ export default function WorksMatcher({
                         <button
                             type="button"
                             onClick={() => setVisibleCount((c) => c + 6)}
-                            className="min-h-[44px] px-6 border border-primary bg-surface hover:bg-primary hover:text-surface text-primary text-sm font-semibold shrink-0 transition-colors"
+                            className="btn-magnetic min-h-[46px] px-7 rounded-full border border-primary/30 bg-surface hover:bg-primary hover:text-surface hover:border-primary text-primary text-sm font-semibold shrink-0"
                         >
                             Показать ещё работы
                         </button>

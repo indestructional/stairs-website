@@ -33,8 +33,53 @@
 }
 
 @layer utilities {
+  .btn-magnetic {
+    @apply relative overflow-hidden transition-all duration-300;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .btn-magnetic:hover {
+    transform: translateY(-1px) scale(1.025);
+    box-shadow: 0 10px 26px rgba(26, 21, 18, 0.16);
+  }
+
+  .btn-magnetic:active {
+    transform: scale(0.975);
+  }
+
+  .card-lift {
+    @apply transition-all duration-300;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 44px rgba(26, 21, 18, 0.10);
+  }
+
+  .pill-interactive {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .pill-interactive:hover {
+    transform: translateY(-1px);
+  }
+
+  .pill-interactive:active {
+    transform: scale(0.97);
+  }
+
   .link-hover {
-    @apply transition-colors duration-200 hover:text-accent;
+    @apply transition-all duration-300 hover:-translate-y-[1px] hover:text-accent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-magnetic:hover,
+  .card-lift:hover,
+  .pill-interactive:hover,
+  .link-hover:hover {
+    transform: none !important;
   }
 }
 
@@ -48,7 +93,7 @@
 
 ::-webkit-scrollbar-thumb {
   background: #CFC5B7;
-  border-radius: 6px;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 import {
     WOOD_SPECIES,
     STAINS,
@@ -16,7 +17,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
     const base = import.meta.env.BASE_URL;
 
     return (
-        <section id="prices" className="w-full pt-6 pb-12 md:pt-8 md:pb-16 px-5 md:px-12 bg-background scroll-mt-20">
+        <section id="prices" className="reveal-section w-full pt-6 pb-12 md:pt-8 md:pb-16 px-5 md:px-12 bg-background scroll-mt-24">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-7">
                     <div>
@@ -34,11 +35,11 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                     </p>
                 </div>
 
-                {/* Фишка #1: Стол живых выкрасов */}
-                <div className="grid lg:grid-cols-12 gap-8 bg-surface border border-primary/15 p-5 sm:p-8 shadow-sm">
+                {/* Стол живых выкрасов */}
+                <div className="grid lg:grid-cols-12 gap-7 bg-surface border border-primary/15 rounded-[2rem] p-5 sm:p-8 shadow-[0_14px_40px_rgba(26,21,18,0.06)]">
                     {/* Левая сцена с доской на фоне пола/двери */}
                     <div
-                        className="lg:col-span-6 relative min-h-[360px] sm:min-h-[410px] p-5 sm:p-6 border border-primary/15 flex flex-col justify-between overflow-hidden transition-all duration-300"
+                        className="lg:col-span-6 relative min-h-[360px] sm:min-h-[410px] p-5 sm:p-6 rounded-2xl border border-primary/15 flex flex-col justify-between overflow-hidden transition-all duration-300"
                         style={{ background: floor.css }}
                     >
                         <div
@@ -47,17 +48,17 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                         />
 
                         <div className="relative z-10 flex flex-wrap justify-between gap-2">
-                            <span className="bg-surface/95 text-primary font-mono text-[11px] px-2.5 py-1.5 border border-primary/15">
+                            <span className="bg-surface/95 backdrop-blur-sm text-primary font-mono text-[11px] px-3 py-1.5 rounded-full border border-primary/15 shadow-sm">
                                 Фон: {floor.name}
                             </span>
-                            <span className="bg-surface/95 text-primary font-mono text-[11px] px-2.5 py-1.5 border border-primary/15">
+                            <span className="bg-surface/95 backdrop-blur-sm text-primary font-mono text-[11px] px-3 py-1.5 rounded-full border border-primary/15 shadow-sm">
                                 Свет: {light.kelvin} · {light.name}
                             </span>
                         </div>
 
                         <div className="relative z-10 my-5 mx-auto w-full max-w-[460px]">
                             <div
-                                className="relative h-48 sm:h-52 overflow-hidden border-b-[14px] border-[#5D442D] shadow-[0_22px_40px_rgba(24,18,12,0.28)]"
+                                className="relative h-48 sm:h-52 rounded-2xl overflow-hidden border-b-[14px] border-[#5D442D] shadow-[0_22px_42px_rgba(24,18,12,0.28)] transition-transform duration-500 hover:scale-[1.015]"
                                 onMouseMove={(e) => {
                                     const r = e.currentTarget.getBoundingClientRect();
                                     setSheen({
@@ -90,14 +91,14 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                         background: `radial-gradient(circle 160px at ${sheen.x}% ${sheen.y}%, rgba(255,250,238,0.28), transparent 70%)`,
                                     }}
                                 />
-                                <div className="absolute right-3 top-3 z-10 bg-surface text-primary px-3 py-2 border border-primary/15 shadow-md">
+                                <div className="absolute right-3 top-3 z-10 bg-surface/95 backdrop-blur-sm text-primary px-3.5 py-2 rounded-xl border border-primary/15 shadow-md">
                                     <div className="font-heading font-semibold text-xl leading-none">{selectedWood.name}</div>
                                     <div className="font-mono text-xs text-accent font-medium mt-1">{selectedWood.price}</div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="relative z-10 bg-surface/95 text-textMain/75 text-xs sm:text-[13px] px-3.5 py-2.5 border border-primary/10 leading-snug">
+                        <div className="relative z-10 bg-surface/95 backdrop-blur-sm text-textMain/75 text-xs sm:text-[13px] px-4 py-2.5 rounded-xl border border-primary/10 leading-snug">
                             Экран передаёт характер волокон, а точный оттенок подбираем живыми выкрасами на вашей породе при свете в вашем доме.
                         </div>
                     </div>
@@ -109,7 +110,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                 <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-textMain/60 mb-2">
                                     1. Порода дерева под ключ
                                 </div>
-                                <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                                     {WOOD_SPECIES.map((sp) => {
                                         const active = sp.id === selectedWood.id;
                                         return (
@@ -117,10 +118,10 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                                 key={sp.id}
                                                 type="button"
                                                 onClick={() => setSelectedWood(sp)}
-                                                className={`min-h-[56px] px-2 py-2 border text-center transition-colors ${
+                                                className={`pill-interactive min-h-[58px] px-2 py-2 rounded-2xl border text-center ${
                                                     active
-                                                        ? 'bg-primary text-surface border-primary'
-                                                        : 'bg-background text-primary border-primary/15 hover:border-primary/40'
+                                                        ? 'bg-primary text-surface border-primary shadow-md scale-[1.02]'
+                                                        : 'bg-background text-primary border-primary/15 hover:border-accent/50 hover:bg-white'
                                                 }`}
                                             >
                                                 <span className="block text-[13px] font-semibold">{sp.name}</span>
@@ -145,10 +146,10 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                                 key={st.id}
                                                 type="button"
                                                 onClick={() => setSelectedStain(st)}
-                                                className={`min-h-[40px] px-3 py-1.5 border text-[13px] inline-flex items-center gap-2 transition-colors ${
+                                                className={`pill-interactive min-h-[40px] px-3.5 py-1.5 rounded-full border text-[13px] inline-flex items-center gap-2 ${
                                                     active
-                                                        ? 'bg-white border-primary text-primary font-semibold shadow-[inset_0_0_0_1px_#1A1512]'
-                                                        : 'bg-background border-primary/15 text-primary/85 hover:border-primary/40'
+                                                        ? 'bg-white border-primary text-primary font-semibold shadow-md ring-1 ring-primary'
+                                                        : 'bg-background border-primary/15 text-primary/85 hover:border-accent/50 hover:bg-white'
                                                 }`}
                                             >
                                                 <span
@@ -175,10 +176,10 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                                     key={lt.id}
                                                     type="button"
                                                     onClick={() => setLight(lt)}
-                                                    className={`min-h-[40px] px-2 text-xs font-mono border transition-colors ${
+                                                    className={`pill-interactive min-h-[40px] px-2 rounded-full text-xs font-mono border ${
                                                         active
-                                                            ? 'bg-accent text-white border-accent font-medium'
-                                                            : 'bg-background text-primary border-primary/15 hover:border-primary/40'
+                                                            ? 'bg-accent text-white border-accent font-medium shadow-md'
+                                                            : 'bg-background text-primary border-primary/15 hover:border-accent/50 hover:bg-white'
                                                     }`}
                                                 >
                                                     {lt.kelvin}
@@ -200,10 +201,10 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                                     key={fl.id}
                                                     type="button"
                                                     onClick={() => setFloor(fl)}
-                                                    className={`min-h-[40px] px-2.5 text-xs border transition-colors ${
+                                                    className={`pill-interactive min-h-[40px] px-3 rounded-full text-xs border ${
                                                         active
-                                                            ? 'bg-primary text-surface border-primary font-medium'
-                                                            : 'bg-background text-primary border-primary/15 hover:border-primary/40'
+                                                            ? 'bg-primary text-surface border-primary font-medium shadow-md'
+                                                            : 'bg-background text-primary border-primary/15 hover:border-accent/50 hover:bg-white'
                                                     }`}
                                                 >
                                                     {fl.short}
@@ -214,7 +215,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                 </div>
                             </div>
 
-                            <div className="bg-background border-l-[3px] border-accent px-4 py-3.5">
+                            <div className="bg-background rounded-2xl border border-primary/10 px-4 py-3.5">
                                 <div className="font-mono text-[11.5px] text-accent font-medium mb-1">
                                     {selectedWood.hardness} · {selectedWood.humidity}
                                 </div>
@@ -231,15 +232,16 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                             <button
                                 type="button"
                                 onClick={onAddWoodToFolder}
-                                className="min-h-[46px] px-5 bg-accent hover:bg-[#7D3A14] text-white text-sm font-semibold transition-colors"
+                                className="btn-magnetic min-h-[46px] px-6 rounded-full bg-accent hover:bg-[#7D3A14] text-white text-sm font-semibold"
                             >
                                 + Добавить выкрас в папку замера
                             </button>
                             <a
                                 href={selectedWood.href}
-                                className="min-h-[46px] px-5 border border-primary/30 hover:border-primary text-primary text-sm font-medium inline-flex items-center transition-colors"
+                                className="btn-magnetic min-h-[46px] px-6 rounded-full border border-primary/25 bg-white/60 hover:border-primary hover:bg-white text-primary text-sm font-medium inline-flex items-center gap-1.5"
                             >
-                                Подробнее о породе ({selectedWood.name.toLowerCase()})
+                                <span>Подробнее о породе ({selectedWood.name.toLowerCase()})</span>
+                                <ArrowRight size={15} />
                             </a>
                         </div>
                     </div>
@@ -247,22 +249,22 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
 
                 {/* Отдельные работы + Что входит в цену */}
                 <div className="grid lg:grid-cols-12 gap-7 mt-7">
-                    <div className="lg:col-span-7">
-                        <div className="font-mono text-xs uppercase tracking-[0.12em] text-textMain/60 mb-3">
+                    <div className="lg:col-span-7 flex flex-col gap-3">
+                        <div className="font-mono text-xs uppercase tracking-[0.12em] text-textMain/60">
                             Отдельные работы
                         </div>
-                        <div className="border-t border-primary/15 divide-y divide-primary/15">
+                        <div className="flex flex-col gap-3">
                             {OTHER_WORKS_PRICES.map((item) => (
                                 <a
                                     key={item.href}
                                     href={item.href}
-                                    className="group block py-5 transition-colors"
+                                    className="group card-lift block p-5 rounded-2xl bg-surface border border-primary/15 hover:border-accent/45"
                                 >
                                     <div className="flex flex-wrap justify-between items-baseline gap-2 mb-1.5">
                                         <h3 className="font-semibold text-[17px] text-primary group-hover:text-accent transition-colors">
                                             {item.title}
                                         </h3>
-                                        <span className="font-mono text-[15px] font-medium text-accent whitespace-nowrap">
+                                        <span className="font-mono text-[14.5px] font-medium text-accent whitespace-nowrap bg-accent/10 px-3 py-0.5 rounded-full">
                                             {item.price}
                                         </span>
                                     </div>
@@ -274,7 +276,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                         </div>
                     </div>
 
-                    <div className="lg:col-span-5 bg-[#EDE4D6] border border-primary/15 p-6 sm:p-8 flex flex-col justify-between gap-6">
+                    <div className="lg:col-span-5 bg-[#EDE4D6] rounded-3xl border border-primary/15 p-6 sm:p-8 flex flex-col justify-between gap-6">
                         <div>
                             <h3 className="font-heading font-semibold text-2xl sm:text-[26px] text-primary mb-4">
                                 Что входит в цену под ключ
@@ -282,7 +284,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                             <ul className="space-y-3 text-[15px] text-textMain/85">
                                 {INCLUDED_IN_PRICE.map((line) => (
                                     <li key={line} className="flex items-start gap-3">
-                                        <span className="w-2 h-0.5 bg-accent mt-2.5 shrink-0" />
+                                        <span className="w-2 h-2 rounded-full bg-accent mt-2 shrink-0" />
                                         <span>{line}</span>
                                     </li>
                                 ))}
@@ -290,9 +292,10 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                         </div>
                         <a
                             href="/ceny/"
-                            className="text-sm font-semibold text-accent underline underline-offset-4 hover:text-primary transition-colors self-start"
+                            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-primary transition-colors self-start"
                         >
-                            Подробнее о том, из чего складывается цена
+                            <span className="underline underline-offset-4">Подробнее о том, из чего складывается цена</span>
+                            <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
                         </a>
                     </div>
                 </div>

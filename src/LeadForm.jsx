@@ -109,9 +109,9 @@ export default function LeadForm({
 
     if (state === 'done') {
         return (
-            <section id="zayavka" className={`w-full px-5 md:px-12 py-20 ${isDark ? 'bg-[#15110E] text-[#F5EFE5]' : 'bg-background'}`}>
-                <div className="max-w-3xl mx-auto bg-primary text-[#F5EFE5] border border-white/15 px-7 py-10 flex flex-col gap-5 items-start">
-                    <div className="w-12 h-12 bg-amber text-[#16110D] flex items-center justify-center">
+            <section id="zayavka" className={`w-full px-5 md:px-12 py-16 ${isDark ? 'bg-[#0F0C0A] text-[#F5EFE5]' : 'bg-background'}`}>
+                <div className="max-w-3xl mx-auto bg-primary text-[#F5EFE5] border border-white/15 rounded-[2rem] px-7 py-10 flex flex-col gap-5 items-start shadow-2xl">
+                    <div className="w-12 h-12 rounded-full bg-amber text-[#16110D] flex items-center justify-center">
                         <Check size={26} />
                     </div>
                     <h2 className="font-heading font-semibold text-3xl text-[#F5EFE5]">Заявка принята</h2>
@@ -123,7 +123,7 @@ export default function LeadForm({
                             href={whatsappHref()}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="min-h-[46px] px-6 bg-amber text-[#16110D] font-semibold inline-flex items-center"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full bg-amber text-[#16110D] font-semibold inline-flex items-center"
                         >
                             Продолжить в WhatsApp
                         </a>
@@ -132,13 +132,13 @@ export default function LeadForm({
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={openMax}
-                            className="min-h-[46px] px-6 border border-white/30 text-[#F5EFE5] font-semibold inline-flex items-center"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full border border-white/30 text-[#F5EFE5] font-semibold inline-flex items-center"
                         >
                             Продолжить в MAX
                         </a>
                         <a
                             href={`tel:${PHONE_HREF}`}
-                            className="min-h-[46px] px-6 border border-white/20 text-[#C8BEB0] inline-flex items-center gap-2"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full border border-white/20 text-[#C8BEB0] inline-flex items-center gap-2"
                         >
                             <Phone size={18} />
                             <span>{PHONE}</span>
@@ -155,8 +155,8 @@ export default function LeadForm({
     }
 
     const inputCls = isDark
-        ? 'w-full border border-white/15 bg-[#15110E] text-[#F5EFE5] placeholder:text-[#8E8377] px-4 py-3 text-[15px] focus:outline-none focus:border-amber'
-        : 'w-full border border-primary/20 bg-white text-primary placeholder:text-textMain/45 px-4 py-3 text-[15px] focus:outline-none focus:border-accent';
+        ? 'w-full rounded-xl border border-white/15 bg-[#15110E] text-[#F5EFE5] placeholder:text-[#8E8377] px-4 py-3 text-[15px] transition-colors focus:outline-none focus:border-amber'
+        : 'w-full rounded-xl border border-primary/20 bg-white text-primary placeholder:text-textMain/45 px-4 py-3 text-[15px] transition-colors focus:outline-none focus:border-accent';
 
     const labelCls = isDark ? 'text-[13px] text-[#C8BEB0]' : 'text-[13px] text-textMain/70';
 
@@ -238,7 +238,7 @@ export default function LeadForm({
             <button
                 type="submit"
                 disabled={state === 'sending' || !agreed}
-                className={`min-h-[48px] px-8 font-semibold text-[15px] self-start transition-colors disabled:opacity-50 ${
+                className={`btn-magnetic min-h-[48px] px-8 rounded-full font-semibold text-[15px] self-start disabled:opacity-50 ${
                     isDark
                         ? 'bg-amber hover:bg-[#E7B276] text-[#16110D]'
                         : 'bg-accent hover:bg-[#7D3A14] text-white'
@@ -261,8 +261,12 @@ export default function LeadForm({
 
     if (isDark) {
         return (
-            <section id="zayavka" className="w-full pt-6 pb-14 md:pt-8 md:pb-16 px-5 md:px-12 bg-[#15110E] text-[#F5EFE5] scroll-mt-20">
-                <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            <section id="zayavka" className="reveal-section relative w-full px-4 md:px-10 pt-2 pb-12 md:pb-16 scroll-mt-24">
+                {/* Верхняя часть фона - светлый #F5EFE6, нижняя - тёмный подвал #0F0C0A */}
+                <div aria-hidden="true" className="absolute inset-x-0 top-0 h-28 md:h-36 bg-background" />
+                <div aria-hidden="true" className="absolute inset-x-0 bottom-0 top-28 md:top-36 bg-[#0F0C0A]" />
+
+                <div className="relative z-10 max-w-7xl mx-auto bg-[#18130F] text-[#F5EFE5] border border-white/15 rounded-[2rem] shadow-[0_24px_64px_rgba(21,17,14,0.24)] p-6 sm:p-10 lg:p-14 grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                     <div className="lg:col-span-5">
                         <div className="font-mono text-xs uppercase tracking-[0.14em] text-amber mb-3">
                             06 · Замер и расчёт
@@ -286,7 +290,7 @@ export default function LeadForm({
                                 href="https://wa.me/79892145276"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="min-h-[44px] px-5 border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center transition-colors"
+                                className="btn-magnetic min-h-[44px] px-5 rounded-full border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center"
                             >
                                 WhatsApp
                             </a>
@@ -294,7 +298,7 @@ export default function LeadForm({
                                 href="https://t.me/+79892145276"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="min-h-[44px] px-5 border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center transition-colors"
+                                className="btn-magnetic min-h-[44px] px-5 rounded-full border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center"
                             >
                                 Telegram
                             </a>
@@ -302,14 +306,14 @@ export default function LeadForm({
                                 href={MAX_LINK}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="min-h-[44px] px-5 border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center transition-colors"
+                                className="btn-magnetic min-h-[44px] px-5 rounded-full border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center"
                             >
                                 MAX
                             </a>
                         </div>
                     </div>
 
-                    <div className="lg:col-span-7 bg-[#201A15] border border-white/15 p-6 sm:p-8">
+                    <div className="lg:col-span-7 bg-[#211B16] border border-white/15 rounded-3xl p-6 sm:p-8">
                         {formBody}
                     </div>
                 </div>
@@ -319,7 +323,7 @@ export default function LeadForm({
 
     return (
         <section id="zayavka" className="w-full px-5 md:px-12 py-12 scroll-mt-24">
-            <div className="max-w-3xl mx-auto bg-surface border border-primary/15 px-6 md:px-10 py-10 shadow-sm">
+            <div className="max-w-3xl mx-auto bg-surface border border-primary/15 rounded-[2rem] px-6 md:px-10 py-10 shadow-sm">
                 <h2 className="font-heading font-semibold text-3xl text-primary mb-3">
                     Записаться на замер или задать вопрос
                 </h2>
