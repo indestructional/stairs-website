@@ -53,9 +53,9 @@ export default function MeasureFolder({
 
     return (
         <>
-            {/* Плавающая панель: полностью скрыта при 0 элементов, никогда не перекрывает мобильный бар */}
+            {/* Плавающая панель: полностью скрыта при 0 элементов, не пересекается с виджетом мессенджеров справа */}
             <div
-                className={`fixed right-3 left-3 sm:left-auto sm:right-5 bottom-[70px] md:bottom-5 z-[75] bg-surface text-primary border-2 border-accent px-3.5 py-2.5 shadow-2xl flex items-center justify-between sm:justify-start gap-3 transition-all duration-300 ${
+                className={`fixed left-3 right-[84px] sm:left-auto sm:right-24 md:right-28 bottom-5 md:bottom-7 z-[75] bg-surface text-primary border-2 border-accent px-3.5 py-2.5 shadow-2xl flex items-center justify-between sm:justify-start gap-3 transition-all duration-300 ${
                     total > 0
                         ? 'opacity-100 visible translate-y-0 pointer-events-auto'
                         : 'opacity-0 invisible translate-y-24 pointer-events-none'
@@ -251,7 +251,7 @@ export default function MeasureFolder({
 
             {/* Уведомление-тост */}
             {toast && (
-                <div className="fixed left-1/2 -translate-x-1/2 bottom-20 md:bottom-8 z-[130] bg-primary text-surface border border-amber/60 px-4 py-2.5 text-sm font-medium shadow-xl max-w-[92vw] text-center">
+                <div className="fixed left-1/2 -translate-x-1/2 bottom-24 z-[130] bg-primary text-surface border border-amber/60 px-4 py-2.5 text-sm font-medium shadow-xl max-w-[92vw] text-center">
                     {toast}
                 </div>
             )}

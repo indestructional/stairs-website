@@ -16,18 +16,18 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
     const base = import.meta.env.BASE_URL;
 
     return (
-        <section id="prices" className="w-full py-20 md:py-28 px-5 md:px-12 bg-background border-t border-primary/10 scroll-mt-20">
+        <section id="prices" className="w-full pt-6 pb-12 md:pt-8 md:pb-16 px-5 md:px-12 bg-background scroll-mt-20">
             <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-7">
                     <div>
-                        <div className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
+                        <div className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-2">
                             01 · Породы, выкрасы и стартовые цены
                         </div>
                         <h2 className="font-heading font-semibold text-4xl md:text-5xl text-primary leading-[1.08]">
                             Сколько стоит лестница
                         </h2>
                     </div>
-                    <p className="text-textMain/75 max-w-xl text-base leading-relaxed">
+                    <p className="text-textMain/75 max-w-xl text-base leading-relaxed m-0">
                         Ниже стартовые цены для самых простых вариантов - чтобы вы понимали порядок бюджета до звонка.
                         Точную сумму называем в течение суток после замера: она зависит от размеров проёма, конструкции
                         (прямая или поворотная), формы ступеней, балясин и отделки.
@@ -246,7 +246,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                 </div>
 
                 {/* Отдельные работы + Что входит в цену */}
-                <div className="grid lg:grid-cols-12 gap-8 mt-10">
+                <div className="grid lg:grid-cols-12 gap-7 mt-7">
                     <div className="lg:col-span-7">
                         <div className="font-mono text-xs uppercase tracking-[0.12em] text-textMain/60 mb-3">
                             Отдельные работы

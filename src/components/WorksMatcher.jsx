@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { X, ChevronLeft, ChevronRight, Bookmark, Check } from 'lucide-react';
 import dimensions from 'virtual:gallery-dimensions';
 import {
-    CRAFT_HOTSPOTS,
     FEATURED_WORK_IDS,
     classifyWork,
 } from '../content/homepage.js';
@@ -41,6 +40,8 @@ const BASE_FILTERS = [
 ];
 
 const DETAIL_TAGS = [
+    { id: 'light', label: 'Светлые' },
+    { id: 'dark', label: 'Тёмные' },
     { id: 'led', label: 'С подсветкой' },
     { id: 'glass', label: 'Со стеклом' },
     { id: 'metal', label: 'С металлом' },
@@ -169,7 +170,6 @@ export default function WorksMatcher({
     onToggleSave,
     onAskSituation,
 }) {
-    const [activePin, setActivePin] = useState(CRAFT_HOTSPOTS.points[0].id);
     const [baseFilter, setBaseFilter] = useState('all');
     const [activeTags, setActiveTags] = useState([]);
     const [meters, setMeters] = useState(6);
@@ -200,7 +200,16 @@ export default function WorksMatcher({
     const currentBaseMeta = BASE_FILTERS.find((b) => b.id === baseFilter) || BASE_FILTERS[0];
     const toggleTag = (id) => {
         setVisibleCount(6);
-        setActiveTags((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+        setActiveTags((prev) => {
+            if (prev.includes(id)) return prev.filter((x) => x !== id);
+            // Светлые и Тёмные переключают друг друга, чтобы не давать пустую выборку
+            const next = id === 'light'
+                ? prev.filter((x) => x !== 'dark')
+                : id === 'dark'
+                    ? prev.filter((x) => x !== 'light')
+                    : prev;
+            return [...next, id];
+        });
     };
 
     const handleSituationAsk = () => {
@@ -209,104 +218,28 @@ export default function WorksMatcher({
         onAskSituation(text, baseFilter);
     };
 
-    const base = import.meta.env.BASE_URL;
-
     return (
-        <section id="works" className="w-full py-20 md:py-28 px-5 md:px-12 bg-background border-t border-primary/10 scroll-mt-20">
+        <section id="works" className="w-full py-12 md:py-16 px-5 md:px-12 bg-background border-t border-primary/10 scroll-mt-20">
             <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-7">
                     <div>
-                        <div className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-3">
-                            02 · Примеры работ и разбор узлов
+                        <div className="font-mono text-xs uppercase tracking-[0.14em] text-accent mb-2">
+                            02 · Сняты на объектах после монтажа
                         </div>
                         <h2 className="font-heading font-semibold text-4xl md:text-5xl text-primary leading-[1.08]">
                             Примеры работ
                         </h2>
                     </div>
-                    <p className="text-textMain/75 max-w-xl text-base leading-relaxed">
-                        Сняты на объектах после монтажа. Нажмите на фотографию, чтобы рассмотреть остальные ракурсы,
-                        или сохраните понравившиеся варианты в папку замера.
+                    <p className="text-textMain/75 max-w-xl text-base leading-relaxed m-0">
+                        Выберите вашу основу и оттенок - покажем подходящие объекты. Нажмите на фотографию,
+                        чтобы рассмотреть остальные ракурсы, или сохраните варианты в папку замера.
                     </p>
                 </div>
 
-                {/* Фишка #4: Разбор реальных узлов на фото */}
-                <div className="grid lg:grid-cols-12 gap-8 items-center bg-surface border border-primary/15 p-5 sm:p-8 mb-12 shadow-sm">
-                    <div className="lg:col-span-6 relative aspect-[4/5] max-h-[540px] w-full mx-auto overflow-hidden bg-[#1D1815]">
-                        <img
-                            src={`${base}${CRAFT_HOTSPOTS.img}`}
-                            alt={CRAFT_HOTSPOTS.title}
-                            width="640"
-                            height="920"
-                            loading="lazy"
-                            className="w-full h-full object-cover"
-                        />
-                        {CRAFT_HOTSPOTS.points.map((pt, idx) => {
-                            const active = pt.id === activePin;
-                            return (
-                                <button
-                                    key={pt.id}
-                                    type="button"
-                                    aria-label={pt.label}
-                                    aria-pressed={active}
-                                    onClick={() => setActivePin(pt.id)}
-                                    style={{ left: `${pt.x}%`, top: `${pt.y}%` }}
-                                    className={`absolute -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full font-mono text-xs font-semibold border-2 shadow-lg transition-transform ${
-                                        active
-                                            ? 'bg-accent text-white border-white scale-110'
-                                            : 'bg-surface/95 text-primary border-accent hover:scale-105'
-                                    }`}
-                                >
-                                    {idx + 1}
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    <div className="lg:col-span-6 flex flex-col gap-3">
-                        <div className="font-mono text-[11px] uppercase tracking-[0.12em] text-accent">
-                            Детали столярной работы
-                        </div>
-                        <h3 className="font-heading font-semibold text-3xl text-primary leading-tight">
-                            {CRAFT_HOTSPOTS.title}
-                        </h3>
-                        <p className="text-sm sm:text-[15px] text-textMain/70 mb-2">
-                            {CRAFT_HOTSPOTS.subtitle}
-                        </p>
-
-                        <div className="flex flex-col gap-2.5">
-                            {CRAFT_HOTSPOTS.points.map((pt, idx) => {
-                                const active = pt.id === activePin;
-                                return (
-                                    <button
-                                        key={pt.id}
-                                        type="button"
-                                        onClick={() => setActivePin(pt.id)}
-                                        className={`text-left p-4 border transition-colors ${
-                                            active
-                                                ? 'bg-white border-accent shadow-[inset_3px_0_0_#9A4A1C]'
-                                                : 'bg-background border-primary/15 hover:border-primary/35'
-                                        }`}
-                                    >
-                                        <div className="flex items-center gap-3 font-semibold text-[15px] text-primary">
-                                            <span className="font-mono text-xs text-accent">0{idx + 1}</span>
-                                            <span>{pt.label}</span>
-                                        </div>
-                                        {active && (
-                                            <p className="mt-2 text-sm text-textMain/75 leading-relaxed m-0">
-                                                {pt.detail}
-                                            </p>
-                                        )}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Фишка #3: Матчер вашей ситуации */}
-                <div className="bg-surface border border-primary/15 p-5 sm:p-6 mb-8 flex flex-col gap-4">
+                {/* Матчер ситуации: основа + тон (светлые/тёмные) и детали */}
+                <div className="bg-surface border border-primary/15 p-4 sm:p-5 mb-6 flex flex-col gap-3.5">
                     <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-textMain/60 mr-2 w-full sm:w-auto">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-textMain/60 mr-1 w-full sm:w-auto">
                             Что сейчас в доме:
                         </span>
                         {BASE_FILTERS.map((f) => {
@@ -319,7 +252,7 @@ export default function WorksMatcher({
                                         setBaseFilter(f.id);
                                         setVisibleCount(6);
                                     }}
-                                    className={`min-h-[44px] px-4 text-sm font-semibold border transition-colors ${
+                                    className={`min-h-[42px] px-3.5 text-sm font-semibold border transition-colors ${
                                         active
                                             ? 'bg-accent text-white border-accent'
                                             : 'bg-background text-primary border-primary/20 hover:border-primary'
@@ -332,8 +265,8 @@ export default function WorksMatcher({
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-textMain/60 mr-2 w-full sm:w-auto">
-                            Детали (по желанию):
+                        <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-textMain/60 mr-1 w-full sm:w-auto">
+                            Тон и детали:
                         </span>
                         {DETAIL_TAGS.map((t) => {
                             const active = activeTags.includes(t.id);
@@ -342,7 +275,7 @@ export default function WorksMatcher({
                                     key={t.id}
                                     type="button"
                                     onClick={() => toggleTag(t.id)}
-                                    className={`min-h-[38px] px-3.5 text-[13px] font-medium border transition-colors ${
+                                    className={`min-h-[36px] px-3.5 text-[13px] font-medium border transition-colors ${
                                         active
                                             ? 'bg-primary text-surface border-primary'
                                             : 'bg-white text-primary/85 border-primary/15 hover:border-primary/45'
@@ -354,7 +287,7 @@ export default function WorksMatcher({
                         })}
                     </div>
 
-                    <div className="bg-background border border-primary/15 p-4 flex flex-wrap items-center justify-between gap-4">
+                    <div className="bg-background border border-primary/15 p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <div className="font-semibold text-[15px] text-primary">
                                 {currentBaseMeta.priceTitle}
@@ -395,7 +328,7 @@ export default function WorksMatcher({
                         <a
                             href="#zayavka"
                             onClick={handleSituationAsk}
-                            className="min-h-[42px] px-4 bg-primary hover:bg-accent text-surface text-sm font-semibold inline-flex items-center transition-colors"
+                            className="min-h-[40px] px-4 bg-primary hover:bg-accent text-surface text-sm font-semibold inline-flex items-center transition-colors"
                         >
                             Спросить по моей ситуации
                         </a>
@@ -403,7 +336,7 @@ export default function WorksMatcher({
                 </div>
 
                 {/* Сетка работ с видимыми подписями и кнопкой в папку замера */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                     {list.slice(0, visibleCount).map((work) => {
                         const firstImg = work.images?.[0];
                         const isSaved = savedIds.includes(work.id);
@@ -437,7 +370,7 @@ export default function WorksMatcher({
                                     )}
                                 </button>
 
-                                <div className="p-4 sm:p-5 flex flex-col flex-1 gap-3">
+                                <div className="p-4 flex flex-col flex-1 gap-3">
                                     <div>
                                         <h3 className="font-semibold text-[15.5px] text-primary leading-snug">
                                             {work.displayTitle}
@@ -466,14 +399,14 @@ export default function WorksMatcher({
                 </div>
 
                 {/* Низ секции работ (без упоминания числа работ) */}
-                <div className="mt-8 pt-6 border-t border-primary/15 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="mt-7 pt-5 border-t border-primary/15 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="max-w-2xl">
                         <p className="text-sm sm:text-[15px] text-textMain/80 m-0">
-                            Похожую лестницу посчитаем заново под ваш проём. Если приглянулся вариант, пришлите скриншот и высоту этажа - прикинем порядок стоимости.
+                            Похожую лестницу посчитаем заново под ваш проём. Если приглянулся вариант, сохраните его в папку замера или просто напишите нам - размеры и фото на старте не обязательны.
                         </p>
                         <a
                             href="/besedki-terrasy-izdeliya-iz-dereva/"
-                            className="inline-block mt-2 text-sm text-accent underline underline-offset-4 hover:text-primary"
+                            className="inline-block mt-1.5 text-sm text-accent underline underline-offset-4 hover:text-primary"
                         >
                             Кроме лестниц делаем беседки, террасы, арки и мебель из массива (кроме кухонь и корпусной мебели с механизмами)
                         </a>
@@ -483,7 +416,7 @@ export default function WorksMatcher({
                         <button
                             type="button"
                             onClick={() => setVisibleCount((c) => c + 6)}
-                            className="min-h-[46px] px-7 border border-primary bg-surface hover:bg-primary hover:text-surface text-primary text-sm font-semibold shrink-0 transition-colors"
+                            className="min-h-[44px] px-6 border border-primary bg-surface hover:bg-primary hover:text-surface text-primary text-sm font-semibold shrink-0 transition-colors"
                         >
                             Показать ещё работы
                         </button>

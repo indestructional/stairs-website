@@ -261,18 +261,19 @@ export default function LeadForm({
 
     if (isDark) {
         return (
-            <section id="zayavka" className="w-full py-20 md:py-28 px-5 md:px-12 bg-[#15110E] text-[#F5EFE5] border-t border-white/10 scroll-mt-20">
-                <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+            <section id="zayavka" className="w-full pt-6 pb-14 md:pt-8 md:pb-16 px-5 md:px-12 bg-[#15110E] text-[#F5EFE5] scroll-mt-20">
+                <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                     <div className="lg:col-span-5">
                         <div className="font-mono text-xs uppercase tracking-[0.14em] text-amber mb-3">
                             06 · Замер и расчёт
                         </div>
                         <h2 className="font-heading font-semibold text-4xl md:text-5xl text-[#F5EFE5] leading-[1.08] mb-5">
-                            Записаться на замер или узнать цену по фото
+                            Записаться на замер или задать вопрос
                         </h2>
                         <p className="text-[#C8BEB0] text-base leading-relaxed mb-7">
-                            Оставьте телефон - перезвоним с 09:00 до 20:00 и договоримся на удобный день.
-                            Если удобнее переписка, напишите сразу в мессенджер и приложите фото проёма.
+                            Оставьте телефон - перезвоним с 09:00 до 20:00, ответим на вопросы и договоримся о замере.
+                            Если удобнее переписка, просто напишите в мессенджер: фото проёма или размеры присылать
+                            не обязательно, но по ним сможем сразу прикинуть порядок цены.
                         </p>
                         <div className="font-heading text-3xl sm:text-4xl font-semibold text-amber">
                             <a href={`tel:${PHONE_HREF}`} className="hover:underline">{PHONE}</a>
@@ -317,10 +318,10 @@ export default function LeadForm({
     }
 
     return (
-        <section id="zayavka" className="w-full px-5 md:px-12 py-16 scroll-mt-24">
+        <section id="zayavka" className="w-full px-5 md:px-12 py-12 scroll-mt-24">
             <div className="max-w-3xl mx-auto bg-surface border border-primary/15 px-6 md:px-10 py-10 shadow-sm">
                 <h2 className="font-heading font-semibold text-3xl text-primary mb-3">
-                    Записаться на замер или узнать цену по фото
+                    Записаться на замер или задать вопрос
                 </h2>
                 <p className="text-textMain/75 mb-7 max-w-xl">
                     Перезвоним с 09:00 до 20:00 и договоримся о времени. Замер бесплатный в черте {CITY}а.
