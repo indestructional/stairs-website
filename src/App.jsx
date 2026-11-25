@@ -770,7 +770,7 @@ export default function App() {
                                     <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-[3px] border-accent/40 shadow-lg bg-[#2A221C] shrink-0 transition-transform duration-500 hover:scale-[1.03]">
                                         <img
                                             src={`${base}master-konstantin.webp`}
-                                            alt="Мастер Константин на монтаже деревянной лестницы"
+                                            alt="Мастер Константин"
                                             width="480"
                                             height="480"
                                             loading="lazy"
