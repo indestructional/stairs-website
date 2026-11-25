@@ -58,10 +58,9 @@ function MaxIcon({ size = 20, white = true }) {
 }
 
 // ==========================================
-// ПЛАВАЮЩАЯ ШАПКА "THE FLOATING ISLAND"
-// Наверху широкая, при прокрутке отсоединяется и плывёт скруглённой капсулой
+// ПЛАВАЮЩАЯ ШАПКА "THE FLOATING ISLAND" (в оригинальной светлой палитре #FAF8F5 / #2E4036 / #CC5833)
 // ==========================================
-export function Navbar({ dark = false }) {
+export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -71,57 +70,44 @@ export function Navbar({ dark = false }) {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    const iconBase = dark
-        ? 'text-[#D6CCC0] transition-all duration-300 hover:-translate-y-0.5'
-        : 'text-primary/80 transition-all duration-300 hover:-translate-y-0.5';
-
     return (
         <div className="hidden md:block">
-            {/* Занимает высоту шапки наверху, чтобы первый экран не прыгал */}
-            <div className={`h-[76px] w-full ${dark ? 'bg-[#15110E]' : 'bg-background'}`} />
+            <div className="h-[78px] w-full bg-background border-b border-primary/5" />
 
             <header
                 className={`fixed left-0 right-0 z-50 flex justify-center transition-all duration-500 ${
                     scrolled
                         ? 'top-4 pointer-events-none px-4'
-                        : `top-0 pointer-events-auto border-b ${
-                            dark ? 'bg-[#15110E]/95 border-white/10' : 'bg-background/95 border-primary/10'
-                        }`
+                        : 'top-0 pointer-events-auto bg-background/95 backdrop-blur-md border-b border-primary/10'
                 }`}
             >
                 <div
-                    className={`flex items-center transition-all duration-500 pointer-events-auto ${
+                    className={`flex items-center transition-all duration-500 pointer-events-auto text-primary ${
                         scrolled
-                            ? `gap-5 lg:gap-7 rounded-full px-5 lg:px-6 py-2.5 backdrop-blur-xl shadow-[0_14px_40px_rgba(21,17,14,0.22)] border w-fit ${
-                                dark
-                                    ? 'bg-[#18130F]/90 text-[#F5EFE5] border-white/15'
-                                    : 'bg-surface/90 text-primary border-primary/15'
-                            }`
-                            : `w-full max-w-7xl justify-between px-6 lg:px-10 h-[76px] mx-auto ${
-                                dark ? 'text-[#F5EFE5]' : 'text-primary'
-                            }`
+                            ? 'gap-5 lg:gap-7 rounded-full px-5 lg:px-6 py-2.5 bg-white/90 backdrop-blur-xl shadow-[0_12px_36px_rgba(46,64,54,0.12)] border border-primary/10 w-fit'
+                            : 'w-full max-w-7xl justify-between px-6 lg:px-10 h-[78px] mx-auto'
                     }`}
                 >
                     <a href="/" className="shrink-0 group">
-                        <div className="font-heading font-semibold text-xl leading-none tracking-tight group-hover:text-amber transition-colors">
+                        <div className="font-heading font-extrabold text-xl leading-none tracking-tight text-primary group-hover:text-accent transition-colors">
                             Лестницы в Краснодаре
                         </div>
                         {!scrolled && (
-                            <div className={`font-mono text-[11px] mt-1 ${dark ? 'text-[#C2B6A8]' : 'text-textMain/60'}`}>
+                            <div className="font-mono text-[11px] mt-1 text-textMain/55">
                                 Мастер Константин · с 2001 года
                             </div>
                         )}
                     </a>
 
-                    <nav className={`hidden xl:flex items-center gap-5 text-sm ${dark ? 'text-[#D6CCC0]' : 'text-textMain/80'}`}>
-                        <a href="/#prices" className="link-hover hover:text-amber">Цены</a>
-                        <a href="/#works" className="link-hover hover:text-amber">Примеры работ</a>
+                    <nav className="hidden xl:flex items-center gap-5 text-sm font-medium text-textMain/80">
+                        <a href="/#prices" className="link-hover">Цены</a>
+                        <a href="/#works" className="link-hover">Примеры работ</a>
                         <div className="relative group/menu">
-                            <button type="button" className="inline-flex items-center gap-1 hover:text-amber transition-colors py-2">
+                            <button type="button" className="inline-flex items-center gap-1 hover:text-accent transition-colors py-2">
                                 Услуги <ChevronDown size={15} />
                             </button>
                             <div className="absolute left-0 top-full pt-2 hidden group-hover/menu:block group-focus-within/menu:block z-50">
-                                <div className="bg-surface text-primary rounded-2xl border border-primary/15 shadow-2xl py-2 w-72 overflow-hidden">
+                                <div className="bg-white text-primary rounded-2xl border border-primary/10 shadow-2xl py-2 w-72 overflow-hidden">
                                     {LANDINGS.map((page) => (
                                         <a
                                             key={page.slug}
@@ -134,20 +120,20 @@ export function Navbar({ dark = false }) {
                                 </div>
                             </div>
                         </div>
-                        <a href="/#master" className="link-hover hover:text-amber">Мастер</a>
-                        <a href="/#stages" className="link-hover hover:text-amber">Этапы</a>
-                        <a href="/#faq" className="link-hover hover:text-amber">Вопросы</a>
+                        <a href="/#master" className="link-hover">Мастер</a>
+                        <a href="/#stages" className="link-hover">Этапы</a>
+                        <a href="/#faq" className="link-hover">Вопросы</a>
                     </nav>
 
                     <div className="flex items-center gap-4 shrink-0">
-                        <div className={`flex items-center gap-3 pr-3 border-r ${dark ? 'border-white/15' : 'border-primary/15'}`}>
+                        <div className="flex items-center gap-3 pr-3 border-r border-primary/15">
                             <a
                                 href={WA_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Написать в WhatsApp"
                                 title="WhatsApp"
-                                className={`${iconBase} hover:text-[#25D366]`}
+                                className="text-primary transition-all duration-300 hover:-translate-y-0.5 hover:text-[#25D366]"
                             >
                                 <WhatsAppIcon size={19} />
                             </a>
@@ -157,7 +143,7 @@ export function Navbar({ dark = false }) {
                                 rel="noopener noreferrer"
                                 aria-label="Написать в Telegram"
                                 title="Telegram"
-                                className={`${iconBase} hover:text-[#29A9EB]`}
+                                className="text-primary transition-all duration-300 hover:-translate-y-0.5 hover:text-[#0088cc]"
                             >
                                 <Send size={18} />
                             </a>
@@ -167,7 +153,7 @@ export function Navbar({ dark = false }) {
                                 rel="noopener noreferrer"
                                 aria-label="Написать в MAX"
                                 title="MAX"
-                                className={`${iconBase} hover:text-[#7B74FF]`}
+                                className="text-primary transition-all duration-300 hover:-translate-y-0.5 hover:text-[#534eef]"
                             >
                                 <MaxIcon size={19} white />
                             </a>
@@ -175,17 +161,13 @@ export function Navbar({ dark = false }) {
 
                         <a
                             href={`tel:${PHONE_HREF}`}
-                            className={`font-mono text-[13.5px] font-medium whitespace-nowrap transition-colors ${dark ? 'text-amber hover:text-white' : 'text-primary hover:text-accent'}`}
+                            className="font-mono text-[13.5px] font-medium whitespace-nowrap text-primary hover:text-accent transition-colors"
                         >
                             {PHONE}
                         </a>
                         <a
                             href="/#zayavka"
-                            className={`btn-magnetic min-h-[40px] px-5 rounded-full text-[13.5px] font-semibold inline-flex items-center whitespace-nowrap ${
-                                dark
-                                    ? 'bg-amber hover:bg-[#E7B276] text-[#16110D]'
-                                    : 'bg-accent hover:bg-[#7D3A14] text-white'
-                            }`}
+                            className="btn-magnetic min-h-[40px] px-5 rounded-full text-[13.5px] font-semibold inline-flex items-center whitespace-nowrap bg-primary hover:bg-accent text-background"
                         >
                             Записаться на замер
                         </a>
@@ -199,7 +181,7 @@ export function Navbar({ dark = false }) {
 // ==========================================
 // МОБИЛЬНАЯ ШАПКА + ВЫДВИЖНОЕ МЕНЮ
 // ==========================================
-export function MobileNav({ dark = false }) {
+export function MobileNav() {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -215,14 +197,10 @@ export function MobileNav({ dark = false }) {
 
     return (
         <div className="md:hidden">
-            <div className={`h-16 w-full sticky top-0 z-50 backdrop-blur-md flex items-center justify-between px-4 border-b ${
-                dark
-                    ? 'bg-[#15110E]/95 text-[#F5EFE5] border-white/15'
-                    : 'bg-background/95 text-primary border-primary/15'
-            }`}>
+            <div className="h-16 w-full sticky top-0 z-50 bg-background/95 backdrop-blur-md text-primary border-b border-primary/10 flex items-center justify-between px-4">
                 <a href="/" className="leading-tight">
-                    <div className="font-heading font-semibold text-lg leading-none">Лестницы в Краснодаре</div>
-                    <div className={`font-mono text-[10.5px] mt-0.5 ${dark ? 'text-[#C2B6A8]' : 'text-textMain/60'}`}>
+                    <div className="font-heading font-extrabold text-lg leading-none text-primary">Лестницы в Краснодаре</div>
+                    <div className="font-mono text-[10.5px] mt-0.5 text-textMain/55">
                         Мастер Константин · с 2001 года
                     </div>
                 </a>
@@ -230,9 +208,7 @@ export function MobileNav({ dark = false }) {
                     <a
                         href={`tel:${PHONE_HREF}`}
                         aria-label="Позвонить"
-                        className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform active:scale-95 ${
-                            dark ? 'bg-amber text-[#16110D]' : 'bg-accent text-white'
-                        }`}
+                        className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center transition-transform active:scale-95"
                     >
                         <Phone size={18} />
                     </a>
@@ -241,9 +217,7 @@ export function MobileNav({ dark = false }) {
                         onClick={() => setOpen(true)}
                         aria-label="Открыть меню"
                         aria-expanded={open}
-                        className={`min-w-[42px] min-h-[40px] px-3 rounded-full border text-xs font-mono uppercase inline-flex items-center gap-1.5 ${
-                            dark ? 'border-white/25 text-[#F5EFE5]' : 'border-primary/25 text-primary'
-                        }`}
+                        className="min-w-[42px] min-h-[40px] px-3 rounded-full border border-primary/20 text-primary text-xs font-mono uppercase inline-flex items-center gap-1.5"
                     >
                         <Menu size={18} />
                         <span>Меню</span>
@@ -440,24 +414,24 @@ export function MessengerWidget() {
 // ==========================================
 export function Footer() {
     return (
-        <footer className="w-full bg-[#0F0C0A] text-[#F5EFE5] border-t border-white/10 pt-10 pb-20 md:py-12 px-5 md:px-12">
+        <footer className="w-full bg-[#1B2620] text-[#FAF8F5] border-t border-white/10 pt-10 pb-20 md:py-12 px-5 md:px-12">
             <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-8">
                 <div className="md:col-span-5 flex flex-col gap-3">
-                    <div className="font-heading font-semibold text-2xl">Лестницы в Краснодаре</div>
-                    <p className="text-sm text-[#C2B6A8] max-w-sm m-0">
+                    <div className="font-heading font-extrabold text-2xl tracking-tight">Лестницы в Краснодаре</div>
+                    <p className="text-sm text-white/70 max-w-sm m-0">
                         Изготовление и монтаж деревянных лестниц на заказ с 2001 года.
                     </p>
                     <div className="font-mono text-sm text-amber mt-1">
                         <a href={`tel:${PHONE_HREF}`} className="hover:underline">{PHONE}</a>
                     </div>
-                    <div className="font-mono text-xs text-[#A99D8F]">Ежедневно с 09:00 до 20:00</div>
+                    <div className="font-mono text-xs text-white/55">Ежедневно с 09:00 до 20:00</div>
                     <div className="flex gap-3 mt-2">
                         <a
                             href={WA_URL}
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="WhatsApp"
-                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-[#D6CCC0] hover:bg-[#25D366] hover:text-white hover:border-transparent"
+                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#25D366] hover:text-white hover:border-transparent"
                         >
                             <WhatsAppIcon size={18} />
                         </a>
@@ -466,7 +440,7 @@ export function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="Telegram"
-                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-[#D6CCC0] hover:bg-[#0088cc] hover:text-white hover:border-transparent"
+                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#0088cc] hover:text-white hover:border-transparent"
                         >
                             <Send size={17} />
                         </a>
@@ -475,22 +449,22 @@ export function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="MAX"
-                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-[#D6CCC0] hover:bg-[#534eef] hover:text-white hover:border-transparent"
+                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#534eef] hover:text-white hover:border-transparent"
                         >
                             <MaxIcon size={18} white />
                         </a>
                     </div>
                 </div>
 
-                <div className="md:col-span-7 grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-[#C2B6A8]">
+                <div className="md:col-span-7 grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-white/75">
                     {LANDINGS.map((page) => (
-                        <a key={page.slug} href={`/${page.slug}/`} className="hover:text-[#F5EFE5] transition-colors">
+                        <a key={page.slug} href={`/${page.slug}/`} className="hover:text-white transition-colors">
                             {page.h1}
                         </a>
                     ))}
-                    <a href="/etap-zamer/" className="hover:text-[#F5EFE5] transition-colors">Замер и расчёт</a>
-                    <a href="/etap-montazh/" className="hover:text-[#F5EFE5] transition-colors">Монтаж лестницы</a>
-                    <a href="/privacy/" className="hover:text-[#F5EFE5] transition-colors">Политика конфиденциальности</a>
+                    <a href="/etap-zamer/" className="hover:text-white transition-colors">Замер и расчёт</a>
+                    <a href="/etap-montazh/" className="hover:text-white transition-colors">Монтаж лестницы</a>
+                    <a href="/privacy/" className="hover:text-white transition-colors">Политика конфиденциальности</a>
                 </div>
             </div>
         </footer>
@@ -676,12 +650,12 @@ export default function App() {
 
     return (
         <div ref={pageRef} className="w-full min-h-screen bg-background text-textMain">
-            <Navbar dark />
-            <MobileNav dark />
+            <Navbar />
+            <MobileNav />
 
             <main>
-                {/* ПЕРВЫЙ ЭКРАН: фото веера ступеней плавно растворяется прямо в светлый фон #F5EFE6 */}
-                <section className="hero-section relative bg-[#15110E] text-[#F5EFE5] overflow-hidden">
+                {/* ПЕРВЫЙ ЭКРАН: фото веера ступеней плавно растворяется прямо в фон оригинала #FAF8F5 */}
+                <section className="hero-section relative bg-[#161E19] text-[#FAF8F5] overflow-hidden">
                     <div className="absolute inset-0 z-0 pointer-events-none">
                         <div className="absolute inset-y-0 right-0 w-full lg:w-[76%] overflow-hidden">
                             <img
@@ -700,47 +674,47 @@ export default function App() {
                             className="absolute inset-0 hidden lg:block"
                             style={{
                                 background:
-                                    'linear-gradient(90deg, rgba(21,17,14,1) 0%, rgba(21,17,14,1) 28%, rgba(21,17,14,0.95) 35%, rgba(21,17,14,0.82) 43%, rgba(21,17,14,0.60) 51%, rgba(21,17,14,0.36) 59%, rgba(21,17,14,0.16) 68%, rgba(21,17,14,0.05) 78%, rgba(21,17,14,0) 90%)',
+                                    'linear-gradient(90deg, rgba(22,30,25,1) 0%, rgba(22,30,25,1) 28%, rgba(22,30,25,0.95) 35%, rgba(22,30,25,0.82) 43%, rgba(22,30,25,0.60) 51%, rgba(22,30,25,0.36) 59%, rgba(22,30,25,0.16) 68%, rgba(22,30,25,0.05) 78%, rgba(22,30,25,0) 90%)',
                             }}
                         />
                         <div
                             className="absolute inset-0 lg:hidden"
                             style={{
                                 background:
-                                    'linear-gradient(180deg, rgba(21,17,14,0.66) 0%, rgba(21,17,14,0.74) 45%, rgba(21,17,14,0.58) 76%, rgba(21,17,14,0.22) 100%)',
+                                    'linear-gradient(180deg, rgba(22,30,25,0.64) 0%, rgba(22,30,25,0.74) 45%, rgba(22,30,25,0.58) 76%, rgba(22,30,25,0.22) 100%)',
                             }}
                         />
 
-                        {/* Бесшовное растворение нижней части фото и тёмного фона прямо в #F5EFE6 */}
+                        {/* Бесшовное растворение нижней части фото и тёмного фона прямо в #FAF8F5 */}
                         <div
                             className="absolute inset-x-0 bottom-0 h-52 md:h-64"
                             style={{
                                 background:
-                                    'linear-gradient(180deg, rgba(245,239,230,0) 0%, rgba(245,239,230,0.015) 12%, rgba(245,239,230,0.055) 23%, rgba(245,239,230,0.125) 34%, rgba(245,239,230,0.225) 44%, rgba(245,239,230,0.355) 54%, rgba(245,239,230,0.505) 63%, rgba(245,239,230,0.655) 72%, rgba(245,239,230,0.79) 80%, rgba(245,239,230,0.895) 87%, rgba(245,239,230,0.965) 93%, rgba(245,239,230,1) 100%)',
+                                    'linear-gradient(180deg, rgba(250,248,245,0) 0%, rgba(250,248,245,0.015) 12%, rgba(250,248,245,0.055) 23%, rgba(250,248,245,0.125) 34%, rgba(250,248,245,0.225) 44%, rgba(250,248,245,0.355) 54%, rgba(250,248,245,0.505) 63%, rgba(250,248,245,0.655) 72%, rgba(250,248,245,0.79) 80%, rgba(250,248,245,0.895) 87%, rgba(250,248,245,0.965) 93%, rgba(250,248,245,1) 100%)',
                             }}
                         />
                     </div>
 
                     <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-12 pt-8 pb-6 md:pt-12 md:pb-8">
                         <div className="max-w-xl pb-10 md:pb-16">
-                            <div className="hero-elem inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-amber mb-3.5">
-                                <span className="w-6 h-[1px] bg-amber/70" />
+                            <div className="hero-elem inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-amber font-medium mb-3.5">
+                                <span className="w-6 h-[1px] bg-amber" />
                                 {HERO_COPY.eyebrow}
                             </div>
 
-                            <h1 className="hero-elem font-heading font-semibold text-[34px] sm:text-5xl lg:text-[58px] leading-[1.04] tracking-tight text-[#FAF6EE] mb-4">
+                            <h1 className="hero-elem font-heading font-extrabold text-[34px] sm:text-5xl lg:text-[54px] leading-[1.06] tracking-tight text-white mb-4">
                                 <span>{HERO_COPY.h1Part1}</span>{' '}
-                                <span>{HERO_COPY.h1Part2}</span>
+                                <span className="text-amber">{HERO_COPY.h1Part2}</span>
                             </h1>
 
-                            <p className="hero-elem text-[15.5px] sm:text-[17px] text-[#D4C9BC] leading-relaxed mb-6">
+                            <p className="hero-elem text-[15.5px] sm:text-[17px] text-white/85 leading-relaxed mb-6">
                                 {HERO_COPY.sub}
                             </p>
 
                             <div className="hero-elem flex flex-wrap gap-3 mb-4">
                                 <a
                                     href="#zayavka"
-                                    className="btn-magnetic min-h-[48px] px-7 rounded-full bg-amber hover:bg-[#E7B276] text-[#16110D] font-semibold text-[15px] inline-flex items-center"
+                                    className="btn-magnetic min-h-[48px] px-7 rounded-full bg-accent hover:bg-[#B44928] text-white font-semibold text-[15px] inline-flex items-center shadow-lg shadow-accent/25"
                                 >
                                     {HERO_COPY.ctaPrimary}
                                 </a>
@@ -748,14 +722,14 @@ export default function App() {
                                     href={WA_URL}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn-magnetic min-h-[48px] px-6 rounded-full border border-white/30 bg-white/5 hover:border-amber hover:text-amber text-[#F5EFE5] font-medium text-[15px] inline-flex items-center gap-2"
+                                    className="btn-magnetic min-h-[48px] px-6 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm hover:border-amber hover:text-amber text-white font-medium text-[15px] inline-flex items-center gap-2"
                                 >
                                     <WhatsAppIcon size={18} />
                                     <span>{HERO_COPY.ctaSecondary}</span>
                                 </a>
                             </div>
 
-                            <p className="hero-elem text-[13.5px] text-[#C5B9AA] leading-relaxed m-0">
+                            <p className="hero-elem text-[13.5px] text-white/75 leading-relaxed m-0">
                                 В Краснодаре замер бесплатный. Удобнее переписка - просто напишите в{' '}
                                 <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="text-amber underline underline-offset-4">WhatsApp</a>,{' '}
                                 <a href={TG_URL} target="_blank" rel="noopener noreferrer" className="text-amber underline underline-offset-4">Telegram</a>{' '}
@@ -765,14 +739,14 @@ export default function App() {
                             </p>
                         </div>
 
-                        {/* Полоса 4 фактов - мягкая скруглённая карточка-мост поверх растворённого фото */}
-                        <div className="hero-elem bg-surface/95 backdrop-blur-xl rounded-3xl border border-primary/15 shadow-[0_18px_48px_rgba(21,17,14,0.10)] px-6 py-5 sm:px-8 sm:py-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                        {/* Полоса 4 фактов - белая скруглённая карточка поверх растворённого фото */}
+                        <div className="hero-elem bg-white/95 backdrop-blur-xl rounded-3xl border border-primary/10 shadow-[0_18px_48px_rgba(46,64,54,0.10)] px-6 py-5 sm:px-8 sm:py-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                             {HERO_COPY.facts.map((fact) => (
                                 <div key={fact.val} className="transition-transform duration-300 hover:-translate-y-0.5">
-                                    <div className="font-heading font-semibold text-[22px] sm:text-2xl text-accent leading-tight">
+                                    <div className="font-heading font-extrabold text-[21px] sm:text-2xl text-primary leading-tight tracking-tight">
                                         {fact.val}
                                     </div>
-                                    <div className="text-[13px] text-textMain/75 mt-0.5">{fact.desc}</div>
+                                    <div className="text-[13px] text-textMain/65 mt-0.5">{fact.desc}</div>
                                 </div>
                             ))}
                         </div>
@@ -800,7 +774,7 @@ export default function App() {
                 />
 
                 {/* СВЕТЛЫЙ КОНТРАСТНЫЙ БЛОК 3: МАСТЕР КОНСТАНТИН */}
-                <section id="master" className="reveal-section w-full py-12 md:py-16 px-5 md:px-12 bg-[#EAE1D2] border-t border-primary/10 scroll-mt-24">
+                <section id="master" className="reveal-section w-full py-12 md:py-16 px-5 md:px-12 bg-[#F1EEE7] border-t border-primary/10 scroll-mt-24">
                     <div className="max-w-7xl mx-auto">
                         <div className="bg-surface border border-primary/15 rounded-[2rem] p-6 sm:p-8 lg:p-10 shadow-[0_14px_40px_rgba(26,21,18,0.06)]">
                             <div className="flex flex-col md:flex-row gap-6 lg:gap-10 items-start">

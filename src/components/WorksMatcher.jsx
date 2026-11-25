@@ -360,11 +360,11 @@ export default function WorksMatcher({
                                             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                                         />
                                     )}
-                                    <span className="absolute left-3.5 top-3.5 bg-[#1A1512]/80 backdrop-blur-sm text-[#FAF7F1] font-mono text-[11px] px-3 py-1 rounded-full">
+                                    <span className="absolute left-3.5 top-3.5 bg-primary/85 backdrop-blur-sm text-white font-mono text-[11px] px-3 py-1 rounded-full">
                                         {work.baseLabel}{work.material && work.material !== 'Другое' ? ` · ${work.material}` : ''}
                                     </span>
                                     {work.images?.length > 1 && (
-                                        <span className="absolute right-3.5 bottom-3.5 bg-[#1A1512]/80 backdrop-blur-sm text-[#FAF7F1] font-mono text-[11px] px-2.5 py-0.5 rounded-full">
+                                        <span className="absolute right-3.5 bottom-3.5 bg-primary/80 backdrop-blur-sm text-white font-mono text-[11px] px-2.5 py-0.5 rounded-full">
                                             {work.images.length} фото
                                         </span>
                                     )}

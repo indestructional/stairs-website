@@ -232,7 +232,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                             <button
                                 type="button"
                                 onClick={onAddWoodToFolder}
-                                className="btn-magnetic min-h-[46px] px-6 rounded-full bg-accent hover:bg-[#7D3A14] text-white text-sm font-semibold"
+                                className="btn-magnetic min-h-[46px] px-6 rounded-full bg-accent hover:bg-[#B44928] text-white text-sm font-semibold"
                             >
                                 + Добавить выкрас в папку замера
                             </button>
@@ -276,7 +276,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                         </div>
                     </div>
 
-                    <div className="lg:col-span-5 bg-[#EDE4D6] rounded-3xl border border-primary/15 p-6 sm:p-8 flex flex-col justify-between gap-6">
+                    <div className="lg:col-span-5 bg-[#F1EEE7] rounded-3xl border border-primary/10 p-6 sm:p-8 flex flex-col justify-between gap-6">
                         <div>
                             <h3 className="font-heading font-semibold text-2xl sm:text-[26px] text-primary mb-4">
                                 Что входит в цену под ключ

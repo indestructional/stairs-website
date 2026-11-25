@@ -15,9 +15,9 @@ export default {
                 textMain: 'rgb(var(--rgb-text-main) / <alpha-value>)',
             },
             fontFamily: {
-                sans: ['Onest', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-                heading: ['Spectral', 'Georgia', 'serif'],
-                mono: ['IBM Plex Mono', 'monospace'],
+                sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                heading: ['Manrope', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                mono: ['JetBrains Mono', 'monospace'],
             },
         },
     },

@@ -109,13 +109,13 @@ export default function LeadForm({
 
     if (state === 'done') {
         return (
-            <section id="zayavka" className={`w-full px-5 md:px-12 py-16 ${isDark ? 'bg-[#0F0C0A] text-[#F5EFE5]' : 'bg-background'}`}>
-                <div className="max-w-3xl mx-auto bg-primary text-[#F5EFE5] border border-white/15 rounded-[2rem] px-7 py-10 flex flex-col gap-5 items-start shadow-2xl">
-                    <div className="w-12 h-12 rounded-full bg-amber text-[#16110D] flex items-center justify-center">
+            <section id="zayavka" className={`w-full px-5 md:px-12 py-16 ${isDark ? 'bg-[#1B2620] text-[#FAF8F5]' : 'bg-background'}`}>
+                <div className="max-w-3xl mx-auto bg-primary text-[#FAF8F5] border border-white/15 rounded-[2rem] px-7 py-10 flex flex-col gap-5 items-start shadow-2xl">
+                    <div className="w-12 h-12 rounded-full bg-accent text-white flex items-center justify-center">
                         <Check size={26} />
                     </div>
-                    <h2 className="font-heading font-semibold text-3xl text-[#F5EFE5]">Заявка принята</h2>
-                    <p className="text-[#C8BEB0] max-w-xl m-0">
+                    <h2 className="font-heading font-bold text-3xl text-white">Заявка принята</h2>
+                    <p className="text-white/80 max-w-xl m-0">
                         Перезвоним с 09:00 до 20:00 и договоримся о замере. Если удобнее переписка, напишите сразу в WhatsApp или MAX.
                     </p>
                     <div className="flex flex-wrap gap-3">
@@ -123,7 +123,7 @@ export default function LeadForm({
                             href={whatsappHref()}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn-magnetic min-h-[46px] px-6 rounded-full bg-amber text-[#16110D] font-semibold inline-flex items-center"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full bg-accent text-white font-semibold inline-flex items-center"
                         >
                             Продолжить в WhatsApp
                         </a>
@@ -132,20 +132,20 @@ export default function LeadForm({
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={openMax}
-                            className="btn-magnetic min-h-[46px] px-6 rounded-full border border-white/30 text-[#F5EFE5] font-semibold inline-flex items-center"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full border border-white/30 text-white font-semibold inline-flex items-center"
                         >
                             Продолжить в MAX
                         </a>
                         <a
                             href={`tel:${PHONE_HREF}`}
-                            className="btn-magnetic min-h-[46px] px-6 rounded-full border border-white/20 text-[#C8BEB0] inline-flex items-center gap-2"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full border border-white/20 text-white/85 inline-flex items-center gap-2"
                         >
                             <Phone size={18} />
                             <span>{PHONE}</span>
                         </a>
                     </div>
                     {copied && (
-                        <p className="text-sm text-[#C8BEB0] m-0">
+                        <p className="text-sm text-white/80 m-0">
                             Текст обращения скопирован - вставьте его в чат MAX.
                         </p>
                     )}
@@ -155,10 +155,10 @@ export default function LeadForm({
     }
 
     const inputCls = isDark
-        ? 'w-full rounded-xl border border-white/15 bg-[#15110E] text-[#F5EFE5] placeholder:text-[#8E8377] px-4 py-3 text-[15px] transition-colors focus:outline-none focus:border-amber'
+        ? 'w-full rounded-xl border border-white/15 bg-[#23332A] text-white placeholder:text-white/45 px-4 py-3 text-[15px] transition-colors focus:outline-none focus:border-amber'
         : 'w-full rounded-xl border border-primary/20 bg-white text-primary placeholder:text-textMain/45 px-4 py-3 text-[15px] transition-colors focus:outline-none focus:border-accent';
 
-    const labelCls = isDark ? 'text-[13px] text-[#C8BEB0]' : 'text-[13px] text-textMain/70';
+    const labelCls = isDark ? 'text-[13px] text-white/75' : 'text-[13px] text-textMain/70';
 
     const formBody = (
         <form onSubmit={submit} className="flex flex-col gap-4">
@@ -216,13 +216,13 @@ export default function LeadForm({
                 />
             </label>
 
-            <label className={`flex items-start gap-2.5 text-[13px] ${isDark ? 'text-[#C8BEB0]' : 'text-textMain/70'}`}>
+            <label className={`flex items-start gap-2.5 text-[13px] ${isDark ? 'text-white/75' : 'text-textMain/70'}`}>
                 <input
                     type="checkbox"
                     checked={agreed}
                     onChange={(e) => setAgreed(e.target.checked)}
                     required
-                    className="mt-1 accent-[#9A4A1C]"
+                    className="mt-1 accent-[#CC5833]"
                 />
                 <span>
                     Согласен на обработку персональных данных в соответствии с{' '}
@@ -238,11 +238,7 @@ export default function LeadForm({
             <button
                 type="submit"
                 disabled={state === 'sending' || !agreed}
-                className={`btn-magnetic min-h-[48px] px-8 rounded-full font-semibold text-[15px] self-start disabled:opacity-50 ${
-                    isDark
-                        ? 'bg-amber hover:bg-[#E7B276] text-[#16110D]'
-                        : 'bg-accent hover:bg-[#7D3A14] text-white'
-                }`}
+                className="btn-magnetic min-h-[48px] px-8 rounded-full font-semibold text-[15px] self-start disabled:opacity-50 bg-accent hover:bg-[#B44928] text-white"
             >
                 {state === 'sending' ? 'Отправляем...' : 'Записаться на замер'}
             </button>
@@ -262,27 +258,27 @@ export default function LeadForm({
     if (isDark) {
         return (
             <section id="zayavka" className="reveal-section relative w-full px-4 md:px-10 pt-2 pb-12 md:pb-16 scroll-mt-24">
-                {/* Верхняя часть фона - светлый #F5EFE6, нижняя - тёмный подвал #0F0C0A */}
+                {/* Верхняя часть фона - слоновая кость #FAF8F5, нижняя - глубокий хвойный подвал #1B2620 */}
                 <div aria-hidden="true" className="absolute inset-x-0 top-0 h-28 md:h-36 bg-background" />
-                <div aria-hidden="true" className="absolute inset-x-0 bottom-0 top-28 md:top-36 bg-[#0F0C0A]" />
+                <div aria-hidden="true" className="absolute inset-x-0 bottom-0 top-28 md:top-36 bg-[#1B2620]" />
 
-                <div className="relative z-10 max-w-7xl mx-auto bg-[#18130F] text-[#F5EFE5] border border-white/15 rounded-[2rem] shadow-[0_24px_64px_rgba(21,17,14,0.24)] p-6 sm:p-10 lg:p-14 grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                <div className="relative z-10 max-w-7xl mx-auto bg-primary text-[#FAF8F5] border border-white/10 rounded-[2rem] shadow-[0_24px_64px_rgba(27,38,32,0.22)] p-6 sm:p-10 lg:p-14 grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                     <div className="lg:col-span-5">
                         <div className="font-mono text-xs uppercase tracking-[0.14em] text-amber mb-3">
                             06 · Замер и расчёт
                         </div>
-                        <h2 className="font-heading font-semibold text-4xl md:text-5xl text-[#F5EFE5] leading-[1.08] mb-5">
+                        <h2 className="font-heading font-extrabold text-4xl md:text-[44px] text-white leading-[1.08] mb-5 tracking-tight">
                             Записаться на замер или задать вопрос
                         </h2>
-                        <p className="text-[#C8BEB0] text-base leading-relaxed mb-7">
+                        <p className="text-white/80 text-base leading-relaxed mb-7">
                             Оставьте телефон - перезвоним с 09:00 до 20:00, ответим на вопросы и договоримся о замере.
                             Если удобнее переписка, просто напишите в мессенджер: фото проёма или размеры присылать
                             не обязательно, но по ним сможем сразу прикинуть порядок цены.
                         </p>
-                        <div className="font-heading text-3xl sm:text-4xl font-semibold text-amber">
+                        <div className="font-heading text-3xl sm:text-4xl font-extrabold text-amber tracking-tight">
                             <a href={`tel:${PHONE_HREF}`} className="hover:underline">{PHONE}</a>
                         </div>
-                        <div className="font-mono text-xs text-[#C8BEB0] mt-2 mb-6">
+                        <div className="font-mono text-xs text-white/70 mt-2 mb-6">
                             Ежедневно с 09:00 до 20:00 · {CITY} и край
                         </div>
                         <div className="flex flex-wrap gap-2.5">
@@ -313,7 +309,7 @@ export default function LeadForm({
                         </div>
                     </div>
 
-                    <div className="lg:col-span-7 bg-[#211B16] border border-white/15 rounded-3xl p-6 sm:p-8">
+                    <div className="lg:col-span-7 bg-[#24342B] border border-white/10 rounded-3xl p-6 sm:p-8">
                         {formBody}
                     </div>
                 </div>

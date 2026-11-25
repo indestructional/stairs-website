@@ -216,7 +216,7 @@ export default function MeasureFolder({
                                     href={`${WA_URL}?text=${encodeURIComponent(message)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn-magnetic min-h-[42px] rounded-full bg-accent hover:bg-[#7D3A14] text-white text-[13px] font-semibold flex items-center justify-center"
+                                    className="btn-magnetic min-h-[42px] rounded-full bg-accent hover:bg-[#B44928] text-white text-[13px] font-semibold flex items-center justify-center"
                                 >
                                     WhatsApp
                                 </a>
@@ -224,14 +224,14 @@ export default function MeasureFolder({
                                     href={`${TG_URL}?text=${encodeURIComponent(message)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn-magnetic min-h-[42px] rounded-full bg-accent hover:bg-[#7D3A14] text-white text-[13px] font-semibold flex items-center justify-center"
+                                    className="btn-magnetic min-h-[42px] rounded-full bg-accent hover:bg-[#B44928] text-white text-[13px] font-semibold flex items-center justify-center"
                                 >
                                     Telegram
                                 </a>
                                 <button
                                     type="button"
                                     onClick={() => onCopyForMax(message, MAX_URL)}
-                                    className="btn-magnetic min-h-[42px] rounded-full bg-accent hover:bg-[#7D3A14] text-white text-[13px] font-semibold flex items-center justify-center"
+                                    className="btn-magnetic min-h-[42px] rounded-full bg-accent hover:bg-[#B44928] text-white text-[13px] font-semibold flex items-center justify-center"
                                 >
                                     MAX
                                 </button>
