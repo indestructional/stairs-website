@@ -87,7 +87,7 @@ export default function MeasureFolder({
                 <button
                     type="button"
                     onClick={() => setOpen(true)}
-                    className="btn-magnetic min-h-[38px] px-4 rounded-full bg-primary hover:bg-accent text-surface text-[13px] font-semibold shrink-0"
+                    className="btn-magnetic min-h-[44px] sm:min-h-[38px] px-4 rounded-full bg-primary hover:bg-accent text-surface text-[13px] font-semibold shrink-0"
                 >
                     Открыть
                 </button>

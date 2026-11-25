@@ -1,6 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Phone, Send, Menu, X, ChevronDown, ChevronRight, ArrowRight, Plus } from 'lucide-react';
 import { LANDINGS, PHONE, PHONE_HREF } from './content/landings.js';
 import { LEADS_ACCESS_KEY } from './content/forms.js';
@@ -21,8 +19,6 @@ import SwatchStudio from './components/SwatchStudio.jsx';
 import WorksMatcher from './components/WorksMatcher.jsx';
 import MeasureFolder from './components/MeasureFolder.jsx';
 import LeadForm from './LeadForm.jsx';
-
-gsap.registerPlugin(ScrollTrigger);
 
 // ==========================================
 // SVG-ИКОНКИ МЕССЕНДЖЕРОВ (WhatsApp и MAX)
@@ -197,18 +193,18 @@ export function MobileNav() {
 
     return (
         <div className="md:hidden">
-            <div className="h-16 w-full sticky top-0 z-50 bg-background/95 backdrop-blur-md text-primary border-b border-primary/10 flex items-center justify-between px-4">
-                <a href="/" className="leading-tight">
-                    <div className="font-heading font-extrabold text-lg leading-none text-primary">Лестницы в Краснодаре</div>
-                    <div className="font-mono text-[10.5px] mt-0.5 text-textMain/55">
+            <div className="h-16 w-full sticky top-0 z-50 bg-background/95 backdrop-blur-md text-primary border-b border-primary/10 flex items-center justify-between gap-2 px-3.5">
+                <a href="/" className="min-w-0 flex-1 leading-tight">
+                    <div className="font-heading font-extrabold text-[15.5px] sm:text-lg leading-none text-primary truncate">Лестницы в Краснодаре</div>
+                    <div className="font-mono text-[10px] mt-1 text-textMain/60 truncate">
                         Мастер Константин · с 2001 года
                     </div>
                 </a>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 shrink-0">
                     <a
                         href={`tel:${PHONE_HREF}`}
                         aria-label="Позвонить"
-                        className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center transition-transform active:scale-95"
+                        className="w-11 h-11 rounded-full bg-accent text-white flex items-center justify-center transition-transform active:scale-95"
                     >
                         <Phone size={18} />
                     </a>
@@ -217,9 +213,9 @@ export function MobileNav() {
                         onClick={() => setOpen(true)}
                         aria-label="Открыть меню"
                         aria-expanded={open}
-                        className="min-w-[42px] min-h-[40px] px-3 rounded-full border border-primary/20 text-primary text-xs font-mono uppercase inline-flex items-center gap-1.5"
+                        className="min-w-[44px] min-h-[44px] px-3 rounded-full border border-primary/20 text-primary text-xs font-mono uppercase inline-flex items-center gap-1.5"
                     >
-                        <Menu size={18} />
+                        <Menu size={17} />
                         <span>Меню</span>
                     </button>
                 </div>
@@ -414,57 +410,59 @@ export function MessengerWidget() {
 // ==========================================
 export function Footer() {
     return (
-        <footer className="w-full bg-[#1B2620] text-[#FAF8F5] border-t border-white/10 pt-10 pb-20 md:py-12 px-5 md:px-12">
-            <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-8">
-                <div className="md:col-span-5 flex flex-col gap-3">
-                    <div className="font-heading font-extrabold text-2xl tracking-tight">Лестницы в Краснодаре</div>
-                    <p className="text-sm text-white/70 max-w-sm m-0">
-                        Изготовление и монтаж деревянных лестниц на заказ с 2001 года.
-                    </p>
-                    <div className="font-mono text-sm text-amber mt-1">
-                        <a href={`tel:${PHONE_HREF}`} className="hover:underline">{PHONE}</a>
+        <footer className="w-full bg-background pt-2">
+            <div className="w-full bg-[#1B2620] text-[#FAF8F5] rounded-t-[2.5rem] md:rounded-t-[3rem] pt-12 pb-20 md:py-14 px-5 md:px-12">
+                <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-8">
+                    <div className="md:col-span-5 flex flex-col gap-3">
+                        <div className="font-heading font-extrabold text-2xl tracking-tight">Лестницы в Краснодаре</div>
+                        <p className="text-sm text-white/70 max-w-sm m-0">
+                            Изготовление и монтаж деревянных лестниц на заказ с 2001 года.
+                        </p>
+                        <div className="font-mono text-sm text-amber mt-1">
+                            <a href={`tel:${PHONE_HREF}`} className="hover:underline">{PHONE}</a>
+                        </div>
+                        <div className="font-mono text-xs text-white/55">Ежедневно с 09:00 до 20:00</div>
+                        <div className="flex gap-3 mt-2">
+                            <a
+                                href={WA_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="WhatsApp"
+                                className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#25D366] hover:text-white hover:border-transparent"
+                            >
+                                <WhatsAppIcon size={18} />
+                            </a>
+                            <a
+                                href={TG_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Telegram"
+                                className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#0088cc] hover:text-white hover:border-transparent"
+                            >
+                                <Send size={17} />
+                            </a>
+                            <a
+                                href={MAX_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="MAX"
+                                className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#534eef] hover:text-white hover:border-transparent"
+                            >
+                                <MaxIcon size={18} white />
+                            </a>
+                        </div>
                     </div>
-                    <div className="font-mono text-xs text-white/55">Ежедневно с 09:00 до 20:00</div>
-                    <div className="flex gap-3 mt-2">
-                        <a
-                            href={WA_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="WhatsApp"
-                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#25D366] hover:text-white hover:border-transparent"
-                        >
-                            <WhatsAppIcon size={18} />
-                        </a>
-                        <a
-                            href={TG_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Telegram"
-                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#0088cc] hover:text-white hover:border-transparent"
-                        >
-                            <Send size={17} />
-                        </a>
-                        <a
-                            href={MAX_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="MAX"
-                            className="btn-magnetic w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/80 hover:bg-[#534eef] hover:text-white hover:border-transparent"
-                        >
-                            <MaxIcon size={18} white />
-                        </a>
-                    </div>
-                </div>
 
-                <div className="md:col-span-7 grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-white/75">
-                    {LANDINGS.map((page) => (
-                        <a key={page.slug} href={`/${page.slug}/`} className="hover:text-white transition-colors">
-                            {page.h1}
-                        </a>
-                    ))}
-                    <a href="/etap-zamer/" className="hover:text-white transition-colors">Замер и расчёт</a>
-                    <a href="/etap-montazh/" className="hover:text-white transition-colors">Монтаж лестницы</a>
-                    <a href="/privacy/" className="hover:text-white transition-colors">Политика конфиденциальности</a>
+                    <div className="md:col-span-7 grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm text-white/75">
+                        {LANDINGS.map((page) => (
+                            <a key={page.slug} href={`/${page.slug}/`} className="hover:text-white transition-colors">
+                                {page.h1}
+                            </a>
+                        ))}
+                        <a href="/etap-zamer/" className="hover:text-white transition-colors">Замер и расчёт</a>
+                        <a href="/etap-montazh/" className="hover:text-white transition-colors">Монтаж лестницы</a>
+                        <a href="/privacy/" className="hover:text-white transition-colors">Политика конфиденциальности</a>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -495,47 +493,35 @@ export default function App() {
         window.__stairsToast = window.setTimeout(() => setToast(''), 3000);
     };
 
-    // Плавные современные GSAP-анимации появления и лёгкого параллакса (с учётом prefers-reduced-motion)
+    // Лёгкие нативные анимации появления секций (IntersectionObserver без тяжёлого GSAP, +123 КБ экономии на мобильном)
     useEffect(() => {
         if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const ctx = gsap.context(() => {
-            gsap.from('.hero-elem', {
-                y: 26,
-                opacity: 0,
-                duration: 0.8,
-                stagger: 0.09,
-                ease: 'power3.out',
-                clearProps: 'transform,opacity',
-            });
+        const root = pageRef.current;
+        if (!root || typeof IntersectionObserver === 'undefined') return;
 
-            gsap.to('.hero-parallax-img', {
-                yPercent: 8,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: '.hero-section',
-                    start: 'top top',
-                    end: 'bottom top',
-                    scrub: true,
-                },
-            });
-
-            gsap.utils.toArray('.reveal-section').forEach((sec) => {
-                gsap.from(sec, {
-                    y: 28,
-                    opacity: 0,
-                    duration: 0.75,
-                    ease: 'power3.out',
-                    clearProps: 'transform,opacity',
-                    scrollTrigger: {
-                        trigger: sec,
-                        start: 'top 88%',
-                        once: true,
-                    },
+        const sections = [...root.querySelectorAll('.reveal-section')];
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('reveal-pending');
+                        entry.target.classList.add('is-visible');
+                        io.unobserve(entry.target);
+                    }
                 });
-            });
-        }, pageRef);
+            },
+            { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+        );
 
-        return () => ctx.revert();
+        sections.forEach((sec) => {
+            const rect = sec.getBoundingClientRect();
+            if (rect.top > window.innerHeight * 0.95) {
+                sec.classList.add('reveal-pending');
+                io.observe(sec);
+            }
+        });
+
+        return () => io.disconnect();
     }, []);
 
     // Загружаем реальный каталог gallery.json и восстанавливаем подборку из URL
@@ -654,64 +640,64 @@ export default function App() {
             <MobileNav />
 
             <main>
-                {/* ПЕРВЫЙ ЭКРАН: фото веера ступеней плавно растворяется прямо в фон оригинала #FAF8F5 */}
-                <section className="hero-section relative bg-[#161E19] text-[#FAF8F5] overflow-hidden">
-                    <div className="absolute inset-0 z-0 pointer-events-none">
-                        <div className="absolute inset-y-0 right-0 w-full lg:w-[76%] overflow-hidden">
-                            <img
-                                src={`${base}${HERO_PHOTO.src}`}
-                                alt={HERO_PHOTO.alt}
-                                width="985"
-                                height="1000"
-                                fetchPriority="high"
-                                decoding="async"
-                                className="hero-parallax-img w-full h-[108%] -top-[4%] relative object-cover object-center"
-                            />
-                        </div>
+                {/* ПЕРВЫЙ ЭКРАН: чёткое HD-фото веера на всю ширину, плавно и полностью растворяется в #FAF8F5 */}
+                <section className="hero-section relative bg-[#161E19] text-[#FAF8F5]">
+                    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+                        <img
+                            src={`${base}${HERO_PHOTO.src}`}
+                            srcSet={`${base}hero-led-2-mobile.webp 820w, ${base}${HERO_PHOTO.src} 1600w`}
+                            sizes="100vw"
+                            alt={HERO_PHOTO.alt}
+                            width="1600"
+                            height="1067"
+                            fetchPriority="high"
+                            decoding="async"
+                            className="w-full h-full object-cover object-[72%_center] md:object-[64%_center]"
+                        />
 
-                        {/* Мягкое горизонтальное затемнение под текст слева без вертикального шва */}
+                        {/* Мягкое горизонтальное затемнение под текст слева без какого-либо шва */}
                         <div
                             className="absolute inset-0 hidden lg:block"
                             style={{
                                 background:
-                                    'linear-gradient(90deg, rgba(22,30,25,1) 0%, rgba(22,30,25,1) 28%, rgba(22,30,25,0.95) 35%, rgba(22,30,25,0.82) 43%, rgba(22,30,25,0.60) 51%, rgba(22,30,25,0.36) 59%, rgba(22,30,25,0.16) 68%, rgba(22,30,25,0.05) 78%, rgba(22,30,25,0) 90%)',
+                                    'linear-gradient(90deg, rgba(22,30,25,0.96) 0%, rgba(22,30,25,0.92) 24%, rgba(22,30,25,0.80) 36%, rgba(22,30,25,0.55) 48%, rgba(22,30,25,0.26) 60%, rgba(22,30,25,0.08) 72%, rgba(22,30,25,0) 84%)',
                             }}
                         />
                         <div
                             className="absolute inset-0 lg:hidden"
                             style={{
                                 background:
-                                    'linear-gradient(180deg, rgba(22,30,25,0.64) 0%, rgba(22,30,25,0.74) 45%, rgba(22,30,25,0.58) 76%, rgba(22,30,25,0.22) 100%)',
+                                    'linear-gradient(180deg, rgba(22,30,25,0.68) 0%, rgba(22,30,25,0.78) 54%, rgba(22,30,25,0.62) 78%, rgba(22,30,25,0.12) 100%)',
                             }}
                         />
 
-                        {/* Бесшовное растворение нижней части фото и тёмного фона прямо в #FAF8F5 */}
+                        {/* Высокое бесшовное растворение прямо в #FAF8F5 (на мобильном не заезжает на текст, на ПК 320px мягкого перехода) */}
                         <div
-                            className="absolute inset-x-0 bottom-0 h-52 md:h-64"
+                            className="absolute inset-x-0 bottom-0 h-44 sm:h-56 md:h-80"
                             style={{
                                 background:
-                                    'linear-gradient(180deg, rgba(250,248,245,0) 0%, rgba(250,248,245,0.015) 12%, rgba(250,248,245,0.055) 23%, rgba(250,248,245,0.125) 34%, rgba(250,248,245,0.225) 44%, rgba(250,248,245,0.355) 54%, rgba(250,248,245,0.505) 63%, rgba(250,248,245,0.655) 72%, rgba(250,248,245,0.79) 80%, rgba(250,248,245,0.895) 87%, rgba(250,248,245,0.965) 93%, rgba(250,248,245,1) 100%)',
+                                    'linear-gradient(180deg, rgba(250,248,245,0) 0%, rgba(250,248,245,0.02) 10%, rgba(250,248,245,0.08) 20%, rgba(250,248,245,0.18) 30%, rgba(250,248,245,0.34) 40%, rgba(250,248,245,0.54) 50%, rgba(250,248,245,0.74) 60%, rgba(250,248,245,0.89) 70%, rgba(250,248,245,0.97) 78%, rgba(250,248,245,1) 85%, rgba(250,248,245,1) 100%)',
                             }}
                         />
                     </div>
 
-                    <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-12 pt-8 pb-6 md:pt-12 md:pb-8">
-                        <div className="max-w-xl pb-10 md:pb-16">
-                            <div className="hero-elem inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-amber font-medium mb-3.5">
+                    <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-12 pt-7 pb-28 md:pt-14 md:pb-40">
+                        <div className="max-w-xl">
+                            <div className="hero-rise hero-d1 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-amber font-medium mb-3.5">
                                 <span className="w-6 h-[1px] bg-amber" />
                                 {HERO_COPY.eyebrow}
                             </div>
 
-                            <h1 className="hero-elem font-heading font-extrabold text-[34px] sm:text-5xl lg:text-[54px] leading-[1.06] tracking-tight text-white mb-4">
+                            <h1 className="hero-rise hero-d2 font-heading font-extrabold text-[34px] sm:text-5xl lg:text-[54px] leading-[1.06] tracking-tight text-white mb-4">
                                 <span>{HERO_COPY.h1Part1}</span>{' '}
                                 <span className="text-amber">{HERO_COPY.h1Part2}</span>
                             </h1>
 
-                            <p className="hero-elem text-[15.5px] sm:text-[17px] text-white/85 leading-relaxed mb-6">
+                            <p className="hero-rise hero-d3 text-[15.5px] sm:text-[17px] text-white/85 leading-relaxed mb-6">
                                 {HERO_COPY.sub}
                             </p>
 
-                            <div className="hero-elem flex flex-wrap gap-3 mb-4">
+                            <div className="hero-rise hero-d4 flex flex-wrap gap-3 mb-4">
                                 <a
                                     href="#zayavka"
                                     className="btn-magnetic min-h-[48px] px-7 rounded-full bg-accent hover:bg-[#B44928] text-white font-semibold text-[15px] inline-flex items-center shadow-lg shadow-accent/25"
@@ -729,7 +715,7 @@ export default function App() {
                                 </a>
                             </div>
 
-                            <p className="hero-elem text-[13.5px] text-white/75 leading-relaxed m-0">
+                            <p className="hero-rise hero-d5 text-[13.5px] text-white/80 leading-relaxed m-0">
                                 В Краснодаре замер бесплатный. Удобнее переписка - просто напишите в{' '}
                                 <a href={WA_URL} target="_blank" rel="noopener noreferrer" className="text-amber underline underline-offset-4">WhatsApp</a>,{' '}
                                 <a href={TG_URL} target="_blank" rel="noopener noreferrer" className="text-amber underline underline-offset-4">Telegram</a>{' '}
@@ -738,20 +724,22 @@ export default function App() {
                                 {' '}ответим на вопросы и подскажем, с чего начать. Если уже есть фото проёма или примерные размеры, можете приложить их для ориентира по цене.
                             </p>
                         </div>
-
-                        {/* Полоса 4 фактов - белая скруглённая карточка поверх растворённого фото */}
-                        <div className="hero-elem bg-white/95 backdrop-blur-xl rounded-3xl border border-primary/10 shadow-[0_18px_48px_rgba(46,64,54,0.10)] px-6 py-5 sm:px-8 sm:py-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                            {HERO_COPY.facts.map((fact) => (
-                                <div key={fact.val} className="transition-transform duration-300 hover:-translate-y-0.5">
-                                    <div className="font-heading font-extrabold text-[21px] sm:text-2xl text-primary leading-tight tracking-tight">
-                                        {fact.val}
-                                    </div>
-                                    <div className="text-[13px] text-textMain/65 mt-0.5">{fact.desc}</div>
-                                </div>
-                            ))}
-                        </div>
                     </div>
                 </section>
+
+                {/* Полоса 4 фактов - парит поверх чистого #FAF8F5 с необрезанной мягкой тенью */}
+                <div className="relative z-20 max-w-7xl mx-auto px-5 md:px-12 -mt-14 md:-mt-24 mb-2">
+                    <div className="hero-rise hero-d5 bg-white/95 backdrop-blur-xl rounded-3xl border border-primary/10 shadow-[0_18px_44px_rgba(46,64,54,0.08)] px-6 py-5 sm:px-8 sm:py-6 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                        {HERO_COPY.facts.map((fact) => (
+                            <div key={fact.val} className="transition-transform duration-300 hover:-translate-y-0.5">
+                                <div className="font-heading font-extrabold text-[21px] sm:text-2xl text-primary leading-tight tracking-tight">
+                                    {fact.val}
+                                </div>
+                                <div className="text-[13px] text-textMain/65 mt-0.5">{fact.desc}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
                 {/* СВЕТЛЫЙ БЛОК 1: СТОЛ ЖИВЫХ ВЫКРАСОВ И ЦЕНЫ */}
                 <SwatchStudio
@@ -785,6 +773,8 @@ export default function App() {
                                             alt="Мастер Константин на монтаже деревянной лестницы"
                                             width="480"
                                             height="480"
+                                            loading="lazy"
+                                            decoding="async"
                                             className="w-full h-full object-cover"
                                         />
                                     </div>

@@ -74,6 +74,8 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                     alt={`Образец древесины: ${selectedWood.name}`}
                                     width="900"
                                     height="458"
+                                    loading="lazy"
+                                    decoding="async"
                                     className="w-full h-full object-cover transition-all duration-300"
                                     style={{ filter: `${selectedStain.filter} ${light.filter}` }}
                                 />
@@ -146,7 +148,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                                 key={st.id}
                                                 type="button"
                                                 onClick={() => setSelectedStain(st)}
-                                                className={`pill-interactive min-h-[40px] px-3.5 py-1.5 rounded-full border text-[13px] inline-flex items-center gap-2 ${
+                                                className={`pill-interactive min-h-[44px] sm:min-h-[40px] px-3.5 py-1.5 rounded-full border text-[13px] inline-flex items-center gap-2 ${
                                                     active
                                                         ? 'bg-white border-primary text-primary font-semibold shadow-md ring-1 ring-primary'
                                                         : 'bg-background border-primary/15 text-primary/85 hover:border-accent/50 hover:bg-white'
@@ -176,7 +178,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                                     key={lt.id}
                                                     type="button"
                                                     onClick={() => setLight(lt)}
-                                                    className={`pill-interactive min-h-[40px] px-2 rounded-full text-xs font-mono border ${
+                                                    className={`pill-interactive min-h-[44px] sm:min-h-[40px] px-2 rounded-full text-xs font-mono border ${
                                                         active
                                                             ? 'bg-accent text-white border-accent font-medium shadow-md'
                                                             : 'bg-background text-primary border-primary/15 hover:border-accent/50 hover:bg-white'
@@ -201,7 +203,7 @@ export default function SwatchStudio({ selectedWood, setSelectedWood, selectedSt
                                                     key={fl.id}
                                                     type="button"
                                                     onClick={() => setFloor(fl)}
-                                                    className={`pill-interactive min-h-[40px] px-3 rounded-full text-xs border ${
+                                                    className={`pill-interactive min-h-[44px] sm:min-h-[40px] px-3 rounded-full text-xs border ${
                                                         active
                                                             ? 'bg-primary text-surface border-primary font-medium shadow-md'
                                                             : 'bg-background text-primary border-primary/15 hover:border-accent/50 hover:bg-white'

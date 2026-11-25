@@ -252,7 +252,7 @@ export default function WorksMatcher({
                                         setBaseFilter(f.id);
                                         setVisibleCount(6);
                                     }}
-                                    className={`pill-interactive min-h-[42px] px-4 rounded-full text-sm font-semibold border ${
+                                    className={`pill-interactive min-h-[44px] sm:min-h-[42px] px-4 rounded-full text-sm font-semibold border ${
                                         active
                                             ? 'bg-accent text-white border-accent shadow-md'
                                             : 'bg-background text-primary border-primary/15 hover:border-accent/50 hover:bg-white'
@@ -275,7 +275,7 @@ export default function WorksMatcher({
                                     key={t.id}
                                     type="button"
                                     onClick={() => toggleTag(t.id)}
-                                    className={`pill-interactive min-h-[38px] px-4 rounded-full text-[13px] font-medium border ${
+                                    className={`pill-interactive min-h-[44px] sm:min-h-[38px] px-4 rounded-full text-[13px] font-medium border ${
                                         active
                                             ? 'bg-primary text-surface border-primary shadow-md'
                                             : 'bg-white text-primary/85 border-primary/15 hover:border-primary/45'
@@ -383,7 +383,7 @@ export default function WorksMatcher({
                                     <button
                                         type="button"
                                         onClick={() => onToggleSave(work)}
-                                        className={`btn-magnetic mt-auto min-h-[42px] px-4 w-full rounded-full border text-[13px] font-semibold inline-flex items-center justify-center gap-2 ${
+                                        className={`btn-magnetic mt-auto min-h-[44px] sm:min-h-[42px] px-4 w-full rounded-full border text-[13px] font-semibold inline-flex items-center justify-center gap-2 ${
                                             isSaved
                                                 ? 'bg-primary text-surface border-primary'
                                                 : 'bg-background text-primary border-primary/20 hover:border-accent hover:bg-white'

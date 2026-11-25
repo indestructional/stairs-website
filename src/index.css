@@ -74,7 +74,51 @@
   }
 }
 
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-rise {
+  animation: heroRise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-d1 { animation-delay: 0.04s; }
+.hero-d2 { animation-delay: 0.11s; }
+.hero-d3 { animation-delay: 0.18s; }
+.hero-d4 { animation-delay: 0.25s; }
+.hero-d5 { animation-delay: 0.32s; }
+
+.reveal-section {
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-section.reveal-pending {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.reveal-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .hero-rise {
+    animation: none !important;
+  }
+  .reveal-section,
+  .reveal-section.reveal-pending {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
   .btn-magnetic:hover,
   .card-lift:hover,
   .pill-interactive:hover,

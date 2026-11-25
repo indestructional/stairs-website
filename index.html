@@ -40,8 +40,25 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
+    rel="preload"
+    as="image"
+    href="/hero-led-2.webp"
+    imagesrcset="/hero-led-2-mobile.webp 820w, /hero-led-2.webp 1600w"
+    imagesizes="100vw"
+    fetchpriority="high"
+  />
+  <link
+    rel="preload"
+    as="style"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </noscript>
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">

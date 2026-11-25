@@ -257,12 +257,8 @@ export default function LeadForm({
 
     if (isDark) {
         return (
-            <section id="zayavka" className="reveal-section relative w-full px-4 md:px-10 pt-2 pb-12 md:pb-16 scroll-mt-24">
-                {/* Верхняя часть фона - слоновая кость #FAF8F5, нижняя - глубокий хвойный подвал #1B2620 */}
-                <div aria-hidden="true" className="absolute inset-x-0 top-0 h-28 md:h-36 bg-background" />
-                <div aria-hidden="true" className="absolute inset-x-0 bottom-0 top-28 md:top-36 bg-[#1B2620]" />
-
-                <div className="relative z-10 max-w-7xl mx-auto bg-primary text-[#FAF8F5] border border-white/10 rounded-[2rem] shadow-[0_24px_64px_rgba(27,38,32,0.22)] p-6 sm:p-10 lg:p-14 grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            <section id="zayavka" className="reveal-section w-full px-4 md:px-10 py-10 md:py-14 bg-background scroll-mt-24">
+                <div className="max-w-7xl mx-auto bg-primary text-[#FAF8F5] border border-white/10 rounded-[2rem] shadow-[0_22px_56px_rgba(46,64,54,0.18)] p-6 sm:p-10 lg:p-14 grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
                     <div className="lg:col-span-5">
                         <div className="font-mono text-xs uppercase tracking-[0.14em] text-amber mb-3">
                             06 · Замер и расчёт
