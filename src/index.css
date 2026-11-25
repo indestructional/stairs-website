@@ -4,66 +4,129 @@
 
 @layer base {
   :root {
-    /* Preset A (Organic Tech) - Light Mode Override */
     --color-background: #FAF8F5;
-    /* Ivory / Off-white base */
+    --color-surface: #FFFFFF;
     --color-primary: #2E4036;
-    /* Moss */
     --color-accent: #CC5833;
-    /* Clay */
+    --color-amber: #F08B67;
     --color-text-main: #1A1A1A;
-    /* Charcoal */
+    --rgb-background: 250 248 245;
+    --rgb-surface: 255 255 255;
+    --rgb-primary: 46 64 54;
+    --rgb-accent: 204 88 51;
+    --rgb-amber: 240 139 103;
+    --rgb-text-main: 26 26 26;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-background text-textMain font-sans antialiased overflow-x-hidden;
   }
 
-  /* Global Noise Overlay */
-  body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.05;
-    background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
   }
 }
 
 @layer utilities {
-
-  .text-data {
-    @apply font-mono;
-  }
-
-  /* Magnetic Button Feel Base */
   .btn-magnetic {
     @apply relative overflow-hidden transition-all duration-300;
     transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .btn-magnetic:hover {
-    @apply scale-[1.03] shadow-lg;
+    transform: translateY(-1px) scale(1.025);
+    box-shadow: 0 10px 26px rgba(26, 21, 18, 0.16);
+  }
+
+  .btn-magnetic:active {
+    transform: scale(0.975);
+  }
+
+  .card-lift {
+    @apply transition-all duration-300;
+    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 44px rgba(26, 21, 18, 0.10);
+  }
+
+  .pill-interactive {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .pill-interactive:hover {
+    transform: translateY(-1px);
+  }
+
+  .pill-interactive:active {
+    transform: scale(0.97);
   }
 
   .link-hover {
-    @apply transition-transform duration-300 hover:-translate-y-[1px];
-  }
-
-  .text-shadow-subtle {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .text-shadow-strong {
-    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    @apply transition-all duration-300 hover:-translate-y-[1px] hover:text-accent;
   }
 }
 
-/* Custom Scrollbar for premium feel */
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-rise {
+  animation: heroRise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-d1 { animation-delay: 0.04s; }
+.hero-d2 { animation-delay: 0.11s; }
+.hero-d3 { animation-delay: 0.18s; }
+.hero-d4 { animation-delay: 0.25s; }
+.hero-d5 { animation-delay: 0.32s; }
+
+.reveal-section {
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-section.reveal-pending {
+  opacity: 0;
+  transform: translateY(22px);
+}
+
+.reveal-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise {
+    animation: none !important;
+  }
+  .reveal-section,
+  .reveal-section.reveal-pending {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .btn-magnetic:hover,
+  .card-lift:hover,
+  .pill-interactive:hover,
+  .link-hover:hover {
+    transform: none !important;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -73,8 +136,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E0DDD5;
-  border-radius: 10px;
+  background: #CFC5B7;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

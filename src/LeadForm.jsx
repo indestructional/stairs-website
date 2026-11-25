@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Phone, Check } from 'lucide-react';
 import { PHONE, PHONE_HREF, CITY } from './content/landings.js';
 
@@ -7,22 +7,34 @@ const MAX_LINK = 'https://max.ru/u/f9LHodD0cOIzDFxgFXUu4MXhGljFSdn3ksgeaCL8ogOH3
 
 /**
  * Форма заявки.
- *
- * Зачем: связаться с мастером можно было только звонком или сообщением
- * в мессенджер. Часть людей на это не готова - вечером, в выходные, или
- * пока только прицениваются. Форма снимает этот барьер.
- *
- * Отправка идёт обычной формой в скрытый кадр, а не запросом из скрипта:
- * браузер не пропускает запросы к сервису рассылки с нашего домена.
- * Проверено, это единственный работающий способ без своего сервера.
+ * Отправка идёт обычной формой в скрытый iframe (единственный стабильный
+ * способ без своего сервера для web3forms) + цель Яндекс.Метрики `zayavka`.
  */
-export default function LeadForm({ accessKey, source = 'сайт' }) {
+export default function LeadForm({
+    accessKey,
+    source = 'сайт',
+    variant = 'light',
+    prefillComment = '',
+    prefillType = '',
+}) {
     const [state, setState] = useState('idle');
     const [sent, setSent] = useState({});
     const [copied, setCopied] = useState(false);
-    const [agreed, setAgreed] = useState(false);
+    const [agreed, setAgreed] = useState(true);
+    const [comment, setComment] = useState(prefillComment);
+    const [nuzhno, setNuzhno] = useState(prefillType || 'Лестница на второй этаж');
     const frameRef = useRef(null);
     const timerRef = useRef(null);
+
+    useEffect(() => {
+        if (prefillComment) setComment(prefillComment);
+    }, [prefillComment]);
+
+    useEffect(() => {
+        if (prefillType) setNuzhno(prefillType);
+    }, [prefillType]);
+
+    useEffect(() => () => clearInterval(timerRef.current), []);
 
     const submit = (event) => {
         event.preventDefault();
@@ -34,7 +46,7 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
         if (!name || !phone) return;
 
         setState('sending');
-        setSent({ name, nuzhno: form.elements.nuzhno.value, comment: form.elements.comment.value.trim() });
+        setSent({ name, nuzhno, comment: comment.trim() });
 
         const post = document.createElement('form');
         post.action = 'https://api.web3forms.com/submit';
@@ -53,8 +65,8 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
         add('from_name', 'Сайт лестниц');
         add('name', name);
         add('phone', phone);
-        add('nuzhno', form.elements.nuzhno.value);
-        add('comment', form.elements.comment.value.trim());
+        add('nuzhno', nuzhno);
+        add('comment', comment.trim());
         add('otkuda', source);
         add('redirect', `${location.origin}/zayavka-prinyata.html`);
         document.body.appendChild(post);
@@ -69,8 +81,6 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
                 clearInterval(timerRef.current);
                 post.remove();
                 setState('done');
-                // Цель в Метрике: без неё заявки не попадут в статистику,
-                // а мы измеряем миссию именно по обращениям.
                 window.ym?.(METRIKA_ID, 'reachGoal', 'zayavka');
             } else if (tries > 30) {
                 clearInterval(timerRef.current);
@@ -80,45 +90,40 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
         }, 500);
     };
 
-    // Ссылка в WhatsApp с уже написанным текстом: человеку остаётся нажать
-    // «отправить», и обращение попадает в мессенджер, куда семья смотрит
-    // постоянно. Автоматически отправить заявку в WhatsApp нельзя - для
-    // этого нужен платный доступ к их API.
     const messageText = () => (sent.name
         ? `Здравствуйте! Меня зовут ${sent.name}. Оставил заявку на сайте: ${sent.nuzhno}.${sent.comment ? ' ' + sent.comment : ''}`
         : 'Здравствуйте! Хочу узнать про изготовление лестницы.');
 
     const whatsappHref = () => `https://wa.me/79892145276?text=${encodeURIComponent(messageText())}`;
 
-    // MAX не умеет открывать чат с готовым текстом, как WhatsApp. Поэтому
-    // текст кладём в буфер обмена: человеку останется вставить его в чат.
     const openMax = async () => {
         try {
             await navigator.clipboard.writeText(messageText());
             setCopied(true);
         } catch {
-            // Буфер может быть недоступен - тогда просто открываем чат.
+            // Буфер недоступен - просто открываем чат.
         }
     };
 
+    const isDark = variant === 'dark';
+
     if (state === 'done') {
         return (
-            <section id="zayavka" className="w-full px-6 md:px-16 py-16">
-                <div className="max-w-3xl mx-auto bg-primary text-background rounded-2xl px-8 py-12 flex flex-col gap-5 items-start">
-                    <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center text-white">
-                        <Check size={28} />
+            <section id="zayavka" className={`w-full px-5 md:px-12 py-16 ${isDark ? 'bg-[#1B2620] text-[#FAF8F5]' : 'bg-background'}`}>
+                <div className="max-w-3xl mx-auto bg-primary text-[#FAF8F5] border border-white/15 rounded-[2rem] px-7 py-10 flex flex-col gap-5 items-start shadow-2xl">
+                    <div className="w-12 h-12 rounded-full bg-accent text-white flex items-center justify-center">
+                        <Check size={26} />
                     </div>
-                    <h2 className="font-heading font-bold text-2xl md:text-3xl text-background">Заявка принята</h2>
-                    <p className="opacity-85 max-w-xl">
-                        Свяжемся с вами в ближайшее время. Если хочется быстрее - напишите
-                        прямо сейчас в WhatsApp, там отвечаем в течение дня.
+                    <h2 className="font-heading font-bold text-3xl text-white">Заявка принята</h2>
+                    <p className="text-white/80 max-w-xl m-0">
+                        Перезвоним с 09:00 до 20:00 и договоримся о замере. Если удобнее переписка, напишите сразу в WhatsApp или MAX.
                     </p>
                     <div className="flex flex-wrap gap-3">
                         <a
                             href={whatsappHref()}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn-magnetic inline-flex items-center gap-3 bg-[#25D366] text-white px-7 py-4 rounded-full font-bold"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full bg-accent text-white font-semibold inline-flex items-center"
                         >
                             Продолжить в WhatsApp
                         </a>
@@ -127,21 +132,21 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={openMax}
-                            className="btn-magnetic inline-flex items-center gap-3 bg-[#534eef] text-white px-7 py-4 rounded-full font-bold"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full border border-white/30 text-white font-semibold inline-flex items-center"
                         >
                             Продолжить в MAX
                         </a>
                         <a
                             href={`tel:${PHONE_HREF}`}
-                            className="inline-flex items-center gap-3 border border-background/30 px-7 py-4 rounded-full font-medium"
+                            className="btn-magnetic min-h-[46px] px-6 rounded-full border border-white/20 text-white/85 inline-flex items-center gap-2"
                         >
-                            <Phone size={19} />
+                            <Phone size={18} />
                             <span>{PHONE}</span>
                         </a>
                     </div>
                     {copied && (
-                        <p className="text-sm opacity-70">
-                            Текст обращения скопирован - вставьте его в чат MAX, чтобы не набирать заново.
+                        <p className="text-sm text-white/80 m-0">
+                            Текст обращения скопирован - вставьте его в чат MAX.
                         </p>
                     )}
                 </div>
@@ -149,103 +154,180 @@ export default function LeadForm({ accessKey, source = 'сайт' }) {
         );
     }
 
-    return (
-        <section id="zayavka" className="w-full px-6 md:px-16 py-16 scroll-mt-24">
-            <div className="max-w-3xl mx-auto bg-white border border-primary/10 rounded-2xl px-6 md:px-10 py-10 shadow-sm">
-                <h2 className="font-heading font-bold text-2xl md:text-3xl text-primary mb-3">
-                    Оставьте заявку на замер
-                </h2>
-                <p className="text-textMain/70 mb-8 max-w-xl">
-                    Перезвоним, уточним детали и договоримся о времени. Замер бесплатный
-                    в черте {CITY}а. Если удобнее написать - <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="text-accent font-medium link-hover">WhatsApp</a> или <a href={MAX_LINK} target="_blank" rel="noopener noreferrer" className="text-accent font-medium link-hover">MAX</a>.
-                </p>
+    const inputCls = isDark
+        ? 'w-full rounded-xl border border-white/15 bg-[#23332A] text-white placeholder:text-white/45 px-4 py-3 text-[15px] transition-colors focus:outline-none focus:border-amber'
+        : 'w-full rounded-xl border border-primary/20 bg-white text-primary placeholder:text-textMain/45 px-4 py-3 text-[15px] transition-colors focus:outline-none focus:border-accent';
 
-                <form onSubmit={submit} className="flex flex-col gap-4">
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <label className="flex flex-col gap-2">
-                            <span className="text-sm text-textMain/70">Как к вам обращаться</span>
-                            <input
-                                name="name"
-                                type="text"
-                                required
-                                autoComplete="name"
-                                placeholder="Имя"
-                                className="border border-primary/15 rounded-xl px-4 py-3.5 focus:outline-none focus:border-accent"
-                            />
-                        </label>
-                        <label className="flex flex-col gap-2">
-                            <span className="text-sm text-textMain/70">Телефон</span>
-                            <input
-                                name="phone"
-                                type="tel"
-                                required
-                                autoComplete="tel"
-                                placeholder="+7 (___) ___-__-__"
-                                className="border border-primary/15 rounded-xl px-4 py-3.5 focus:outline-none focus:border-accent"
-                            />
-                        </label>
+    const labelCls = isDark ? 'text-[13px] text-white/75' : 'text-[13px] text-textMain/70';
+
+    const formBody = (
+        <form onSubmit={submit} className="flex flex-col gap-4">
+            <div className="grid sm:grid-cols-2 gap-4">
+                <label className="flex flex-col gap-1.5">
+                    <span className={labelCls}>Ваше имя</span>
+                    <input
+                        name="name"
+                        type="text"
+                        required
+                        autoComplete="name"
+                        placeholder="Например, Алексей"
+                        className={inputCls}
+                    />
+                </label>
+                <label className="flex flex-col gap-1.5">
+                    <span className={labelCls}>Телефон</span>
+                    <input
+                        name="phone"
+                        type="tel"
+                        required
+                        autoComplete="tel"
+                        placeholder="+7 (9__) ___-__-__"
+                        className={inputCls}
+                    />
+                </label>
+            </div>
+
+            <label className="flex flex-col gap-1.5">
+                <span className={labelCls}>Что нужно</span>
+                <select
+                    name="nuzhno"
+                    value={nuzhno}
+                    onChange={(e) => setNuzhno(e.target.value)}
+                    className={inputCls}
+                >
+                    <option>Лестница на второй этаж</option>
+                    <option>Отделка бетонной лестницы</option>
+                    <option>Ступени на металлокаркас</option>
+                    <option>Перила и ограждения</option>
+                    <option>Беседка, терраса или столярка</option>
+                    <option>Пока не решил</option>
+                </select>
+            </label>
+
+            <label className="flex flex-col gap-1.5">
+                <span className={labelCls}>Комментарий (высота этажа, город, пожелания)</span>
+                <textarea
+                    name="comment"
+                    rows={3}
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="Например: высота от пола до пола 2,9 м, Краснодар, интересует ясень"
+                    className={`${inputCls} resize-y`}
+                />
+            </label>
+
+            <label className={`flex items-start gap-2.5 text-[13px] ${isDark ? 'text-white/75' : 'text-textMain/70'}`}>
+                <input
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={(e) => setAgreed(e.target.checked)}
+                    required
+                    className="mt-1 accent-[#CC5833]"
+                />
+                <span>
+                    Согласен на обработку персональных данных в соответствии с{' '}
+                    <a
+                        href="/privacy/"
+                        className={`underline underline-offset-4 ${isDark ? 'text-amber' : 'text-accent'}`}
+                    >
+                        политикой конфиденциальности
+                    </a>
+                </span>
+            </label>
+
+            <button
+                type="submit"
+                disabled={state === 'sending' || !agreed}
+                className="btn-magnetic min-h-[48px] px-8 rounded-full font-semibold text-[15px] self-start disabled:opacity-50 bg-accent hover:bg-[#B44928] text-white"
+            >
+                {state === 'sending' ? 'Отправляем...' : 'Записаться на замер'}
+            </button>
+
+            {state === 'error' && (
+                <p className={`text-sm m-0 ${isDark ? 'text-amber' : 'text-accent'}`}>
+                    Не получилось отправить. Позвоните по номеру{' '}
+                    <a href={`tel:${PHONE_HREF}`} className="font-semibold underline">{PHONE}</a>{' '}
+                    или напишите в WhatsApp - так точно дойдёт.
+                </p>
+            )}
+
+            <iframe ref={frameRef} name="lead-sink" title="Отправка заявки" style={{ display: 'none' }} />
+        </form>
+    );
+
+    if (isDark) {
+        return (
+            <section id="zayavka" className="reveal-section w-full px-4 md:px-10 py-10 md:py-14 bg-background scroll-mt-24">
+                <div className="max-w-7xl mx-auto bg-primary text-[#FAF8F5] border border-white/10 rounded-[2rem] shadow-[0_22px_56px_rgba(46,64,54,0.18)] p-6 sm:p-10 lg:p-14 grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                    <div className="lg:col-span-5">
+                        <div className="font-mono text-xs uppercase tracking-[0.14em] text-amber mb-3">
+                            06 · Замер и расчёт
+                        </div>
+                        <h2 className="font-heading font-extrabold text-4xl md:text-[44px] text-white leading-[1.08] mb-5 tracking-tight">
+                            Записаться на замер или задать вопрос
+                        </h2>
+                        <p className="text-white/80 text-base leading-relaxed mb-7">
+                            Оставьте телефон - перезвоним с 09:00 до 20:00, ответим на вопросы и договоримся о замере.
+                            Если удобнее переписка, просто напишите в мессенджер: фото проёма или размеры присылать
+                            не обязательно, но по ним сможем сразу прикинуть порядок цены.
+                        </p>
+                        <div className="font-heading text-3xl sm:text-4xl font-extrabold text-amber tracking-tight">
+                            <a href={`tel:${PHONE_HREF}`} className="hover:underline">{PHONE}</a>
+                        </div>
+                        <div className="font-mono text-xs text-white/70 mt-2 mb-6">
+                            Ежедневно с 09:00 до 20:00 · {CITY} и край
+                        </div>
+                        <div className="flex flex-wrap gap-2.5">
+                            <a
+                                href="https://wa.me/79892145276"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-magnetic min-h-[44px] px-5 rounded-full border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center"
+                            >
+                                WhatsApp
+                            </a>
+                            <a
+                                href="https://t.me/+79892145276"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-magnetic min-h-[44px] px-5 rounded-full border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center"
+                            >
+                                Telegram
+                            </a>
+                            <a
+                                href={MAX_LINK}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-magnetic min-h-[44px] px-5 rounded-full border border-white/25 hover:border-amber hover:text-amber text-sm font-medium inline-flex items-center"
+                            >
+                                MAX
+                            </a>
+                        </div>
                     </div>
 
-                    <label className="flex flex-col gap-2">
-                        <span className="text-sm text-textMain/70">Что нужно</span>
-                        <select
-                            name="nuzhno"
-                            defaultValue="Лестница на второй этаж"
-                            className="border border-primary/15 rounded-xl px-4 py-3.5 bg-white focus:outline-none focus:border-accent"
-                        >
-                            <option>Лестница на второй этаж</option>
-                            <option>Отделка бетонной лестницы деревом</option>
-                            <option>Ступени на металлокаркас</option>
-                            <option>Винтовая лестница</option>
-                            <option>Перила и ограждения</option>
-                            <option>Беседка, терраса</option>
-                            <option>Мебель из массива</option>
-                            <option>Пока не решил, нужен совет</option>
-                        </select>
-                    </label>
+                    <div className="lg:col-span-7 bg-[#24342B] border border-white/10 rounded-3xl p-6 sm:p-8">
+                        {formBody}
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
-                    <label className="flex flex-col gap-2">
-                        <span className="text-sm text-textMain/70">Комментарий, если есть</span>
-                        <textarea
-                            name="comment"
-                            rows={3}
-                            placeholder="Размеры проёма, сроки, пожелания по породе дерева"
-                            className="border border-primary/15 rounded-xl px-4 py-3.5 resize-y focus:outline-none focus:border-accent"
-                        />
-                    </label>
-
-                    <label className="flex items-start gap-3 text-sm text-textMain/70">
-                        <input
-                            type="checkbox"
-                            checked={agreed}
-                            onChange={(e) => setAgreed(e.target.checked)}
-                            required
-                            className="mt-1"
-                        />
-                        <span>
-                            Согласен на обработку персональных данных в соответствии
-                            с <a href="/privacy/" className="text-accent link-hover">политикой конфиденциальности</a>
-                        </span>
-                    </label>
-
-                    <button
-                        type="submit"
-                        disabled={state === 'sending' || !agreed}
-                        className="btn-magnetic bg-accent text-white px-8 py-4 rounded-full font-bold text-lg self-start disabled:opacity-50"
-                    >
-                        {state === 'sending' ? 'Отправляем...' : 'Отправить заявку'}
-                    </button>
-
-                    {state === 'error' && (
-                        <p className="text-sm text-accent">
-                            Не получилось отправить. Позвоните, пожалуйста, по номеру{' '}
-                            <a href={`tel:${PHONE_HREF}`} className="font-medium underline">{PHONE}</a>{' '}
-                            или напишите в WhatsApp - так точно дойдёт.
-                        </p>
-                    )}
-                </form>
-
-                <iframe ref={frameRef} name="lead-sink" title="Отправка заявки" style={{ display: 'none' }} />
+    return (
+        <section id="zayavka" className="w-full px-5 md:px-12 py-12 scroll-mt-24">
+            <div className="max-w-3xl mx-auto bg-surface border border-primary/15 rounded-[2rem] px-6 md:px-10 py-10 shadow-sm">
+                <h2 className="font-heading font-semibold text-3xl text-primary mb-3">
+                    Записаться на замер или задать вопрос
+                </h2>
+                <p className="text-textMain/75 mb-7 max-w-xl">
+                    Перезвоним с 09:00 до 20:00 и договоримся о времени. Замер бесплатный в черте {CITY}а.
+                    Если удобнее написать -{' '}
+                    <a href="https://wa.me/79892145276" target="_blank" rel="noopener noreferrer" className="text-accent font-medium underline underline-offset-4">WhatsApp</a>,{' '}
+                    <a href="https://t.me/+79892145276" target="_blank" rel="noopener noreferrer" className="text-accent font-medium underline underline-offset-4">Telegram</a>{' '}
+                    или{' '}
+                    <a href={MAX_LINK} target="_blank" rel="noopener noreferrer" className="text-accent font-medium underline underline-offset-4">MAX</a>.
+                </p>
+                {formBody}
             </div>
         </section>
     );
