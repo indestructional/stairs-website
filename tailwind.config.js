@@ -7,15 +7,17 @@ export default {
     theme: {
         extend: {
             colors: {
-                background: 'var(--color-background)',
-                primary: 'var(--color-primary)',
-                accent: 'var(--color-accent)',
-                textMain: 'var(--color-text-main)',
+                background: 'rgb(var(--rgb-background) / <alpha-value>)',
+                surface: 'rgb(var(--rgb-surface) / <alpha-value>)',
+                primary: 'rgb(var(--rgb-primary) / <alpha-value>)',
+                accent: 'rgb(var(--rgb-accent) / <alpha-value>)',
+                amber: 'rgb(var(--rgb-amber) / <alpha-value>)',
+                textMain: 'rgb(var(--rgb-text-main) / <alpha-value>)',
             },
             fontFamily: {
-                sans: ['Inter', 'sans-serif'],
-                heading: ['Manrope', 'sans-serif'],
-                mono: ['JetBrains Mono', 'monospace'],
+                sans: ['Onest', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                heading: ['Spectral', 'Georgia', 'serif'],
+                mono: ['IBM Plex Mono', 'monospace'],
             },
         },
     },
